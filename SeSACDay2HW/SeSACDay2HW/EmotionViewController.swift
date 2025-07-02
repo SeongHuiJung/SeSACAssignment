@@ -7,6 +7,11 @@
 
 import UIKit
 
+// 받은 피드백
+// switch 쓸때 default 위험성 체크
+// 반복되는 부분 collection 및 함수로 변경
+// 반복되는 부분 dictionary 사용해보기
+
 class EmotionViewController: UIViewController {
     
     var numberList = [0,0,0,0,0,0,0,0,0]
