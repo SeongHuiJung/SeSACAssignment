@@ -61,7 +61,6 @@ class SaveContentViewController: UIViewController {
         button.setTitleColor(textColor, for: .normal)
         button.backgroundColor = backgroundColor
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        
         button.layer.cornerRadius = 5
         button.clipsToBounds = true
     }
