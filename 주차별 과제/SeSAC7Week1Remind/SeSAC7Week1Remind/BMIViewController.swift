@@ -175,7 +175,7 @@ class BMIViewController: UIViewController {
         heightQuestionLabel.textAlignment = .left
         heightQuestionLabel.backgroundColor = .clear
         
-        weightQuestionLabel.text = "몸무메가 어떻게 되시나요?"
+        weightQuestionLabel.text = "몸무게가 어떻게 되시나요?"
         weightQuestionLabel.font = .systemFont(ofSize: 15)
         weightQuestionLabel.textColor = .black
         weightQuestionLabel.textAlignment = .left
