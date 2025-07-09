@@ -18,8 +18,6 @@ class SetNameViewController: UIViewController {
         super.viewDidLoad()
         setUI()
         setTextField()
-        
-
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
@@ -57,7 +55,6 @@ class SetNameViewController: UIViewController {
         tabNavigationBar.rightBarButtonItem?.tintColor = .primary
         tabNavigationBar.titleView?.tintColor = .primary
     }
-    
     func setTextField() {
         textField.attributedPlaceholder = NSAttributedString(string: "이름을 적어주세요!", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         textField.backgroundColor = .second

@@ -8,7 +8,6 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
     @IBOutlet var navigationBarTitle: UINavigationItem!
     
     @IBOutlet var damagochiImage: UIImageView!
@@ -65,14 +64,15 @@ class ViewController: UIViewController {
             stateLabel.text = getUpdatedStateLabel()
         }
     }
+    
     private var waterCount = 0{
+        // property observer
         didSet {
             UserDefaults.standard.set(waterCount, forKey: "waterCount")
             level = getUpdatedLevel()
             stateLabel.text = getUpdatedStateLabel()
         }
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +81,7 @@ class ViewController: UIViewController {
         fetch()
         
         // 첫 실행 체크
+        // property wrapper
         if !UserDefaults.standard.bool(forKey: "isFirstOpenApp") {
             print("첫 실행")
             UserDefaults.standard.set(true, forKey: "isFirstOpenApp")
@@ -177,7 +178,6 @@ class ViewController: UIViewController {
     func getUpdatedStateLabel() -> String {
         return "LV\(level) · 밥알 \(riceCount)개 · 물방울 \(waterCount)개"
     }
-    
     func getRandomMessage() -> String {
         let message =  messages.randomElement() ?? "매세지가 없습니다"
         return message.replacingOccurrences(of: "userName", with: UserDefaults.standard.string(forKey: "userName")!)
@@ -187,13 +187,12 @@ class ViewController: UIViewController {
         riceCount = UserDefaults.standard.integer(forKey: "riceCount")
         waterCount = UserDefaults.standard.integer(forKey: "waterCount")
     }
+    
     @IBAction func resetCount(_ sender: UIButton) {
         riceCount = 0
         waterCount = 0
     }
-    
     @IBAction func riceTextFieldKeyboardDown(_ sender: UITextField) {}
-    
     @IBAction func waterTextFieldKeyboardDown(_ sender: UITextField) {}
     
     // MARK: - UI
@@ -232,11 +231,9 @@ class ViewController: UIViewController {
         stateLabel.textAlignment = .center
         
     }
-    
     func setNavigationBarUI() {
         navigationBarTitle.title = (UserDefaults.standard.string(forKey: "userName") ?? "대장") + "님의 다마고치"
     }
-    
     func setButtonUI() {
         riceButton.setTitle("밥먹기", for: .normal)
         riceButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
@@ -267,12 +264,10 @@ class ViewController: UIViewController {
         resetButton.layer.cornerRadius = 15
         resetButton.clipsToBounds = true
     }
-    
     func setAllTextFieldUI() {
         setTextFieldUI(textField: riceTextField, text: "밥주세용")
         setTextFieldUI(textField: waterBubbleTextField, text: "물주세용")
     }
-    
     func setTextFieldUI(textField: UITextField, text: String) {
         textField.attributedPlaceholder = NSAttributedString(string: text, attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
         textField.backgroundColor = .second
