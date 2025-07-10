@@ -59,16 +59,15 @@ class TamagochiViewController: UIViewController {
     
     private var riceCount = 0 {
         didSet {
-            UserDefaults.standard.set(riceCount, forKey: "riceCount")
+            UserDefaultsManager.riceCount = riceCount
             level = getUpdatedLevel()
             stateLabel.text = getUpdatedStateLabel()
         }
     }
     
     private var waterCount = 0{
-        // property observer
         didSet {
-            UserDefaults.standard.set(waterCount, forKey: "waterCount")
+            UserDefaultsManager.waterCount = waterCount
             level = getUpdatedLevel()
             stateLabel.text = getUpdatedStateLabel()
         }
@@ -82,10 +81,9 @@ class TamagochiViewController: UIViewController {
         
         // 첫 실행 체크
         // property wrapper
-        if !UserDefaults.standard.bool(forKey: "isFirstOpenApp") {
+        if !UserDefaultsManager.isFirstOpenApp {
             print("첫 실행")
-            UserDefaults.standard.set(true, forKey: "isFirstOpenApp")
-            UserDefaults.standard.set("대장", forKey: "userName")
+            UserDefaultsManager.isFirstOpenApp = true
         }
         
         setUI()
@@ -180,12 +178,12 @@ class TamagochiViewController: UIViewController {
     }
     func getRandomMessage() -> String {
         let message =  messages.randomElement() ?? "매세지가 없습니다"
-        return message.replacingOccurrences(of: "userName", with: UserDefaults.standard.string(forKey: "userName")!)
+        return message.replacingOccurrences(of: "userName", with: UserDefaultsManager.userName)
     }
     
     func fetch() {
-        riceCount = UserDefaults.standard.integer(forKey: "riceCount")
-        waterCount = UserDefaults.standard.integer(forKey: "waterCount")
+        riceCount = UserDefaultsManager.riceCount
+        waterCount = UserDefaultsManager.waterCount
     }
     
     @IBAction func resetCount(_ sender: UIButton) {
@@ -232,7 +230,7 @@ class TamagochiViewController: UIViewController {
         
     }
     func setNavigationBarUI() {
-        navigationBarTitle.title = (UserDefaults.standard.string(forKey: "userName") ?? "대장") + "님의 다마고치"
+        navigationBarTitle.title = UserDefaultsManager.userName + "님의 다마고치"
     }
     func setButtonUI() {
         riceButton.setTitle("밥먹기", for: .normal)
