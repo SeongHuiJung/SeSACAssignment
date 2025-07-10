@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class TamagochiViewController: UIViewController {
     @IBOutlet var navigationBarTitle: UINavigationItem!
     
     @IBOutlet var damagochiImage: UIImageView!
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
         "userName님, 덕분에 오늘도 웃어요!",
         "userName님, 내일도 함께해요~!"
     ]
-
+    
     private var level = 1 {
         didSet {
             if level < 10 {
@@ -123,7 +123,7 @@ class ViewController: UIViewController {
             print("올바른 숫자를 입력하지 않았어요")
             return
         }
-
+        
         // 다마고치 메시지 랜덤 변경
         damagochiSpeechLabel.text = getRandomMessage()
     }
@@ -153,7 +153,7 @@ class ViewController: UIViewController {
             print("올바른 숫자를 입력하지 않았어요")
             return
         }
-
+        
         // 다마고치 메시지 랜덤 변경
         damagochiSpeechLabel.text = getRandomMessage()
     }
@@ -277,7 +277,7 @@ class ViewController: UIViewController {
         textField.borderStyle = .none
         textField.layer.borderWidth = 1
         textField.layer.borderColor = UIColor.primary.cgColor
-
+        
         // 입력하는 부분 왼쪽에 간격 추가
         textField.leftView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 8, height: 0.0))
         textField.leftViewMode = .always
