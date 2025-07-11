@@ -7,6 +7,8 @@
 
 import UIKit
 
+// TODO: Property Observer 적용, struct로 리팩토링
+
 class TamagochiViewController: UIViewController {
     @IBOutlet var navigationBarTitle: UINavigationItem!
     
@@ -190,6 +192,7 @@ class TamagochiViewController: UIViewController {
         riceCount = 0
         waterCount = 0
     }
+    
     @IBAction func riceTextFieldKeyboardDown(_ sender: UITextField) {}
     @IBAction func waterTextFieldKeyboardDown(_ sender: UITextField) {}
     

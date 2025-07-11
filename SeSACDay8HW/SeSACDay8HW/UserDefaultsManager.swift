@@ -7,6 +7,8 @@
 
 import Foundation
 
+// TODO: type enum 으로 빼주기
+
 class UserDefaultsManager {
     
     @UserDefault(key: "riceCount", defaultValue: 0)
