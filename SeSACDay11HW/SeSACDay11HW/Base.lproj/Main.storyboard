@@ -74,6 +74,35 @@
             </objects>
             <point key="canvasLocation" x="-973.28244274809151" y="295.77464788732397"/>
         </scene>
+        <!--도시 상세 정보-->
+        <scene sceneID="EPJ-UN-6n0">
+            <objects>
+                <tableViewController id="odv-Hu-NsV" customClass="CityDetailViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Y7h-EG-GvG">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CityDetailTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CityDetailTableViewCell" rowHeight="256" id="15f-GQ-pn3" customClass="CityDetailTableViewCell" customModule="SeSACDay11HW" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="393" height="256"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="15f-GQ-pn3" id="cYg-Xe-anu">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="256"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="odv-Hu-NsV" id="C6l-Rk-Y5b"/>
+                            <outlet property="delegate" destination="odv-Hu-NsV" id="psg-zX-p9j"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="도시 상세 정보" image="heart.fill" catalog="system" id="kx5-IF-14d"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MBT-aT-dhD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-996.18320610687022" y="1085.9154929577464"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="E5b-0a-nBC">
             <objects>
@@ -86,6 +115,7 @@
                     <connections>
                         <segue destination="gfO-u6-sBj" kind="relationship" relationship="viewControllers" id="tbR-wL-nmD"/>
                         <segue destination="hc2-la-8QI" kind="relationship" relationship="viewControllers" id="6FO-WB-fb0"/>
+                        <segue destination="odv-Hu-NsV" kind="relationship" relationship="viewControllers" id="GJ3-eU-NpV"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysv-t5-Aho" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -197,6 +227,7 @@
     </scenes>
     <resources>
         <image name="hands.clap.fill" catalog="system" width="128" height="121"/>
+        <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
