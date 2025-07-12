@@ -15,7 +15,7 @@ class CityDetailTableViewCell: UITableViewCell {
     
     @IBOutlet var gradeCollection: [UIImageView]!
     @IBOutlet var travelImage: UIImageView!
-    @IBOutlet var likeImage: UIImageView!
+    @IBOutlet var likeButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -46,5 +46,8 @@ class CityDetailTableViewCell: UITableViewCell {
     }
 
     override func prepareForReuse() {
+        for i in 0..<5 {
+            gradeCollection[i].tintColor = .systemGray4
+        }
     }
 }

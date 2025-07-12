@@ -108,13 +108,6 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H1s-8y-BHw">
-                                            <rect key="frame" x="335.33333333333331" y="30" width="27.666666666666686" height="28"/>
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" secondItem="H1s-8y-BHw" secondAttribute="height" multiplier="1:1" id="d9R-iH-dQ9"/>
-                                            </constraints>
-                                        </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="MW1-fz-SyY">
                                             <rect key="frame" x="20" y="73.666666666666671" width="104" height="20"/>
                                             <subviews>
@@ -166,21 +159,30 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dEv-ib-rIw">
+                                            <rect key="frame" x="335" y="28" width="24" height="23"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="dEv-ib-rIw" secondAttribute="height" id="WP5-0K-8Yx"/>
+                                            </constraints>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system"/>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="1H9-f6-nNp" firstAttribute="leading" secondItem="Cv8-gp-Ooj" secondAttribute="trailing" constant="20" id="3ey-BV-bAK"/>
                                         <constraint firstItem="1H9-f6-nNp" firstAttribute="leading" secondItem="0dm-VG-e3m" secondAttribute="trailing" constant="20" id="4T0-bU-tHg"/>
-                                        <constraint firstItem="H1s-8y-BHw" firstAttribute="width" secondItem="1H9-f6-nNp" secondAttribute="height" multiplier="1:6" id="9Pv-bT-0gf"/>
+                                        <constraint firstItem="dEv-ib-rIw" firstAttribute="width" secondItem="1H9-f6-nNp" secondAttribute="height" multiplier="1:6" id="5XD-KR-UEq"/>
                                         <constraint firstItem="MW1-fz-SyY" firstAttribute="top" secondItem="0dm-VG-e3m" secondAttribute="bottom" constant="10" id="Blx-1v-qbc"/>
+                                        <constraint firstItem="dEv-ib-rIw" firstAttribute="trailing" secondItem="1H9-f6-nNp" secondAttribute="trailing" constant="-10" id="CEc-NR-Hl8"/>
                                         <constraint firstItem="Cv8-gp-Ooj" firstAttribute="top" secondItem="cYg-Xe-anu" secondAttribute="top" constant="20" id="EOP-fh-Qye"/>
-                                        <constraint firstItem="1H9-f6-nNp" firstAttribute="top" secondItem="H1s-8y-BHw" secondAttribute="top" constant="-10" id="GtI-Uo-3jY"/>
                                         <constraint firstItem="MW1-fz-SyY" firstAttribute="leading" secondItem="cYg-Xe-anu" secondAttribute="leading" constant="20" id="KWI-P9-jZt"/>
                                         <constraint firstItem="vAN-hv-BWZ" firstAttribute="top" secondItem="0dm-VG-e3m" secondAttribute="bottom" constant="10" id="Lfl-qA-e1l"/>
                                         <constraint firstAttribute="trailing" secondItem="1H9-f6-nNp" secondAttribute="trailing" constant="20" id="NDW-o2-ihv"/>
                                         <constraint firstItem="1H9-f6-nNp" firstAttribute="top" secondItem="cYg-Xe-anu" secondAttribute="top" constant="20" id="Vks-DO-8aR"/>
                                         <constraint firstItem="0dm-VG-e3m" firstAttribute="top" secondItem="Cv8-gp-Ooj" secondAttribute="bottom" constant="3" id="ZY7-1j-v85"/>
                                         <constraint firstAttribute="bottom" secondItem="1H9-f6-nNp" secondAttribute="bottom" constant="20" id="bgi-3K-xQV"/>
-                                        <constraint firstItem="H1s-8y-BHw" firstAttribute="trailing" secondItem="1H9-f6-nNp" secondAttribute="trailing" constant="-10" id="iU1-Ia-maw"/>
+                                        <constraint firstItem="1H9-f6-nNp" firstAttribute="top" secondItem="dEv-ib-rIw" secondAttribute="top" constant="-10" id="jFz-Vt-Z6v"/>
                                         <constraint firstItem="Cv8-gp-Ooj" firstAttribute="leading" secondItem="cYg-Xe-anu" secondAttribute="leading" constant="20" id="mzA-el-dt6"/>
                                         <constraint firstItem="vAN-hv-BWZ" firstAttribute="leading" secondItem="MW1-fz-SyY" secondAttribute="trailing" constant="12" id="ps9-yW-duV"/>
                                         <constraint firstItem="0dm-VG-e3m" firstAttribute="leading" secondItem="cYg-Xe-anu" secondAttribute="leading" constant="20" id="rQG-p0-iqE"/>
@@ -188,7 +190,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="descriptionLabel" destination="0dm-VG-e3m" id="zGA-Kz-nzx"/>
-                                    <outlet property="likeImage" destination="H1s-8y-BHw" id="SQs-ob-lmy"/>
+                                    <outlet property="likeButton" destination="dEv-ib-rIw" id="f7i-fB-zZH"/>
                                     <outlet property="saveLabel" destination="vAN-hv-BWZ" id="kjz-8G-gjm"/>
                                     <outlet property="titleLabel" destination="Cv8-gp-Ooj" id="cAT-aw-U7Y"/>
                                     <outlet property="travelImage" destination="1H9-f6-nNp" id="zN6-9R-NIa"/>
@@ -335,6 +337,7 @@
     </scenes>
     <resources>
         <image name="hands.clap.fill" catalog="system" width="128" height="121"/>
+        <image name="heart" catalog="system" width="128" height="107"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="labelColor">

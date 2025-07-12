@@ -15,6 +15,17 @@ class CityDetailViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    @objc func likeButtonTapped(_ sender: UIButton) {
+        if let like = travelData.travel[sender.tag].like {
+            travelData.travel[sender.tag].like = !like
+        }
+        else {
+            travelData.travel[sender.tag].like = true
+        }
+        
+        tableView.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .automatic)
+    }
 }
 
 extension CityDetailViewController {
@@ -24,6 +35,9 @@ extension CityDetailViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CityDetailTableViewCell", for: indexPath) as! CityDetailTableViewCell
+        
+        cell.likeButton.tag = indexPath.row
+        cell.likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         
         cell.titleLabel.text = travelData.travel[indexPath.row].title
         cell.descriptionLabel.text = travelData.travel[indexPath.row].description
@@ -43,21 +57,16 @@ extension CityDetailViewController {
         }
         
         if travelData.travel[indexPath.row].like == true {
-            cell.likeImage.image = UIImage(systemName: "heart.fill")
+            cell.likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
         else {
-            cell.likeImage.image = UIImage(systemName: "heart")
+            cell.likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         }
         
         if let grade = travelData.travel[indexPath.row].grade {
             let grade = Int(round(grade))
             for i in 0..<grade {
                 cell.gradeCollection[i].tintColor = .yellow
-            }
-        }
-        else {
-            for i in 0..<5 {
-                cell.gradeCollection[i].tintColor = .systemGray4
             }
         }
         
