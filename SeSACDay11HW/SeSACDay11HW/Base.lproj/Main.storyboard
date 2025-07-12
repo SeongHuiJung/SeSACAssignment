@@ -8,21 +8,54 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item 2-->
+        <!--369게임-->
         <scene sceneID="px7-ND-53s">
             <objects>
-                <viewController id="hc2-la-8QI" sceneMemberID="viewController">
+                <viewController id="hc2-la-8QI" customClass="GameViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="n9Q-Hc-qdw">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="최대 숫자를 입력해주세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pgV-Js-3bI">
+                                <rect key="frame" x="30" y="190" width="333" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="mAk-He-Ll8"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textFieldTapEnter:" destination="hc2-la-8QI" eventType="editingDidEndOnExit" id="yDu-Hp-i4Z"/>
+                                </connections>
+                            </textField>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="dd" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="yJh-A4-oO8">
+                                <rect key="frame" x="30" y="254" width="333" height="451"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="JNN-TF-5eN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="JNN-TF-5eN" firstAttribute="trailing" secondItem="pgV-Js-3bI" secondAttribute="trailing" constant="30" id="0XP-Ss-7Lz"/>
+                            <constraint firstItem="pgV-Js-3bI" firstAttribute="leading" secondItem="JNN-TF-5eN" secondAttribute="leading" constant="30" id="ASf-7r-qm6"/>
+                            <constraint firstItem="yJh-A4-oO8" firstAttribute="leading" secondItem="JNN-TF-5eN" secondAttribute="leading" constant="30" id="BM9-Kf-3k6"/>
+                            <constraint firstItem="JNN-TF-5eN" firstAttribute="trailing" secondItem="yJh-A4-oO8" secondAttribute="trailing" constant="30" id="LLt-se-Izb"/>
+                            <constraint firstItem="pgV-Js-3bI" firstAttribute="top" secondItem="JNN-TF-5eN" secondAttribute="top" constant="72" id="Wos-8g-PIZ"/>
+                            <constraint firstItem="yJh-A4-oO8" firstAttribute="top" secondItem="pgV-Js-3bI" secondAttribute="bottom" constant="24" id="bsL-mQ-oI2"/>
+                            <constraint firstItem="JNN-TF-5eN" firstAttribute="bottom" secondItem="yJh-A4-oO8" secondAttribute="bottom" constant="30" id="o51-r2-utk"/>
+                        </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="gIL-yb-HzT"/>
+                    <tabBarItem key="tabBarItem" title="369게임" image="hands.clap.fill" catalog="system" id="gIL-yb-HzT"/>
+                    <connections>
+                        <outlet property="textField" destination="pgV-Js-3bI" id="NXR-VW-NJF"/>
+                        <outlet property="textView" destination="yJh-A4-oO8" id="IFl-ic-6MB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cyV-JW-j16" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-973" y="296"/>
+            <point key="canvasLocation" x="-973.28244274809151" y="295.77464788732397"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="E5b-0a-nBC">
@@ -146,7 +179,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="hands.clap.fill" catalog="system" width="128" height="121"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
