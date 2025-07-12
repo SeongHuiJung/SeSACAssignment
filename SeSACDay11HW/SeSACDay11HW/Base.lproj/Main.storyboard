@@ -27,28 +27,45 @@
                                     <action selector="textFieldTapEnter:" destination="hc2-la-8QI" eventType="editingDidEndOnExit" id="yDu-Hp-i4Z"/>
                                 </connections>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="dd" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="yJh-A4-oO8">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="yJh-A4-oO8">
                                 <rect key="frame" x="30" y="254" width="333" height="451"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="총 박수의 개수 :" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z9R-dg-rSA">
+                                <rect key="frame" x="143.66666666666666" y="130" width="106" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qaU-rw-oEy">
+                                <rect key="frame" x="249.66666666666666" y="130" width="10.999999999999972" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JNN-TF-5eN"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="JNN-TF-5eN" firstAttribute="trailing" secondItem="pgV-Js-3bI" secondAttribute="trailing" constant="30" id="0XP-Ss-7Lz"/>
+                            <constraint firstItem="qaU-rw-oEy" firstAttribute="top" secondItem="JNN-TF-5eN" secondAttribute="top" constant="12" id="6RG-Wd-SUb"/>
                             <constraint firstItem="pgV-Js-3bI" firstAttribute="leading" secondItem="JNN-TF-5eN" secondAttribute="leading" constant="30" id="ASf-7r-qm6"/>
                             <constraint firstItem="yJh-A4-oO8" firstAttribute="leading" secondItem="JNN-TF-5eN" secondAttribute="leading" constant="30" id="BM9-Kf-3k6"/>
                             <constraint firstItem="JNN-TF-5eN" firstAttribute="trailing" secondItem="yJh-A4-oO8" secondAttribute="trailing" constant="30" id="LLt-se-Izb"/>
                             <constraint firstItem="pgV-Js-3bI" firstAttribute="top" secondItem="JNN-TF-5eN" secondAttribute="top" constant="72" id="Wos-8g-PIZ"/>
                             <constraint firstItem="yJh-A4-oO8" firstAttribute="top" secondItem="pgV-Js-3bI" secondAttribute="bottom" constant="24" id="bsL-mQ-oI2"/>
+                            <constraint firstItem="Z9R-dg-rSA" firstAttribute="top" secondItem="JNN-TF-5eN" secondAttribute="top" constant="12" id="lhc-Eo-Fws"/>
                             <constraint firstItem="JNN-TF-5eN" firstAttribute="bottom" secondItem="yJh-A4-oO8" secondAttribute="bottom" constant="30" id="o51-r2-utk"/>
+                            <constraint firstItem="qaU-rw-oEy" firstAttribute="leading" secondItem="Z9R-dg-rSA" secondAttribute="trailing" id="xRv-lK-HUR"/>
+                            <constraint firstItem="Z9R-dg-rSA" firstAttribute="centerX" secondItem="n9Q-Hc-qdw" secondAttribute="centerX" id="zHu-FF-aT9"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="369게임" image="hands.clap.fill" catalog="system" id="gIL-yb-HzT"/>
                     <connections>
+                        <outlet property="clapCountLabel" destination="qaU-rw-oEy" id="0ig-ZV-Jlp"/>
                         <outlet property="textField" destination="pgV-Js-3bI" id="NXR-VW-NJF"/>
                         <outlet property="textView" destination="yJh-A4-oO8" id="IFl-ic-6MB"/>
                     </connections>

@@ -11,6 +11,8 @@ class GameViewController: UIViewController {
 
     @IBOutlet var textField: UITextField!
     @IBOutlet var textView: UITextView!
+    @IBOutlet var clapCountLabel: UILabel!
+    var clapCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +20,9 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func textFieldTapEnter(_ sender: UITextField) {
+        clapCount = 0
         getGameStringValue()
+        clapCountLabel.text = String(clapCount)
     }
     
     func getGameStringValue() {
@@ -31,13 +35,28 @@ class GameViewController: UIViewController {
             return
         }
         
-        guard Int(text) != nil else {
+        guard let text = Int(text) else {
             textView.text = "문자가 아닌 숫자만 입력해주세요!"
             return
         }
         
-        for i in 1...Int(text)! {
-            result += "\(getHardResult(text: String(i))), "
+        guard text >= 1 else {
+            textView.text = "1 이상 입력해주세요!"
+            return
+        }
+        
+        guard text <= 1000 else {
+            textView.text = "1000 이하로 입력해주세요!"
+            return
+        }
+        
+        for i in 1...text {
+            let value = getHardResult(text: String(i))
+            let text = value.0
+            let clapCount = value.1
+            
+            self.clapCount += clapCount
+            result += "\(text), "
         }
         
         result.popLast()!
@@ -46,22 +65,33 @@ class GameViewController: UIViewController {
         textView.text = result
     }
     
-    func getSimpleResult(text: String) -> String {
+    func getSimpleResult(text: String) -> (String, Int) {
+        var result = text
+        var clapCount = 0
+        
         for char in text {
-            if char == "3" || char == "6" || char == "9" { return "👏" }
+            if char == "3" || char == "6" || char == "9" {
+                result = "👏"
+                clapCount += 1
+                break
+            }
         }
         
-        return text
+        return (result, clapCount)
     }
     
-    func getHardResult(text: String) -> String {
+    func getHardResult(text: String) -> (String, Int) {
         var result = ""
+        var clapCount = 0
         
         for char in text {
-            if char == "3" || char == "6" || char == "9" { result += "👏" }
+            if char == "3" || char == "6" || char == "9" {
+                result += "👏"
+                clapCount += 1
+            }
             else { result += String(char) }
         }
         
-        return result
+        return (result, clapCount)
     }
 }
