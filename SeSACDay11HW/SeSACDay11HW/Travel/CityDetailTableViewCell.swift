@@ -8,16 +8,43 @@
 import UIKit
 
 class CityDetailTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var descriptionLabel: UILabel!
+    @IBOutlet var saveLabel: UILabel!
+    
+    @IBOutlet var gradeCollection: [UIImageView]!
+    @IBOutlet var travelImage: UIImageView!
+    @IBOutlet var likeImage: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        setLabelUI()
+        setImageUI()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func setLabelUI() {
+        titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        titleLabel.textColor = .black
+        titleLabel.textAlignment = .left
+        titleLabel.numberOfLines = 0
+        
+        descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        descriptionLabel.textColor = .gray
+        descriptionLabel.textAlignment = .left
+        descriptionLabel.numberOfLines = 0
+        
+        saveLabel.text = "저장"
+        saveLabel.font = .systemFont(ofSize: 12, weight: .light)
+        saveLabel.textColor = .lightGray
+        saveLabel.textAlignment = .left
+    }
+    
+    func setImageUI() {
+        travelImage.contentMode = .scaleAspectFill
     }
 
+    override func prepareForReuse() {
+    }
 }
