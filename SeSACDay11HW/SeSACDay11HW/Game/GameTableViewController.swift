@@ -17,12 +17,13 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.isEditable = false
+        setLabelUI()
     }
     
     @IBAction func textFieldTapEnter(_ sender: UITextField) {
         clapCount = 0
         getGameStringValue()
-        clapCountLabel.text = String(clapCount)
+        clapCountLabel.text = "숫자 \(textField.text!)까지 총 박수는 \(String(clapCount))번 입니다."
     }
     
     func getGameStringValue() {
@@ -93,5 +94,12 @@ class GameViewController: UIViewController {
         }
         
         return (result, clapCount)
+    }
+    
+    func setLabelUI() {
+        clapCountLabel.font = .systemFont(ofSize: 30, weight: .bold)
+        clapCountLabel.textColor = UIColor.black
+        clapCountLabel.textAlignment = .center
+        clapCountLabel.numberOfLines = 0
     }
 }
