@@ -65,6 +65,7 @@ extension CityDetailViewController {
         }
         
         if let url = URL(string: travelData.travel[indexPath.row].travel_image ?? "") {
+            cell.travelImage.kf.indicatorType = .activity
             cell.travelImage.kf.setImage(with: url)
         }
         else {
@@ -93,6 +94,7 @@ extension CityDetailViewController {
         
         cell.advertisementLabel.text = travelData.travel[indexPath.row].title
         cell.backgroundColor = adBackgroundColorList.randomElement()
+        cell.selectionStyle = .none
         
         return cell
     }
