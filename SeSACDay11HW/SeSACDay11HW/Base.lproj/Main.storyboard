@@ -82,9 +82,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="NsX-PR-4qp">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="89"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="도시 상세 정보" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLf-yP-IAh">
+                                    <rect key="frame" x="145.66666666666666" y="33.666666666666664" width="102" height="21.666666666666664"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqF-NC-6GL">
+                                    <rect key="frame" x="0.0" y="88" width="393" height="1"/>
+                                    <color key="backgroundColor" systemColor="systemGrayColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="jq6-R3-eev"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="jqF-NC-6GL" secondAttribute="bottom" id="JxZ-dt-eYu"/>
+                                <constraint firstItem="jqF-NC-6GL" firstAttribute="leading" secondItem="NsX-PR-4qp" secondAttribute="leading" id="KBL-2I-VNC"/>
+                                <constraint firstAttribute="trailing" secondItem="jqF-NC-6GL" secondAttribute="trailing" id="Nd3-Qb-NJf"/>
+                                <constraint firstItem="TLf-yP-IAh" firstAttribute="centerY" secondItem="NsX-PR-4qp" secondAttribute="centerY" id="Xhs-28-ECR"/>
+                                <constraint firstItem="TLf-yP-IAh" firstAttribute="centerX" secondItem="NsX-PR-4qp" secondAttribute="centerX" id="bsv-pu-gZK"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="CityDetailTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CityDetailTableViewCell" rowHeight="207" id="15f-GQ-pn3" customClass="CityDetailTableViewCell" customModule="SeSACDay11HW" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="50" width="393" height="207"/>
+                                <rect key="frame" x="0.0" y="139" width="393" height="207"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="15f-GQ-pn3" id="cYg-Xe-anu">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="207"/>
@@ -199,6 +226,29 @@
                                     <outletCollection property="gradeCollection" destination="bc9-JY-y7Y" collectionClass="NSMutableArray" id="sU8-eD-V0A"/>
                                     <outletCollection property="gradeCollection" destination="2yh-j7-eql" collectionClass="NSMutableArray" id="G9m-18-neu"/>
                                     <outletCollection property="gradeCollection" destination="uqX-wf-Sh0" collectionClass="NSMutableArray" id="W2x-hk-jj4"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AdTableViewCell" rowHeight="154" id="0RA-al-VXh" customClass="AdTableViewCell" customModule="SeSACDay11HW" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="346" width="393" height="154"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0RA-al-VXh" id="w4q-J9-ZUk">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="154"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4o-b3-feS">
+                                            <rect key="frame" x="176" y="67" width="41.333333333333343" height="20.333333333333329"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="P4o-b3-feS" firstAttribute="centerX" secondItem="w4q-J9-ZUk" secondAttribute="centerX" id="MfY-my-3Fa"/>
+                                        <constraint firstItem="P4o-b3-feS" firstAttribute="centerY" secondItem="w4q-J9-ZUk" secondAttribute="centerY" id="nmg-SY-81c"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="advertisementLabel" destination="P4o-b3-feS" id="ttq-1D-VTv"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -351,6 +401,9 @@
         </systemColor>
         <systemColor name="systemGray4Color">
             <color red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

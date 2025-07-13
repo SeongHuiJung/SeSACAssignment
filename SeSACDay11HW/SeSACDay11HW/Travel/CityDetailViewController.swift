@@ -12,6 +12,8 @@ class CityDetailViewController: UITableViewController {
 
     var travelData = TravelInfo()
     
+    let adBackgroundColorList: [UIColor] = [.yellow, .systemPink, .systemBlue, .systemMint]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -45,7 +47,7 @@ extension CityDetailViewController {
         return travelData.travel.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func getDefaultCell(indexPath: IndexPath) -> CityDetailTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CityDetailTableViewCell", for: indexPath) as! CityDetailTableViewCell
         
         cell.likeButton.tag = indexPath.row
@@ -86,7 +88,27 @@ extension CityDetailViewController {
         return cell
     }
     
+    func getAdvertisementCell(indexPath: IndexPath) -> AdTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AdTableViewCell", for: indexPath) as! AdTableViewCell
+        
+        cell.advertisementLabel.text = travelData.travel[indexPath.row].title
+        cell.backgroundColor = adBackgroundColorList.randomElement()
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if travelData.travel[indexPath.row].ad == false {
+            return getDefaultCell(indexPath: indexPath)
+        }
+        else {
+            return getAdvertisementCell(indexPath: indexPath)
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        200
+        if travelData.travel[indexPath.row].ad == false { return 200 }
+        else { return 100 }
     }
 }

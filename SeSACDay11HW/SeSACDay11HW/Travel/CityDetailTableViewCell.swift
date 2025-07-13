@@ -35,7 +35,7 @@ class CityDetailTableViewCell: UITableViewCell {
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 0
         
-        saveLabel.text = "저장"
+        saveLabel.text = "저장 0"
         saveLabel.font = .systemFont(ofSize: 12, weight: .light)
         saveLabel.textColor = .lightGray
         saveLabel.textAlignment = .left
