@@ -18,11 +18,6 @@ class MagazineTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         setUI()
-        setDateFormmat()
-    }
-
-    func setDateFormmat() {
-        
     }
     
     func setUI() {
@@ -45,9 +40,4 @@ class MagazineTableViewCell: UITableViewCell {
         photoImage.layer.cornerRadius = 10
         photoImage.clipsToBounds = true
     }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
 }
