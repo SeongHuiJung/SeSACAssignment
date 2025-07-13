@@ -16,6 +16,18 @@ class CityDetailViewController: UITableViewController {
         super.viewDidLoad()
     }
     
+    func getCommaNum(value: String) -> String {
+        var result = value
+        for i in 1...value.count {
+            if i % 3 == 0 {
+                let index = result.index(result.startIndex, offsetBy: value.count - i)
+                result.insert(",", at: index)
+            }
+        }
+        
+       return result
+    }
+    
     @objc func likeButtonTapped(_ sender: UIButton) {
         if let like = travelData.travel[sender.tag].like {
             travelData.travel[sender.tag].like = !like
@@ -43,7 +55,8 @@ extension CityDetailViewController {
         cell.descriptionLabel.text = travelData.travel[indexPath.row].description
         
         if let saveCount = travelData.travel[indexPath.row].save  {
-            cell.saveLabel.text = "저장 \(String(saveCount))"
+            let commaNum = getCommaNum(value: String(saveCount))
+            cell.saveLabel.text = "저장 \(commaNum)"
         }
         else {
             cell.saveLabel.text = "저장 0"
