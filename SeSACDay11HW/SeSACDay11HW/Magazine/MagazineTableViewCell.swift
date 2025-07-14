@@ -13,6 +13,7 @@ class MagazineTableViewCell: UITableViewCell {
     @IBOutlet var subtitleLabel: UILabel!
     @IBOutlet var dateLabel: UILabel!
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -38,5 +39,18 @@ class MagazineTableViewCell: UITableViewCell {
         photoImage.contentMode = .scaleAspectFill
         photoImage.layer.cornerRadius = 10
         photoImage.clipsToBounds = true
+    }
+    
+    func configureUI(row: Magazine, formatStringToDate: DateFormatter, formatDateToString: DateFormatter) {
+        let url = URL(string: row.photo_image)
+        photoImage.kf.setImage(with: url)
+        
+        titleLabel.text = row.title
+        subtitleLabel.text = row.subtitle
+        dateLabel.text = row.date
+        
+        let date = formatStringToDate.date(from: dateLabel.text ?? "") ?? Date()
+        let dateString = formatDateToString.string(from: date)
+        dateLabel.text = dateString
     }
 }

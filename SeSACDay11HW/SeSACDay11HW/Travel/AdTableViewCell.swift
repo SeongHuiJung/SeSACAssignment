@@ -10,10 +10,19 @@ import UIKit
 class AdTableViewCell: UITableViewCell {
 
     @IBOutlet var advertisementLabel: UILabel!
+    
+    let adBackgroundColorList: [UIColor] = [.yellow, .systemPink, .systemBlue, .systemMint]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        setStandardUI()
         setLabelUI()
+    }
+    
+    func setStandardUI() {
+        selectionStyle = .none
+        backgroundColor = adBackgroundColorList.randomElement()
     }
     
     func setLabelUI() {
@@ -23,4 +32,7 @@ class AdTableViewCell: UITableViewCell {
         advertisementLabel.textAlignment = .center
     }
     
+    func configureAdCellUI(row: Travel) {
+        advertisementLabel.text = row.title
+    }
 }

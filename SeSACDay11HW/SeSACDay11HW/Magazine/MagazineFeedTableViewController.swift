@@ -30,17 +30,8 @@ class MagazineFeedTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MagazineTableViewCell", for: indexPath) as! MagazineTableViewCell
-
-        let url = URL(string: magazineData.magazine[indexPath.row].photo_image)
-        cell.photoImage.kf.setImage(with: url)
-        cell.titleLabel.text = magazineData.magazine[indexPath.row].title
-        cell.subtitleLabel.text = magazineData.magazine[indexPath.row].subtitle
-        cell.dateLabel.text = magazineData.magazine[indexPath.row].date
         
-        let date = formatStringToDate.date(from: cell.dateLabel.text ?? "") ?? Date()
-        let dateString = formatDateToString.string(from: date)
-        
-        cell.dateLabel.text = dateString
+        cell.configureUI(row: magazineData.magazine[indexPath.row], formatStringToDate: formatStringToDate, formatDateToString: formatDateToString)
         
         return cell
     }

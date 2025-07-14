@@ -20,6 +20,8 @@ class CityDetailTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        travelImage.kf.indicatorType = .activity
+        
         setLabelUI()
         setImageUI()
     }
@@ -48,6 +50,54 @@ class CityDetailTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         for i in 0..<5 {
             gradeCollection[i].tintColor = .systemGray4
+        }
+    }
+    
+    // 이 함수가 여기에 포함되는게 맞을까?
+    func getCommaNum(value: String) -> String {
+        var result = value
+        for i in 1...value.count {
+            if i % 3 == 0 {
+                let index = result.index(result.startIndex, offsetBy: value.count - i)
+                result.insert(",", at: index)
+            }
+        }
+        
+       return result
+    }
+    
+    func configureDefaultCellUI(row: Travel) {
+        titleLabel.text = row.title
+        descriptionLabel.text = row.description
+        
+        if let saveCount = row.save  {
+            let commaNum = getCommaNum(value: String(saveCount))
+            saveLabel.text = "저장 \(commaNum)"
+        }
+        else {
+            saveLabel.text = "저장 0"
+        }
+        
+        if let url = URL(string: row.travel_image ?? "") {
+            
+            travelImage.kf.setImage(with: url)
+        }
+        else {
+            travelImage.image = UIImage(systemName: "xmark.diamond.fill")
+        }
+        
+        if row.like == true {
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        }
+        else {
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        }
+        
+        if let grade = row.grade {
+            let grade = Int(round(grade))
+            for i in 0..<grade {
+                gradeCollection[i].tintColor = .yellow
+            }
         }
     }
 }
