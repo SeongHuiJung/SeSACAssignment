@@ -20,6 +20,8 @@ class MagazineFeedTableViewController: UITableViewController {
         formatStringToDate.dateFormat = "yyMMdd"
         formatDateToString.dateFormat = "yy년 M월 d일"
 
+        let xib = UINib(nibName: "MagazineTableViewCell", bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: "MagazineTableViewCell")
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

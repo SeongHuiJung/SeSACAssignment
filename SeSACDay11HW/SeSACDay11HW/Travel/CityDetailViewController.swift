@@ -17,6 +17,12 @@ class CityDetailViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var xib = UINib(nibName: "AdTableViewCell", bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: "AdTableViewCell")
+        
+        xib = UINib(nibName: "CityDetailTableViewCell", bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: "CityDetailTableViewCell")
     }
     
     // 이 함수가 여기에 포함되는게 맞을까?

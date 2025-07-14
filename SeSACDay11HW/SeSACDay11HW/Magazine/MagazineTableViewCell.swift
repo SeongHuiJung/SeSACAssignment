@@ -2,13 +2,12 @@
 //  MagazineTableViewCell.swift
 //  SeSACDay11HW
 //
-//  Created by 정성희 on 7/12/25.
+//  Created by 정성희 on 7/14/25.
 //
 
 import UIKit
 
 class MagazineTableViewCell: UITableViewCell {
-
     @IBOutlet var photoImage: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var subtitleLabel: UILabel!

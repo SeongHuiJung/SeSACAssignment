@@ -2,7 +2,7 @@
 //  AdTableViewCell.swift
 //  SeSACDay11HW
 //
-//  Created by 정성희 on 7/13/25.
+//  Created by 정성희 on 7/14/25.
 //
 
 import UIKit
@@ -22,4 +22,5 @@ class AdTableViewCell: UITableViewCell {
         advertisementLabel.textColor = .black
         advertisementLabel.textAlignment = .center
     }
+    
 }
