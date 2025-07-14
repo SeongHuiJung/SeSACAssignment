@@ -7,7 +7,8 @@
 
 import UIKit
 import Kingfisher
-
+// baseViewController : UIViewController/
+// adBackgroundColorList 넣기
 class CityDetailViewController: UITableViewController {
 
     var travelData = TravelInfo()
@@ -18,6 +19,7 @@ class CityDetailViewController: UITableViewController {
         super.viewDidLoad()
     }
     
+    // 이 함수가 여기에 포함되는게 맞을까?
     func getCommaNum(value: String) -> String {
         var result = value
         for i in 1...value.count {
@@ -35,6 +37,7 @@ class CityDetailViewController: UITableViewController {
             travelData.travel[sender.tag].like = !like
         }
         else {
+            // protocol Collection
             travelData.travel[sender.tag].like = true
         }
         
@@ -48,6 +51,9 @@ extension CityDetailViewController {
     }
     
     func getDefaultCell(indexPath: IndexPath) -> CityDetailTableViewCell {
+        // static 으로 관리하기
+        // enum
+        // String(description...)
         let cell = tableView.dequeueReusableCell(withIdentifier: "CityDetailTableViewCell", for: indexPath) as! CityDetailTableViewCell
         
         cell.likeButton.tag = indexPath.row
