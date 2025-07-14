@@ -21,7 +21,6 @@ class AdTableViewCell: UITableViewCell {
     }
     
     func setStandardUI() {
-        selectionStyle = .none
         backgroundColor = adBackgroundColorList.randomElement()
     }
     

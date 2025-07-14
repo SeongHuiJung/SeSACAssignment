@@ -7,10 +7,12 @@
 
 import UIKit
 import Kingfisher
+import Toast
+
 // baseViewController : UIViewController/
 // adBackgroundColorList 넣기
 
-class CityDetailViewController: UITableViewController {
+class CityDetailTableViewController: UITableViewController {
 
     var travelData = TravelInfo()
     
@@ -37,7 +39,7 @@ class CityDetailViewController: UITableViewController {
     }
 }
 
-extension CityDetailViewController {
+extension CityDetailTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return travelData.travel.count
     }
@@ -79,5 +81,11 @@ extension CityDetailViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if travelData.travel[indexPath.row].ad == false { return 200 }
         else { return 100 }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if travelData.travel[indexPath.row].ad == true {
+            self.makeToast("광고입니다")
+        }
     }
 }
