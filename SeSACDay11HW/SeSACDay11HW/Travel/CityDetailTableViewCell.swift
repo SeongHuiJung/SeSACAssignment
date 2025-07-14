@@ -54,16 +54,12 @@ class CityDetailTableViewCell: UITableViewCell {
     }
     
     // 이 함수가 여기에 포함되는게 맞을까?
-    func getCommaNum(value: String) -> String {
-        var result = value
-        for i in 1...value.count {
-            if i % 3 == 0 {
-                let index = result.index(result.startIndex, offsetBy: value.count - i)
-                result.insert(",", at: index)
-            }
-        }
+    func getCommaNum(value: Int) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let result = numberFormatter.string(for: value)!
         
-       return result
+        return result
     }
     
     func configureDefaultCellUI(row: Travel) {
@@ -71,7 +67,7 @@ class CityDetailTableViewCell: UITableViewCell {
         descriptionLabel.text = row.description
         
         if let saveCount = row.save  {
-            let commaNum = getCommaNum(value: String(saveCount))
+            let commaNum = getCommaNum(value: saveCount)
             saveLabel.text = "저장 \(commaNum)"
         }
         else {
