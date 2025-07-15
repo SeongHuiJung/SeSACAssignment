@@ -19,11 +19,11 @@ class CityDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var xib = UINib(nibName: "AdTableViewCell", bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: "AdTableViewCell")
+        var xib = UINib(nibName: AdTableViewCell.identifier, bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: AdTableViewCell.identifier)
         
-        xib = UINib(nibName: "CityDetailTableViewCell", bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: "CityDetailTableViewCell")
+        xib = UINib(nibName: CityDetailTableViewCell.identifier, bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: CityDetailTableViewCell.identifier)
     }
     
     @objc func likeButtonTapped(_ sender: UIButton) {
@@ -45,10 +45,7 @@ extension CityDetailTableViewController {
     }
     
     func getDefaultCell(indexPath: IndexPath, row: Travel) -> CityDetailTableViewCell {
-        // static 으로 관리하기
-        // enum
-        // String(description...)
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CityDetailTableViewCell", for: indexPath) as! CityDetailTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CityDetailTableViewCell.identifier, for: indexPath) as! CityDetailTableViewCell
         
         cell.configureDefaultCellUI(row: travelData.travel[indexPath.row])
         
@@ -59,7 +56,7 @@ extension CityDetailTableViewController {
     }
     
     func getAdvertisementCell(indexPath: IndexPath, row: Travel) -> AdTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "AdTableViewCell", for: indexPath) as! AdTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: AdTableViewCell.identifier, for: indexPath) as! AdTableViewCell
         
         cell.configureAdCellUI(row: travelData.travel[indexPath.row])
         

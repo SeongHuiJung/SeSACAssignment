@@ -9,6 +9,8 @@ import UIKit
 
 class AdTableViewCell: UITableViewCell {
 
+    static let identifier = "AdTableViewCell"
+    
     @IBOutlet var advertisementLabel: UILabel!
     
     let adBackgroundColorList: [UIColor] = [.yellow, .systemPink, .systemBlue, .systemMint]
