@@ -77,43 +77,102 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="NsX-PR-4qp">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="89"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="도시 상세 정보" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLf-yP-IAh">
-                                    <rect key="frame" x="145.66666666666666" y="33.666666666666664" width="102" height="21.666666666666664"/>
-                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqF-NC-6GL">
-                                    <rect key="frame" x="0.0" y="88" width="393" height="1"/>
-                                    <color key="backgroundColor" systemColor="systemGrayColor"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="1" id="jq6-R3-eev"/>
-                                    </constraints>
-                                </view>
-                            </subviews>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <constraints>
-                                <constraint firstAttribute="bottom" secondItem="jqF-NC-6GL" secondAttribute="bottom" id="JxZ-dt-eYu"/>
-                                <constraint firstItem="jqF-NC-6GL" firstAttribute="leading" secondItem="NsX-PR-4qp" secondAttribute="leading" id="KBL-2I-VNC"/>
-                                <constraint firstAttribute="trailing" secondItem="jqF-NC-6GL" secondAttribute="trailing" id="Nd3-Qb-NJf"/>
-                                <constraint firstItem="TLf-yP-IAh" firstAttribute="centerY" secondItem="NsX-PR-4qp" secondAttribute="centerY" id="Xhs-28-ECR"/>
-                                <constraint firstItem="TLf-yP-IAh" firstAttribute="centerX" secondItem="NsX-PR-4qp" secondAttribute="centerX" id="bsv-pu-gZK"/>
-                            </constraints>
-                        </view>
                         <connections>
                             <outlet property="dataSource" destination="odv-Hu-NsV" id="C6l-Rk-Y5b"/>
                             <outlet property="delegate" destination="odv-Hu-NsV" id="psg-zX-p9j"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="도시 상세 정보" image="heart.fill" catalog="system" id="kx5-IF-14d"/>
+                    <navigationItem key="navigationItem" title="도시 상세 정보" id="Dpy-ld-ZY1"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MBT-aT-dhD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-996.18320610687022" y="1085.2112676056338"/>
+            <point key="canvasLocation" x="-69.465648854961827" y="1085.2112676056338"/>
+        </scene>
+        <!--Tourist Attraction View Controller-->
+        <scene sceneID="flB-zJ-hnC">
+            <objects>
+                <viewController storyboardIdentifier="TouristAttractionViewController" id="rR1-or-fjQ" customClass="TouristAttractionViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RJn-kO-0Hc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="toast" highlightedImage="toast" translatesAutoresizingMaskIntoConstraints="NO" id="qEG-Ft-Huq">
+                                <rect key="frame" x="20" y="138" width="353" height="353"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="qEG-Ft-Huq" secondAttribute="height" id="V19-ww-nZX"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="토스트" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jln-kc-yTa">
+                                <rect key="frame" x="157.66666666666666" y="521" width="78" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="낮과 밤 서로 다른 매력을 가진 토스트" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pl0-r3-r4y">
+                                <rect key="frame" x="30" y="577" width="333" height="60"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcG-ZT-Nu7">
+                                <rect key="frame" x="159" y="657" width="75" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="anotherTouristShowButtonTapped:" destination="rR1-or-fjQ" eventType="touchUpInside" id="WwE-59-jtS"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="L6d-IJ-eek"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="zcG-ZT-Nu7" firstAttribute="top" secondItem="Pl0-r3-r4y" secondAttribute="bottom" constant="20" id="DgQ-iF-V5E"/>
+                            <constraint firstItem="L6d-IJ-eek" firstAttribute="trailing" secondItem="qEG-Ft-Huq" secondAttribute="trailing" constant="20" id="O4W-AL-E2C"/>
+                            <constraint firstAttribute="trailing" secondItem="Pl0-r3-r4y" secondAttribute="trailing" constant="30" id="SCC-V0-lgd"/>
+                            <constraint firstItem="jln-kc-yTa" firstAttribute="top" secondItem="qEG-Ft-Huq" secondAttribute="bottom" constant="30" id="SgX-jj-1qL"/>
+                            <constraint firstItem="Pl0-r3-r4y" firstAttribute="leading" secondItem="L6d-IJ-eek" secondAttribute="leading" constant="30" id="Wnn-cr-Pa7"/>
+                            <constraint firstItem="jln-kc-yTa" firstAttribute="centerX" secondItem="RJn-kO-0Hc" secondAttribute="centerX" id="cB3-jN-0yV"/>
+                            <constraint firstItem="Pl0-r3-r4y" firstAttribute="top" secondItem="jln-kc-yTa" secondAttribute="bottom" constant="20" id="kun-79-TBc"/>
+                            <constraint firstItem="qEG-Ft-Huq" firstAttribute="leading" secondItem="L6d-IJ-eek" secondAttribute="leading" constant="20" id="owJ-JQ-Z3d"/>
+                            <constraint firstItem="qEG-Ft-Huq" firstAttribute="top" secondItem="L6d-IJ-eek" secondAttribute="top" constant="20" id="uHO-ML-oKq"/>
+                            <constraint firstItem="zcG-ZT-Nu7" firstAttribute="centerX" secondItem="RJn-kO-0Hc" secondAttribute="centerX" id="uLy-K2-5Gi"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="anotherTouristShowButton" destination="zcG-ZT-Nu7" id="3Yr-DB-CTS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j1c-dh-MET" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1164.1221374045801" y="873.94366197183103"/>
+        </scene>
+        <!--Advertisement View Controller-->
+        <scene sceneID="0JZ-zL-scz">
+            <objects>
+                <viewController storyboardIdentifier="AdvertisementViewController" id="OgG-u2-VYA" customClass="AdvertisementViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cob-cx-VPp">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="도쿄 여행 예약은? 수업 있어서 갈 생각은 없습니다!!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iMY-Md-0hv">
+                                <rect key="frame" x="20" y="390.33333333333331" width="353" height="71.666666666666686"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="kuO-So-F1g"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="iMY-Md-0hv" firstAttribute="centerY" secondItem="cob-cx-VPp" secondAttribute="centerY" id="4RT-e4-enh"/>
+                            <constraint firstItem="kuO-So-F1g" firstAttribute="trailing" secondItem="iMY-Md-0hv" secondAttribute="trailing" constant="20" id="RVD-Qt-tag"/>
+                            <constraint firstItem="iMY-Md-0hv" firstAttribute="leading" secondItem="kuO-So-F1g" secondAttribute="leading" constant="20" id="gkh-LG-GUa"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nsC-aG-1kd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1156.4885496183206" y="1617.605633802817"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="E5b-0a-nBC">
@@ -127,7 +186,7 @@
                     <connections>
                         <segue destination="gfO-u6-sBj" kind="relationship" relationship="viewControllers" id="tbR-wL-nmD"/>
                         <segue destination="hc2-la-8QI" kind="relationship" relationship="viewControllers" id="6FO-WB-fb0"/>
-                        <segue destination="odv-Hu-NsV" kind="relationship" relationship="viewControllers" id="GJ3-eU-NpV"/>
+                        <segue destination="nFG-ew-S2N" kind="relationship" relationship="viewControllers" id="fpM-EL-qrM"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysv-t5-Aho" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -180,11 +239,31 @@
             </objects>
             <point key="canvasLocation" x="-973.28244274809151" y="-392.25352112676057"/>
         </scene>
+        <!--도시 상세 정보-->
+        <scene sceneID="Tdj-YI-HIc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nFG-ew-S2N" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="도시 상세 정보" image="heart.fill" catalog="system" id="kx5-IF-14d"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="J1W-tz-qM1">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="odv-Hu-NsV" kind="relationship" relationship="rootViewController" id="3V0-6h-V2m"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="coE-PF-t7T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-996.18320610687022" y="1085.2112676056338"/>
+        </scene>
     </scenes>
     <resources>
         <image name="hands.clap.fill" catalog="system" width="128" height="121"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
+        <image name="toast" width="200" height="200"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -193,9 +272,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

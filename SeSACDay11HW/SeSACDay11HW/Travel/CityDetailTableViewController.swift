@@ -19,13 +19,13 @@ class CityDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var xib = UINib(nibName: AdTableViewCell.identifier, bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: AdTableViewCell.identifier)
-        
-        xib = UINib(nibName: CityDetailTableViewCell.identifier, bundle: nil)
-        tableView.register(xib, forCellReuseIdentifier: CityDetailTableViewCell.identifier)
+        connectXib()
+        setNavigationUI()
     }
-    
+}
+
+//action
+extension CityDetailTableViewController {
     @objc func likeButtonTapped(_ sender: UIButton) {
         if let like = travelData.travel[sender.tag].like {
             travelData.travel[sender.tag].like = !like
@@ -39,6 +39,15 @@ class CityDetailTableViewController: UITableViewController {
     }
 }
 
+// setUI
+extension CityDetailTableViewController {
+    func setNavigationUI () {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = .black
+    }
+}
+
+// tableView
 extension CityDetailTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return travelData.travel.count
@@ -83,6 +92,31 @@ extension CityDetailTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if travelData.travel[indexPath.row].ad == true {
             self.makeToast("광고입니다")
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: AdvertisementViewController.identifier) as! AdvertisementViewController
+            
+            // 네비게이션 컨트롤러가 있는 형태로 Present modally 하는 방법
+            let navigation = UINavigationController(rootViewController: viewController)
+            navigation.modalPresentationStyle = .fullScreen
+            
+            present(navigation, animated: true)
         }
+        else {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let viewController = storyboard.instantiateViewController(withIdentifier: TouristAttractionViewController.identifier) as! TouristAttractionViewController
+            navigationController?.pushViewController(viewController, animated: true)
+        }
+    }
+}
+
+// xib
+extension CityDetailTableViewController {
+    func connectXib() {
+        var xib = UINib(nibName: AdTableViewCell.identifier, bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: AdTableViewCell.identifier)
+        
+        xib = UINib(nibName: CityDetailTableViewCell.identifier, bundle: nil)
+        tableView.register(xib, forCellReuseIdentifier: CityDetailTableViewCell.identifier)
     }
 }
