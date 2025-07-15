@@ -144,7 +144,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1c-dh-MET" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1164.1221374045801" y="873.94366197183103"/>
+            <point key="canvasLocation" x="961" y="1085"/>
         </scene>
         <!--Advertisement View Controller-->
         <scene sceneID="0JZ-zL-scz">
@@ -172,7 +172,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nsC-aG-1kd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1156.4885496183206" y="1617.605633802817"/>
+            <point key="canvasLocation" x="1714" y="1085"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="E5b-0a-nBC">
@@ -187,6 +187,7 @@
                         <segue destination="gfO-u6-sBj" kind="relationship" relationship="viewControllers" id="tbR-wL-nmD"/>
                         <segue destination="hc2-la-8QI" kind="relationship" relationship="viewControllers" id="6FO-WB-fb0"/>
                         <segue destination="nFG-ew-S2N" kind="relationship" relationship="viewControllers" id="fpM-EL-qrM"/>
+                        <segue destination="7U0-VU-oXu" kind="relationship" relationship="viewControllers" id="UVm-J6-LYS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ysv-t5-Aho" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -258,10 +259,100 @@
             </objects>
             <point key="canvasLocation" x="-996.18320610687022" y="1085.2112676056338"/>
         </scene>
+        <!--인기 도시-->
+        <scene sceneID="TSd-4y-Xpa">
+            <objects>
+                <tableViewController storyboardIdentifier="TravelCityTableViewController" id="AP3-D5-o5g" customClass="TravelCityTableViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="ngx-Fn-62c">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="var-3q-N5p">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="135"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="z8X-h9-HFH">
+                                    <rect key="frame" x="20" y="88" width="353" height="32"/>
+                                    <segments>
+                                        <segment title="모두"/>
+                                        <segment title="국내"/>
+                                        <segment title="해외"/>
+                                    </segments>
+                                    <connections>
+                                        <action selector="citySegmentChanged:" destination="AP3-D5-o5g" eventType="valueChanged" id="7q4-hF-p0S"/>
+                                    </connections>
+                                </segmentedControl>
+                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="원하는 도시를 검색해보세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mvS-ZN-96p">
+                                    <rect key="frame" x="20" y="28" width="353" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="Okt-sT-4It"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <connections>
+                                        <action selector="textFieldDidEndOnExit:" destination="AP3-D5-o5g" eventType="editingDidEndOnExit" id="cri-V3-8tw"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="mvS-ZN-96p" secondAttribute="trailing" constant="20" id="9s4-Xj-ZaV"/>
+                                <constraint firstAttribute="trailing" secondItem="z8X-h9-HFH" secondAttribute="trailing" constant="20" id="UaV-kE-F6n"/>
+                                <constraint firstItem="z8X-h9-HFH" firstAttribute="leading" secondItem="var-3q-N5p" secondAttribute="leading" constant="20" id="bQo-kV-zv4"/>
+                                <constraint firstItem="mvS-ZN-96p" firstAttribute="top" secondItem="var-3q-N5p" secondAttribute="top" constant="28" id="c5f-T7-Umd"/>
+                                <constraint firstItem="z8X-h9-HFH" firstAttribute="top" secondItem="mvS-ZN-96p" secondAttribute="bottom" constant="20" id="rNW-2O-rpF"/>
+                                <constraint firstItem="mvS-ZN-96p" firstAttribute="leading" secondItem="var-3q-N5p" secondAttribute="leading" constant="20" id="z7Q-V3-vA7"/>
+                            </constraints>
+                        </view>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="lUe-fZ-L2k">
+                                <rect key="frame" x="0.0" y="185" width="393" height="44.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lUe-fZ-L2k" id="RIo-Xy-OB5">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="44.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="AP3-D5-o5g" id="OfK-aw-Aha"/>
+                            <outlet property="delegate" destination="AP3-D5-o5g" id="fCQ-vt-OXg"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="인기 도시" id="gO1-zf-ECt"/>
+                    <connections>
+                        <outlet property="citySegment" destination="z8X-h9-HFH" id="Krn-X5-kCh"/>
+                        <outlet property="textField" destination="mvS-ZN-96p" id="EiH-Xc-0K6"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tke-k6-IgP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-101.5267175572519" y="1937.323943661972"/>
+        </scene>
+        <!--여행 도시-->
+        <scene sceneID="Hbv-br-109">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7U0-VU-oXu" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="여행 도시" image="rectangle.pattern.checkered" catalog="system" id="dBl-bS-fTD"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jlS-zq-Ojk">
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AP3-D5-o5g" kind="relationship" relationship="rootViewController" id="bsf-sb-89Q"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qmy-wA-GCi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1028.2442748091603" y="1937.323943661972"/>
+        </scene>
     </scenes>
     <resources>
         <image name="hands.clap.fill" catalog="system" width="128" height="121"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
+        <image name="rectangle.pattern.checkered" catalog="system" width="128" height="93"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <image name="toast" width="200" height="200"/>
         <systemColor name="labelColor">
