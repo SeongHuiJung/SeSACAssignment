@@ -15,6 +15,6 @@ extension UIViewController {
         style.messageColor = .white
         style.backgroundColor = .systemBlue
 
-        self.view.superview?.superview?.superview?.makeToast(message, duration: 3.0, position: .top, style: style)
+        self.tabBarController?.view.makeToast(message, duration: 3.0, position: .top, style: style)
     }
 }
