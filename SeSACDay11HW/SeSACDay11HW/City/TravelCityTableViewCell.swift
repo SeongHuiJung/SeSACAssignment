@@ -13,6 +13,7 @@ class TravelCityTableViewCell: UITableViewCell {
     @IBOutlet var cityNameLabel: UILabel!
     @IBOutlet var cityExplainLabel: UILabel!
     @IBOutlet var labelBackgroundImage: UIView!
+    @IBOutlet var shadowView: UIView!
     
     static let identifier = "TravelCityTableViewCell"
     
@@ -36,6 +37,14 @@ class TravelCityTableViewCell: UITableViewCell {
         
         labelBackgroundImage.layer.maskedCorners = [.layerMaxXMaxYCorner]
         labelBackgroundImage.layer.cornerRadius = 12
+        
+        // 그림자 설정
+        shadowView.backgroundColor = .white
+        shadowView.layer.shadowOffset = CGSize(width: 5, height: 5)
+        shadowView.layer.shadowOpacity = 0.2
+        shadowView.layer.shadowRadius = 4
+        shadowView.layer.cornerRadius = 12
+        shadowView.layer.masksToBounds = false
     }
 
     func configureUI(row: City) {
