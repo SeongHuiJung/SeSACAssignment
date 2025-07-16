@@ -12,12 +12,16 @@ class TravelCityTableViewCell: UITableViewCell {
     @IBOutlet var travelImage: UIImageView!
     @IBOutlet var cityNameLabel: UILabel!
     @IBOutlet var cityExplainLabel: UILabel!
+    @IBOutlet var labelBackgroundImage: UIView!
     
     static let identifier = "TravelCityTableViewCell"
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
+        configureStandardUI()
+    }
+    
+    func configureStandardUI() {
         cityNameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         cityNameLabel.textColor = .white
         cityNameLabel.textAlignment = .right
@@ -25,6 +29,13 @@ class TravelCityTableViewCell: UITableViewCell {
         cityExplainLabel.font = .systemFont(ofSize: 13)
         cityExplainLabel.textColor = .white
         cityExplainLabel.textAlignment = .left
+        
+        travelImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMaxYCorner]
+        travelImage.layer.cornerRadius = 12
+        travelImage.layer.masksToBounds = true
+        
+        labelBackgroundImage.layer.maskedCorners = [.layerMaxXMaxYCorner]
+        labelBackgroundImage.layer.cornerRadius = 12
     }
 
     func configureUI(row: City) {
@@ -41,5 +52,13 @@ class TravelCityTableViewCell: UITableViewCell {
         
         cityNameLabel.text = "\(row.cityName) | \(row.cityEnglishName)"
         cityExplainLabel.text = row.cityExplain
+    }
+    
+    // 검색한 키워드와 일치하는 글자 색 변경
+    func changeKeywordColor(label: UILabel, keyword: String) {
+        guard let text = label.text else { return }
+        let attributeString = NSMutableAttributedString(string: text)
+        attributeString.addAttribute(.foregroundColor, value: UIColor.yellow, range: (text.lowercased() as NSString).range(of: keyword))
+        label.attributedText = attributeString
     }
 }

@@ -24,7 +24,7 @@ class CityDetailTableViewController: UITableViewController {
     }
 }
 
-//action
+//MARK: - action
 extension CityDetailTableViewController {
     @objc func likeButtonTapped(_ sender: UIButton) {
         if let like = travelData.travel[sender.tag].like {

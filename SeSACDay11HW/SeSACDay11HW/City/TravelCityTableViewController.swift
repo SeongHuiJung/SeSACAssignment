@@ -37,7 +37,12 @@ extension TravelCityTableViewController {
 // TableView
 extension TravelCityTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if textField.text?.isEmpty == true {
+        guard let text = textField.text else { return 0 }
+        
+        if text.contains(" ") {
+            return 0
+        }
+        else if textField.text?.isEmpty == true{
             switch segmentSelected {
             case 0: return cityList.city.count
             case 1: return cityList.city.filter{$0.domesticTravel == true}.count
@@ -57,9 +62,13 @@ extension TravelCityTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print(#function)
+        
+        guard let text = textField.text else { return UITableViewCell() }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: TravelCityTableViewCell.identifier, for: indexPath) as! TravelCityTableViewCell
         
-        if textField.text?.isEmpty == true {
+        if text.isEmpty == true {
             switch segmentSelected {
             case 0: cell.configureUI(row: cityList.city[indexPath.row])
             case 1: cell.configureUI(row: cityList.city.filter{$0.domesticTravel == true}[indexPath.row])
@@ -75,6 +84,9 @@ extension TravelCityTableViewController {
             case 2: cell.configureUI(row: cityList.filter{$0.domesticTravel == false}[indexPath.row])
             default: cell.configureUI(row: cityList[indexPath.row])
             }
+            
+            cell.changeKeywordColor(label: cell.cityNameLabel, keyword: text)
+            cell.changeKeywordColor(label: cell.cityExplainLabel, keyword: text)
         }
         
         return cell

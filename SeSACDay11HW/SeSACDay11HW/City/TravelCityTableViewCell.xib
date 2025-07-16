@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,6 +20,13 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IfT-P3-bey">
                         <rect key="frame" x="12" y="6" width="296" height="180"/>
                     </imageView>
+                    <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6n3-SU-Pa2">
+                        <rect key="frame" x="12" y="142" width="296" height="44"/>
+                        <color key="backgroundColor" systemColor="labelColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="EQh-ua-qOd"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YbX-hJ-mHd">
                         <rect key="frame" x="22" y="155" width="42" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -34,12 +42,15 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="IfT-P3-bey" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="4xM-gX-ExJ"/>
+                    <constraint firstItem="6n3-SU-Pa2" firstAttribute="trailing" secondItem="IfT-P3-bey" secondAttribute="trailing" id="D8L-af-HqS"/>
                     <constraint firstItem="IfT-P3-bey" firstAttribute="leading" secondItem="YbX-hJ-mHd" secondAttribute="leading" constant="-10" id="LK9-ws-Psv"/>
                     <constraint firstItem="IfT-P3-bey" firstAttribute="top" secondItem="cRM-Km-Ga6" secondAttribute="top" constant="-10" id="ODH-ba-EZN"/>
+                    <constraint firstItem="IfT-P3-bey" firstAttribute="bottom" secondItem="6n3-SU-Pa2" secondAttribute="bottom" id="QlG-8l-B2O"/>
                     <constraint firstAttribute="trailing" secondItem="IfT-P3-bey" secondAttribute="trailing" constant="12" id="al6-Oq-I95"/>
                     <constraint firstItem="IfT-P3-bey" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="by4-U5-35W"/>
                     <constraint firstItem="cRM-Km-Ga6" firstAttribute="trailing" secondItem="IfT-P3-bey" secondAttribute="trailing" constant="-10" id="csk-eG-sJB"/>
                     <constraint firstAttribute="bottom" secondItem="IfT-P3-bey" secondAttribute="bottom" constant="6" id="r87-on-Im5"/>
+                    <constraint firstItem="6n3-SU-Pa2" firstAttribute="leading" secondItem="IfT-P3-bey" secondAttribute="leading" id="sV7-JF-ueY"/>
                     <constraint firstItem="YbX-hJ-mHd" firstAttribute="bottom" secondItem="IfT-P3-bey" secondAttribute="bottom" constant="-10" id="z1p-uR-RUg"/>
                 </constraints>
             </tableViewCellContentView>
@@ -47,9 +58,15 @@
             <connections>
                 <outlet property="cityExplainLabel" destination="YbX-hJ-mHd" id="Fq6-yK-wvE"/>
                 <outlet property="cityNameLabel" destination="cRM-Km-Ga6" id="gcC-cC-osK"/>
+                <outlet property="labelBackgroundImage" destination="6n3-SU-Pa2" id="jXI-cm-lN9"/>
                 <outlet property="travelImage" destination="IfT-P3-bey" id="lw7-LU-yM2"/>
             </connections>
             <point key="canvasLocation" x="-25.954198473282442" y="85.91549295774648"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
