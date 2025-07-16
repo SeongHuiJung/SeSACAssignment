@@ -289,7 +289,7 @@
                                     <action selector="textFieldDidEndOnExit:" destination="phb-bg-EOD" eventType="editingDidEndOnExit" id="m5k-OS-9OQ"/>
                                 </connections>
                             </textField>
-                            <searchBar contentMode="redraw" placeholder="도시를 검색해 보세요 (SearchBar)" translatesAutoresizingMaskIntoConstraints="NO" id="3ok-4a-gC6">
+                            <searchBar contentMode="redraw" text="" placeholder="도시를 검색해 보세요 (SearchBar)" translatesAutoresizingMaskIntoConstraints="NO" id="3ok-4a-gC6">
                                 <rect key="frame" x="20" y="232" width="353" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Lb5-N3-Y35"/>

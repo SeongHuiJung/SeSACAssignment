@@ -77,21 +77,7 @@ class CityDetailTableViewCell: UITableViewCell {
             saveLabel.text = "저장 0"
         }
         
-        if let url = URL(string: row.travel_image ?? "") {
-            // Down Sampling
-            let processor = DownsamplingImageProcessor(size: travelImage.bounds.size)
-            travelImage.kf.setImage(with: url,
-            options: [
-                .processor(processor),
-                .scaleFactor(UIScreen.main.scale),
-                .cacheOriginalImage, // 캐시가 있으면 캐시를 불러오고, 캐시가 없다면 네트워킹으로 데이터를 새로 받아옴
-                .memoryCacheExpiration(.days(1)), // 메모리 캐시 유지 기간을 1일로 설정
-                .diskCacheExpiration(.never) // 디스크 캐시는 만료되지 않도록 설정
-            ])
-        }
-        else {
-            travelImage.image = UIImage(systemName: "xmark.diamond.fill")
-        }
+        travelImage.setDownSamplingImage(url: row.travel_image)
         
         if row.like == true {
             likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
