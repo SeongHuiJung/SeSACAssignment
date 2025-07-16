@@ -65,6 +65,7 @@ class TravelCityTableViewCell: UITableViewCell {
     
     // 검색한 키워드와 일치하는 글자 색 변경
     func changeKeywordColor(label: UILabel, keyword: String) {
+        print("keyword: \(keyword)")
         guard let text = label.text else { return }
         let attributeString = NSMutableAttributedString(string: text)
         attributeString.addAttribute(.foregroundColor, value: UIColor.yellow, range: (text.lowercased() as NSString).range(of: keyword))

@@ -9,6 +9,8 @@ import UIKit
 
 class FamousCityViewController: UIViewController {
     @IBOutlet var textField: UITextField!
+    @IBOutlet var searchBar: UISearchBar!
+    
     @IBOutlet var citySegment: UISegmentedControl!
     @IBOutlet var tableView: UITableView!
     
@@ -38,12 +40,16 @@ extension FamousCityViewController {
 // MARK: - TableView
 extension FamousCityViewController: UITableViewDelegate, UITableViewDataSource  {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // searchBar 이용해서 검색하는 코드
+        //guard let text = searchBar.text else { return 0 }
+        
+        // textField 이용해서 검색하는 코드
         guard let text = textField.text else { return 0 }
         
         if text.contains(" ") {
             return 0
         }
-        else if textField.text?.isEmpty == true{
+        else if text.isEmpty == true{
             switch segmentSelected {
             case 0: return cityList.city.count
             case 1: return cityList.city.filter{$0.domesticTravel == true}.count
@@ -52,7 +58,7 @@ extension FamousCityViewController: UITableViewDelegate, UITableViewDataSource  
             }
         }
         else {
-            let cityList = getSearchResultList()
+            let cityList = getSearchResultList(text: text)
             switch segmentSelected {
             case 0: return cityList.count
             case 1: return cityList.filter{$0.domesticTravel == true}.count
@@ -64,7 +70,10 @@ extension FamousCityViewController: UITableViewDelegate, UITableViewDataSource  
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print(#function)
+        // searchBar 이용해서 검색하는 코드
+        //guard let text = searchBar.text else { return UITableViewCell() }
         
+        // textField 이용해서 검색하는 코드
         guard let text = textField.text else { return UITableViewCell() }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: TravelCityTableViewCell.identifier, for: indexPath) as! TravelCityTableViewCell
@@ -78,7 +87,7 @@ extension FamousCityViewController: UITableViewDelegate, UITableViewDataSource  
             }
         }
         else {
-            let cityList = getSearchResultList()
+            let cityList = getSearchResultList(text: text)
             switch segmentSelected {
             case 0: cell.configureUI(row: cityList[indexPath.row])
             case 1: cell.configureUI(row: cityList.filter{$0.domesticTravel == true}[indexPath.row])
@@ -117,12 +126,16 @@ extension FamousCityViewController {
 // MARK: - TextField Action
 extension FamousCityViewController {
     
+    @IBAction func textFieldChanged(_ sender: UITextField) {
+        tableView.reloadData()
+    }
+    
     @IBAction func textFieldDidEndOnExit(_ sender: UITextField) {
         tableView.reloadData()
     }
     
-    func getSearchResultList() -> [City]{
-        guard let text = textField.text?.lowercased() else { return [] }
+    func getSearchResultList(text: String) -> [City] {
+        let text = text.lowercased()
         var result: [City] = []
         
         for city in cityList.city {
@@ -143,5 +156,27 @@ extension FamousCityViewController {
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
+        textField.delegate = self
+        searchBar.delegate = self
+        
+        searchBar.autocapitalizationType = .none
+    }
+}
+
+// MARK: - TextField Delegate
+extension FamousCityViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 입력중인 상태는 textField.text 에 나오지 않음
+        // 그래서 한글자씩 늦게 반영이 되어 검색이 제대로 되지 않는 상황
+        print(#function, textField.text!)
+        return true
+    }
+}
+
+// MARK: - SearchBar Delegate
+extension FamousCityViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        tableView.reloadData()
+        print(#function, searchText)
     }
 }

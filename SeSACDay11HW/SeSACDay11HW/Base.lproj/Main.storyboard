@@ -274,10 +274,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nbe-VL-bv9">
-                                <rect key="frame" x="0.0" y="292" width="393" height="443"/>
+                                <rect key="frame" x="0.0" y="346" width="393" height="389"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="도시를 검색해 보세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8QD-eW-cSq">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="도시를 검색해 보세요 (TextField)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8QD-eW-cSq">
                                 <rect key="frame" x="20" y="182" width="353" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Ckl-T0-Caw"/>
@@ -285,11 +285,22 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
+                                    <action selector="textFieldChanged:" destination="phb-bg-EOD" eventType="editingChanged" id="L7w-sS-tOo"/>
                                     <action selector="textFieldDidEndOnExit:" destination="phb-bg-EOD" eventType="editingDidEndOnExit" id="m5k-OS-9OQ"/>
                                 </connections>
                             </textField>
+                            <searchBar contentMode="redraw" placeholder="도시를 검색해 보세요 (SearchBar)" translatesAutoresizingMaskIntoConstraints="NO" id="3ok-4a-gC6">
+                                <rect key="frame" x="20" y="232" width="353" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Lb5-N3-Y35"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="phb-bg-EOD" id="tBF-VA-zgE"/>
+                                </connections>
+                            </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fRV-rU-dFS">
-                                <rect key="frame" x="20" y="242" width="353" height="31"/>
+                                <rect key="frame" x="20" y="296" width="353" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Icl-qF-p2o"/>
                                 </constraints>
@@ -306,12 +317,15 @@
                         <viewLayoutGuide key="safeArea" id="X8x-VM-Lhj"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="fRV-rU-dFS" firstAttribute="top" secondItem="3ok-4a-gC6" secondAttribute="bottom" constant="20" id="5Yz-9g-szw"/>
+                            <constraint firstItem="3ok-4a-gC6" firstAttribute="trailing" secondItem="X8x-VM-Lhj" secondAttribute="trailing" constant="-20" id="F16-Br-1JU"/>
                             <constraint firstItem="fRV-rU-dFS" firstAttribute="leading" secondItem="X8x-VM-Lhj" secondAttribute="leading" constant="20" id="Fuh-Pm-cxx"/>
                             <constraint firstItem="X8x-VM-Lhj" firstAttribute="bottom" secondItem="nbe-VL-bv9" secondAttribute="bottom" id="Hop-vR-8Ew"/>
                             <constraint firstItem="X8x-VM-Lhj" firstAttribute="trailing" secondItem="nbe-VL-bv9" secondAttribute="trailing" id="Lul-rA-BHt"/>
+                            <constraint firstItem="3ok-4a-gC6" firstAttribute="leading" secondItem="X8x-VM-Lhj" secondAttribute="leading" constant="20" id="Mis-hJ-4i0"/>
                             <constraint firstItem="X8x-VM-Lhj" firstAttribute="trailing" secondItem="8QD-eW-cSq" secondAttribute="trailing" constant="20" id="NY9-0U-6Eh"/>
                             <constraint firstItem="8QD-eW-cSq" firstAttribute="leading" secondItem="X8x-VM-Lhj" secondAttribute="leading" constant="20" id="ORN-Tx-r3x"/>
-                            <constraint firstItem="fRV-rU-dFS" firstAttribute="top" secondItem="8QD-eW-cSq" secondAttribute="bottom" constant="20" id="Ujm-8v-9Wa"/>
+                            <constraint firstItem="3ok-4a-gC6" firstAttribute="top" secondItem="8QD-eW-cSq" secondAttribute="bottom" constant="10" id="Ujm-8v-9Wa"/>
                             <constraint firstItem="8QD-eW-cSq" firstAttribute="top" secondItem="X8x-VM-Lhj" secondAttribute="top" constant="20" id="Umb-oS-Y8B"/>
                             <constraint firstItem="X8x-VM-Lhj" firstAttribute="trailing" secondItem="fRV-rU-dFS" secondAttribute="trailing" constant="20" id="iAs-IY-IZ5"/>
                             <constraint firstItem="nbe-VL-bv9" firstAttribute="leading" secondItem="X8x-VM-Lhj" secondAttribute="leading" id="mMF-j8-dfH"/>
@@ -321,13 +335,14 @@
                     <navigationItem key="navigationItem" title="인기 도시" id="2Pg-x2-cJi"/>
                     <connections>
                         <outlet property="citySegment" destination="fRV-rU-dFS" id="V40-bS-sbu"/>
+                        <outlet property="searchBar" destination="3ok-4a-gC6" id="fQV-jr-ZLi"/>
                         <outlet property="tableView" destination="nbe-VL-bv9" id="ZCc-5T-JnK"/>
                         <outlet property="textField" destination="8QD-eW-cSq" id="Krp-XM-stq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzw-dp-MGs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-103" y="1937"/>
+            <point key="canvasLocation" x="-103.05343511450381" y="1936.6197183098593"/>
         </scene>
         <!--City Detail View Controller-->
         <scene sceneID="qox-wC-WL3">
