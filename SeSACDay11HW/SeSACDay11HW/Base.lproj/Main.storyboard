@@ -96,8 +96,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="toast" highlightedImage="toast" translatesAutoresizingMaskIntoConstraints="NO" id="qEG-Ft-Huq">
-                                <rect key="frame" x="20" y="138" width="353" height="353"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="toast" highlightedImage="toast" translatesAutoresizingMaskIntoConstraints="NO" id="qEG-Ft-Huq">
+                                <rect key="frame" x="21" y="138" width="353" height="353"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="qEG-Ft-Huq" secondAttribute="height" id="V19-ww-nZX"/>
                                 </constraints>
@@ -140,6 +140,9 @@
                     </view>
                     <connections>
                         <outlet property="anotherTouristShowButton" destination="zcG-ZT-Nu7" id="3Yr-DB-CTS"/>
+                        <outlet property="descriptionLabel" destination="Pl0-r3-r4y" id="fiz-D2-nHt"/>
+                        <outlet property="titleLabel" destination="jln-kc-yTa" id="KpF-f7-MRF"/>
+                        <outlet property="travelImage" destination="qEG-Ft-Huq" id="uH0-5o-WWc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j1c-dh-MET" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -169,6 +172,9 @@
                             <constraint firstItem="iMY-Md-0hv" firstAttribute="leading" secondItem="kuO-So-F1g" secondAttribute="leading" constant="20" id="gkh-LG-GUa"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="titleLabel" destination="iMY-Md-0hv" id="bNb-Fw-oUg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nsC-aG-1kd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -329,6 +335,55 @@
             </objects>
             <point key="canvasLocation" x="-101.5267175572519" y="1937.323943661972"/>
         </scene>
+        <!--City Detail View Controller-->
+        <scene sceneID="qox-wC-WL3">
+            <objects>
+                <viewController storyboardIdentifier="CityDetailViewController" id="PcI-Wd-Xks" customClass="CityDetailViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Dyy-Us-UEE">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UpP-gs-UI4">
+                                <rect key="frame" x="175.66666666666666" y="218" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fQS-2R-G4X">
+                                <rect key="frame" x="175.66666666666666" y="259" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ATq-S7-sAM">
+                                <rect key="frame" x="175.66666666666666" y="300" width="42" height="384"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="NGG-9S-aae"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fQS-2R-G4X" firstAttribute="centerX" secondItem="Dyy-Us-UEE" secondAttribute="centerX" id="2af-Zm-qx9"/>
+                            <constraint firstItem="fQS-2R-G4X" firstAttribute="top" secondItem="UpP-gs-UI4" secondAttribute="bottom" constant="20" id="5QM-6c-9yW"/>
+                            <constraint firstItem="UpP-gs-UI4" firstAttribute="top" secondItem="NGG-9S-aae" secondAttribute="top" constant="100" id="L4a-0L-SQF"/>
+                            <constraint firstItem="UpP-gs-UI4" firstAttribute="centerX" secondItem="Dyy-Us-UEE" secondAttribute="centerX" id="Lta-xf-Bbt"/>
+                            <constraint firstItem="NGG-9S-aae" firstAttribute="bottom" secondItem="ATq-S7-sAM" secondAttribute="bottom" constant="100" id="NCT-F1-KxA"/>
+                            <constraint firstItem="ATq-S7-sAM" firstAttribute="centerX" secondItem="Dyy-Us-UEE" secondAttribute="centerX" id="bnA-nV-rn0"/>
+                            <constraint firstItem="ATq-S7-sAM" firstAttribute="top" secondItem="fQS-2R-G4X" secondAttribute="bottom" constant="20" id="mTs-Yj-fBR"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="cityEnglishNameLabel" destination="fQS-2R-G4X" id="1Ej-0N-nON"/>
+                        <outlet property="cityExplainLabel" destination="ATq-S7-sAM" id="4Qa-45-o9b"/>
+                        <outlet property="cityNameLabel" destination="UpP-gs-UI4" id="7tk-cE-kai"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MYI-lM-nEZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="799" y="1937"/>
+        </scene>
         <!--여행 도시-->
         <scene sceneID="Hbv-br-109">
             <objects>
@@ -359,7 +414,7 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -95,6 +95,15 @@ extension TravelCityTableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         200
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function)
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "CityDetailViewController") as! CityDetailViewController
+        
+        viewController.cityData = cityList.city[indexPath.row]
+        
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 // segmentSelected controll

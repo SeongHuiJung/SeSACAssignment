@@ -11,9 +11,14 @@ class AdvertisementViewController: UIViewController {
 
     static let identifier = "AdvertisementViewController"
     
+    @IBOutlet var titleLabel: UILabel!
+    
+    var titleData = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationUI()
+        setUI()
     }
 }
 
@@ -31,5 +36,12 @@ extension AdvertisementViewController {
         navigationController?.navigationBar.tintColor = .black
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .done, target: self, action: #selector(backbuttonTapped))
+    }
+}
+
+//UI
+extension AdvertisementViewController {
+    func setUI() {
+        titleLabel.text = titleData
     }
 }

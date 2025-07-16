@@ -96,6 +96,8 @@ extension CityDetailTableViewController {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: AdvertisementViewController.identifier) as! AdvertisementViewController
             
+            viewController.titleData = travelData.travel[indexPath.row].title
+            
             // 네비게이션 컨트롤러가 있는 형태로 Present modally 하는 방법
             let navigation = UINavigationController(rootViewController: viewController)
             navigation.modalPresentationStyle = .fullScreen
@@ -105,6 +107,9 @@ extension CityDetailTableViewController {
         else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let viewController = storyboard.instantiateViewController(withIdentifier: TouristAttractionViewController.identifier) as! TouristAttractionViewController
+            
+            viewController.tourData = travelData.travel[indexPath.row]
+            
             navigationController?.pushViewController(viewController, animated: true)
         }
     }
