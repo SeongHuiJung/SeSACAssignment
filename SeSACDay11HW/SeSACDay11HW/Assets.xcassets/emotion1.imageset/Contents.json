@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "스크린샷 2025-07-16 오후 5.14.54.jpg",
+      "filename" : "emotion1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "emotion1@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "emotion1@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

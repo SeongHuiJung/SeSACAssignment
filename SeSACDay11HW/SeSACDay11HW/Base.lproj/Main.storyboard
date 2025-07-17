@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -274,11 +275,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="nbe-VL-bv9">
-                                <rect key="frame" x="0.0" y="346" width="393" height="389"/>
+                                <rect key="frame" x="0.0" y="302" width="393" height="482"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="도시를 검색해 보세요 (TextField)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8QD-eW-cSq">
-                                <rect key="frame" x="20" y="182" width="353" height="40"/>
+                                <rect key="frame" x="20" y="138" width="353" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Ckl-T0-Caw"/>
                                 </constraints>
@@ -290,7 +291,7 @@
                                 </connections>
                             </textField>
                             <searchBar contentMode="redraw" text="" placeholder="도시를 검색해 보세요 (SearchBar)" translatesAutoresizingMaskIntoConstraints="NO" id="3ok-4a-gC6">
-                                <rect key="frame" x="20" y="232" width="353" height="44"/>
+                                <rect key="frame" x="20" y="188" width="353" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="Lb5-N3-Y35"/>
                                 </constraints>
@@ -300,7 +301,7 @@
                                 </connections>
                             </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fRV-rU-dFS">
-                                <rect key="frame" x="20" y="296" width="353" height="31"/>
+                                <rect key="frame" x="20" y="252" width="353" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Icl-qF-p2o"/>
                                 </constraints>
@@ -343,6 +344,89 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzw-dp-MGs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-103.05343511450381" y="1936.6197183098593"/>
+        </scene>
+        <!--인기 도시-->
+        <scene sceneID="Sjm-9m-XCP">
+            <objects>
+                <viewController storyboardIdentifier="FamousCityCollectionViewController" id="Pox-gd-BlT" customClass="FamousCityCollectionViewController" customModule="SeSACDay11HW" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Vyb-Ch-r74">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="도시를 검색해 보세요" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wfH-SU-f5W">
+                                <rect key="frame" x="20" y="182" width="353" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="kZB-xK-Ru5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textFieldChanged:" destination="phb-bg-EOD" eventType="editingChanged" id="3Yj-TA-09G"/>
+                                    <action selector="textFieldChanged:" destination="Pox-gd-BlT" eventType="editingChanged" id="Z8T-Dj-fY9"/>
+                                    <action selector="textFieldDidEndOnExit:" destination="phb-bg-EOD" eventType="editingDidEndOnExit" id="txv-et-2bv"/>
+                                </connections>
+                            </textField>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="QRd-U1-c1W">
+                                <rect key="frame" x="20" y="242" width="353" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="vBZ-fa-qf2"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="모두"/>
+                                    <segment title="국내"/>
+                                    <segment title="해외"/>
+                                </segments>
+                                <connections>
+                                    <action selector="citySegmentChanged:" destination="phb-bg-EOD" eventType="valueChanged" id="yXu-U6-SdO"/>
+                                    <action selector="segmentValueChanged:" destination="Pox-gd-BlT" eventType="valueChanged" id="b7I-da-orG"/>
+                                </connections>
+                            </segmentedControl>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rKf-eV-VaW">
+                                <rect key="frame" x="0.0" y="282" width="393" height="453"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8Yq-fO-GAX">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cNJ-g0-i9e">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gyc-hf-5ta">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="CBC-g0-uYU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="QRd-U1-c1W" firstAttribute="top" secondItem="wfH-SU-f5W" secondAttribute="bottom" constant="20" id="0nz-Ah-tvQ"/>
+                            <constraint firstItem="rKf-eV-VaW" firstAttribute="leading" secondItem="CBC-g0-uYU" secondAttribute="leading" id="3E8-Yd-7jw"/>
+                            <constraint firstItem="CBC-g0-uYU" firstAttribute="trailing" secondItem="wfH-SU-f5W" secondAttribute="trailing" constant="20" id="7y7-Ok-w67"/>
+                            <constraint firstItem="QRd-U1-c1W" firstAttribute="leading" secondItem="CBC-g0-uYU" secondAttribute="leading" constant="20" id="B60-Cq-q1G"/>
+                            <constraint firstItem="CBC-g0-uYU" firstAttribute="trailing" secondItem="QRd-U1-c1W" secondAttribute="trailing" constant="20" id="Jqh-7x-E0D"/>
+                            <constraint firstItem="rKf-eV-VaW" firstAttribute="top" secondItem="QRd-U1-c1W" secondAttribute="bottom" constant="10" id="PS0-aj-hcp"/>
+                            <constraint firstItem="wfH-SU-f5W" firstAttribute="top" secondItem="CBC-g0-uYU" secondAttribute="top" constant="20" id="asT-RN-6cs"/>
+                            <constraint firstItem="wfH-SU-f5W" firstAttribute="leading" secondItem="CBC-g0-uYU" secondAttribute="leading" constant="20" id="gzB-vP-Z7B"/>
+                            <constraint firstItem="CBC-g0-uYU" firstAttribute="bottom" secondItem="rKf-eV-VaW" secondAttribute="bottom" id="mzi-2T-kXw"/>
+                            <constraint firstItem="CBC-g0-uYU" firstAttribute="trailing" secondItem="rKf-eV-VaW" secondAttribute="trailing" id="xLO-1y-vwN"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="인기 도시" id="MCn-Nq-3tM"/>
+                    <connections>
+                        <outlet property="citySegment" destination="QRd-U1-c1W" id="STM-Ra-8gQ"/>
+                        <outlet property="collectionView" destination="rKf-eV-VaW" id="IeZ-5W-uWr"/>
+                        <outlet property="textField" destination="wfH-SU-f5W" id="Dyp-1d-9z0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zsH-Iu-P5b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-105" y="2747"/>
         </scene>
         <!--City Detail View Controller-->
         <scene sceneID="qox-wC-WL3">
@@ -405,7 +489,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="phb-bg-EOD" kind="relationship" relationship="rootViewController" id="RTa-1J-3WG"/>
+                        <segue destination="Pox-gd-BlT" kind="relationship" relationship="rootViewController" id="13p-TI-2up"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qmy-wA-GCi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
