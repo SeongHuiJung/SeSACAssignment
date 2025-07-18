@@ -11,7 +11,11 @@ class FamousCityCollectionViewController: UIViewController {
 
     @IBOutlet var textField: UITextField!
     @IBOutlet var collectionView: UICollectionView!
-    @IBOutlet var citySegment: UISegmentedControl!
+    @IBOutlet var citySegment: UISegmentedControl! {
+        didSet {
+            
+        }
+    }
     
     var cityList = CityInfo().city
     
@@ -45,7 +49,7 @@ extension FamousCityCollectionViewController {
         let entireData = CityInfo().city
         switch segmentSelected {
         case 0: filter = entireData
-        case 1: filter = entireData.filter{$0.domesticTravel == true}
+        case 1: filter = entireData.filter{$0.domesticTravel}
         case 2: filter = entireData.filter{$0.domesticTravel == false}
         default: filter = entireData
         }
@@ -98,7 +102,7 @@ extension FamousCityCollectionViewController: UICollectionViewDelegate, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewController = self.storyboard?.instantiateViewController(withIdentifier: "CityDetailViewController") as! CityDetailViewController
+        let viewController = self.storyboard?.instantiateViewController(withIdentifier: CityDetailViewController.identifier) as! CityDetailViewController
         
         viewController.cityData = cityList[indexPath.row]
         
@@ -112,6 +116,10 @@ extension FamousCityCollectionViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        collectionView.collectionViewLayout = makeLayout()
+    }
+    
+    func makeLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let deviceWidth = UIScreen.main.bounds.width
         
@@ -124,7 +132,7 @@ extension FamousCityCollectionViewController {
         layout.minimumLineSpacing = gap
         layout.minimumInteritemSpacing = gap
         layout.scrollDirection = .vertical
-        collectionView.collectionViewLayout = layout
+        return layout
     }
 }
 

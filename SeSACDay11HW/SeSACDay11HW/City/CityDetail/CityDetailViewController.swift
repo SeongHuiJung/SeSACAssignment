@@ -13,6 +13,8 @@ class CityDetailViewController: UIViewController {
     @IBOutlet var cityEnglishNameLabel: UILabel!
     @IBOutlet var cityExplainLabel: UILabel!
     
+    static let identifier = "CityDetailViewController"
+    
     var cityData: City = City(cityName: "", cityEnglishName: "", cityExplain: "", cityImage: "", domesticTravel: false)
     
     override func viewDidLoad() {
