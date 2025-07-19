@@ -13,11 +13,29 @@ class TalkListViewController: UIViewController {
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var chatNavigationItem: UINavigationItem!
     
-    let listData = ChatList.list
+    var listData = ChatList.list
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+    }
+}
+
+// MARK: - Logic
+extension TalkListViewController {
+    func filterChatList() {
+        guard let text = searchBar.text else { return }
+        let entireList = ChatList.list
+        
+        var filteredList: [ChatRoom] = []
+        
+        for chat in entireList {
+            if chat.chatroomName.contains(text) {
+                filteredList.append(chat)
+            }
+        }
+        
+        listData = filteredList
     }
 }
 
@@ -78,5 +96,19 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
         viewController.chatData = listData[indexPath.item]
         
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+// MARK: - Search Bar Delegate
+extension TalkListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text else { return }
+        if !text.isEmpty {
+            filterChatList()
+        } else {
+            listData = ChatList.list
+        }
+        
+        collectionView.reloadData()
     }
 }
