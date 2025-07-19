@@ -61,6 +61,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2gh-dN-Qym"/>
+                    <connections>
+                        <outlet property="collectionView" destination="wIV-4n-MWv" id="dvF-67-rQl"/>
+                        <outlet property="searchBar" destination="oro-Ba-lbV" id="sp6-zA-kRr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
