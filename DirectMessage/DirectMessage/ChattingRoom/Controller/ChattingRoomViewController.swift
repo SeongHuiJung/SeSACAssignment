@@ -18,6 +18,7 @@ class ChattingRoomViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configure()
     }
 }
@@ -25,6 +26,10 @@ class ChattingRoomViewController: UIViewController {
 
 // MARK: Login
 extension ChattingRoomViewController {
+    func showLastChat() {
+        let lastIndex = IndexPath(row: chatData.chatList.count - 1, section: 0)
+        tableView.scrollToRow(at: lastIndex, at: .bottom, animated: false)
+    }
 }
 
 // MARK: - TableView Delegate
@@ -63,6 +68,7 @@ extension ChattingRoomViewController {
         tableView.separatorStyle = .none
         setDelegate()
         setNavigation()
+        showLastChat()
     }
     
     private func setDelegate() {
