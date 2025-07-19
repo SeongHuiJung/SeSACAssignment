@@ -26,7 +26,7 @@ extension TalkListViewController {
     private func configure() {
         setNib(identifier: TalkListCollectionViewCell.identifier, object: collectionView)
         setDelegate()
-        chatNavigationItem.title = "TRAVEL TALK"
+        setNavigationUI()
         collectionView.collectionViewLayout = getLayout()
     }
     
@@ -50,6 +50,12 @@ extension TalkListViewController {
         layout.scrollDirection = .vertical
         
         return layout
+    }
+    
+    private func setNavigationUI() {
+        chatNavigationItem.title = "TRAVEL TALK"
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = .black
     }
 }
 

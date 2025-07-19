@@ -37,12 +37,12 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
         
         cell.configure(item: chatData.chatList[indexPath.row])
-        
+
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        200
+        return UITableView.automaticDimension
     }
 }
 
@@ -50,6 +50,7 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
 extension ChattingRoomViewController {
     private func configure() {
         setNib(identifier: ChatBubbleOtherUserTableViewCell.identifier, object: tableView)
+        tableView.separatorStyle = .none
         setDelegate()
         setNavigation()
     }
@@ -60,6 +61,6 @@ extension ChattingRoomViewController {
     }
     
     private func setNavigation() {
-        navigationItem.title = "대화방"
+        navigationItem.title = chatData.chatroomName
     }
 }
