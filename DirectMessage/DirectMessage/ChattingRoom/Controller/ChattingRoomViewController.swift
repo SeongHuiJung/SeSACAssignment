@@ -18,17 +18,38 @@ class ChattingRoomViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configure()
     }
 }
 
-
-// MARK: Login
+// MARK: - Logic
 extension ChattingRoomViewController {
-    func showLastChat() {
+    private func showLastChat() {
         let lastIndex = IndexPath(row: chatData.chatList.count - 1, section: 0)
         tableView.scrollToRow(at: lastIndex, at: .bottom, animated: false)
+    }
+    
+    @IBAction func textFieldDidEndOnExit(_ sender: UITextField) {
+        guard let text = textField.text else { return }
+        guard !text.isEmpty else { return }
+        
+        let chatRoomId = chatData.chatroomId
+        
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd HH:mm"
+        let dateString = format.string(from: Date())
+        
+        let newChat = Chat(user: User(name: "김새싹", image: "Me"), date: dateString, message: text)
+        
+        ChatList.list[chatRoomId - 1].chatList.append(newChat)
+        
+        fetchData(chatRoomId: chatRoomId)
+        showLastChat()
+    }
+    
+    private func fetchData(chatRoomId: Int) {
+        chatData = ChatList.list[chatRoomId - 1]
+        tableView.reloadData()
     }
 }
 
@@ -80,3 +101,4 @@ extension ChattingRoomViewController {
         navigationItem.title = chatData.chatroomName
     }
 }
+

@@ -19,6 +19,10 @@ class TalkListViewController: UIViewController {
         super.viewDidLoad()
         configure()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchData()
+    }
 }
 
 // MARK: - Logic
@@ -36,6 +40,11 @@ extension TalkListViewController {
         }
         
         listData = filteredList
+    }
+    
+    func fetchData() {
+        listData = ChatList.list
+        collectionView.reloadData()
     }
 }
 
