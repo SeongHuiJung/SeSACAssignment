@@ -23,16 +23,16 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="nOW-pb-qid">
-                        <rect key="frame" x="73.999999999999986" y="8" width="165.66666666666663" height="58"/>
+                        <rect key="frame" x="73.999999999999986" y="20" width="165.66666666666663" height="34"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hHh-Fk-MPK">
-                                <rect key="frame" x="0.0" y="0.0" width="165.66666666666666" height="23.666666666666668"/>
+                                <rect key="frame" x="0.0" y="0.0" width="165.66666666666666" height="11.666666666666666"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kws-E7-1GY">
-                                <rect key="frame" x="0.0" y="34.666666666666664" width="165.66666666666666" height="23.333333333333336"/>
+                                <rect key="frame" x="0.0" y="22.666666666666664" width="165.66666666666666" height="11.333333333333336"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -57,10 +57,10 @@
                 <constraint firstItem="vT3-iy-vwb" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="HqO-R3-aNX"/>
                 <constraint firstItem="1LC-FQ-gD0" firstAttribute="leading" secondItem="nOW-pb-qid" secondAttribute="trailing" constant="8" id="WVP-lI-3jp"/>
                 <constraint firstAttribute="trailing" secondItem="1LC-FQ-gD0" secondAttribute="trailing" constant="8" id="Xlq-Kc-tne"/>
-                <constraint firstAttribute="bottom" secondItem="nOW-pb-qid" secondAttribute="bottom" constant="8" id="a0b-eH-oxl"/>
+                <constraint firstAttribute="bottom" secondItem="nOW-pb-qid" secondAttribute="bottom" constant="20" id="a0b-eH-oxl"/>
                 <constraint firstItem="vT3-iy-vwb" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="ii0-OB-fhJ"/>
                 <constraint firstItem="1LC-FQ-gD0" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="lDn-0S-FNk"/>
-                <constraint firstItem="nOW-pb-qid" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="ofh-e9-Bic"/>
+                <constraint firstItem="nOW-pb-qid" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="ofh-e9-Bic"/>
             </constraints>
             <size key="customSize" width="297" height="74"/>
             <connections>

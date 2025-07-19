@@ -38,7 +38,7 @@ class TalkListCollectionViewCell: UICollectionViewCell {
     func configureData(_ row: ChatRoom) {
         profileImage.image = UIImage(named: row.chatroomImage)
         nameLabel.text = row.chatroomName
-        lastChatLabel.text = "test"
-        lastChatDateLabel.text = "25.07.19"
+        lastChatLabel.text = row.getLastChatText
+        lastChatDateLabel.text = row.getLastChatDate
     }
 }

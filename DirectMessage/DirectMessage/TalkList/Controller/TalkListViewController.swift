@@ -20,9 +20,6 @@ class TalkListViewController: UIViewController {
     }
 }
 
-
-
-
 // MARK: - UI & Standard Setting
 extension TalkListViewController {
     private func configure() {
@@ -36,6 +33,23 @@ extension TalkListViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
     }
+    
+    private func getLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        let deviceWidth = UIScreen.main.bounds.width
+        
+        let widthCellCount: CGFloat = 1
+        let gap: CGFloat = 8
+        
+        let cellWidth: Double = deviceWidth - (gap * 2) - (gap * (widthCellCount - 1))
+        layout.itemSize = CGSize(width: cellWidth / widthCellCount, height: 80)
+        layout.sectionInset = UIEdgeInsets(top: gap, left: gap, bottom: gap, right: gap)
+        layout.minimumLineSpacing = gap
+        layout.minimumInteritemSpacing = gap
+        layout.scrollDirection = .vertical
+        
+        return layout
+    }
 }
 
 // MARK: - Collection View
@@ -48,22 +62,5 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TalkListCollectionViewCell.identifier, for: indexPath) as! TalkListCollectionViewCell
         cell.configureData(listData[indexPath.item])
         return cell
-    }
-    
-    private func getLayout() -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        let deviceWidth = UIScreen.main.bounds.width
-        
-        let widthCellCount: CGFloat = 1
-        let gap: CGFloat = 8
-        
-        let cellWidth: Double = deviceWidth - (gap * 2) - (gap * (widthCellCount - 1))
-        layout.itemSize = CGSize(width: cellWidth / widthCellCount, height: 100)
-        layout.sectionInset = UIEdgeInsets(top: gap, left: gap, bottom: gap, right: gap)
-        layout.minimumLineSpacing = gap
-        layout.minimumInteritemSpacing = gap
-        layout.scrollDirection = .vertical
-        
-        return layout
     }
 }
