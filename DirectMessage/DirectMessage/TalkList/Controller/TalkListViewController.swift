@@ -11,6 +11,7 @@ class TalkListViewController: UIViewController {
 
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var chatNavigationItem: UINavigationItem!
     
     let listData = ChatList.list
     
@@ -25,7 +26,7 @@ extension TalkListViewController {
     private func configure() {
         setNib(identifier: TalkListCollectionViewCell.identifier, object: collectionView)
         setDelegate()
-        
+        chatNavigationItem.title = "TRAVEL TALK"
         collectionView.collectionViewLayout = getLayout()
     }
     
@@ -62,5 +63,9 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TalkListCollectionViewCell.identifier, for: indexPath) as! TalkListCollectionViewCell
         cell.configureData(listData[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        navigationPush(storyboard: "Main", identifier: ChattingRoomViewController.identifier)
     }
 }

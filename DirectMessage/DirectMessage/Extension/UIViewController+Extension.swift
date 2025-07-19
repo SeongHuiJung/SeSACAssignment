@@ -19,4 +19,10 @@ extension UIViewController {
         object.register(nib, forCellReuseIdentifier: identifier)
     }
     
+    func navigationPush(storyboard: String, identifier: String) {
+        let storyboard = UIStoryboard(name: storyboard, bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: identifier) as! UIViewController
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
 }

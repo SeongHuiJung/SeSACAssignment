@@ -62,6 +62,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="2gh-dN-Qym"/>
                     <connections>
+                        <outlet property="chatNavigationItem" destination="2gh-dN-Qym" id="B3u-mW-LQO"/>
                         <outlet property="collectionView" destination="wIV-4n-MWv" id="dvF-67-rQl"/>
                         <outlet property="searchBar" destination="oro-Ba-lbV" id="sp6-zA-kRr"/>
                     </connections>
@@ -69,6 +70,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1057.2519083969464" y="-34.507042253521128"/>
+        </scene>
+        <!--Chatting Room View Controller-->
+        <scene sceneID="Yre-Bj-Wlh">
+            <objects>
+                <viewController storyboardIdentifier="ChattingRoomViewController" id="jdb-WY-OIs" customClass="ChattingRoomViewController" customModule="DirectMessage" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ru6-iN-bns">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="XlX-4S-hCi"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0qo-KS-DFr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2040" y="-35"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jif-Tc-hf3">
