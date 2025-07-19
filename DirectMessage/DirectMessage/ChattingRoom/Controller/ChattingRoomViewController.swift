@@ -34,11 +34,20 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
-        
-        cell.configure(item: chatData.chatList[indexPath.row])
+        if chatData.chatList[indexPath.row].user.name == "김새싹" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
+            
+            cell.configure(item: chatData.chatList[indexPath.row])
+            
+            return cell
+        }
+        else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
+            
+            cell.configure(item: chatData.chatList[indexPath.row])
 
-        return cell
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -50,6 +59,7 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
 extension ChattingRoomViewController {
     private func configure() {
         setNib(identifier: ChatBubbleOtherUserTableViewCell.identifier, object: tableView)
+        setNib(identifier: ChatBubbleUserTableViewCell.identifier, object: tableView)
         tableView.separatorStyle = .none
         setDelegate()
         setNavigation()
