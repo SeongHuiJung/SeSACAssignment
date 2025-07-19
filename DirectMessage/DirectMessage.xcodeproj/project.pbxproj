@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		57A762292E2BC145005A02F5 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 57A762282E2BC145005A02F5 /* IQKeyboardManagerSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		57A761B62E2A7509005A02F5 /* DirectMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DirectMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57A762292E2BC145005A02F5 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = DirectMessage;
 			packageProductDependencies = (
+				57A762282E2BC145005A02F5 /* IQKeyboardManagerSwift */,
 			);
 			productName = DirectMessage;
 			productReference = 57A761B62E2A7509005A02F5 /* DirectMessage.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = 57A761AD2E2A7509005A02F5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				57A762272E2BC145005A02F5 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 57A761B72E2A7509005A02F5 /* Products */;
 			projectDirPath = "";
@@ -347,6 +356,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		57A762272E2BC145005A02F5 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		57A762282E2BC145005A02F5 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57A762272E2BC145005A02F5 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 57A761AE2E2A7509005A02F5 /* Project object */;
 }
