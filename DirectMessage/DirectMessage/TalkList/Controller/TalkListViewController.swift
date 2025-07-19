@@ -66,6 +66,11 @@ extension TalkListViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigationPush(storyboard: "Main", identifier: ChattingRoomViewController.identifier)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: ChattingRoomViewController.identifier) as! ChattingRoomViewController
+        
+        viewController.chatData = listData[indexPath.item]
+        
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }

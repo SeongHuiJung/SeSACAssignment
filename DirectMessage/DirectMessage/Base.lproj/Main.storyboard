@@ -78,9 +78,36 @@
                     <view key="view" contentMode="scaleToFill" id="Ru6-iN-bns">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="RlX-FF-cFU">
+                                <rect key="frame" x="0.0" y="118" width="393" height="602"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hWj-e7-ccm">
+                                <rect key="frame" x="20" y="720" width="353" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Cud-Fc-6TE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="XlX-4S-hCi"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="RlX-FF-cFU" secondAttribute="trailing" id="90Z-zD-8ia"/>
+                            <constraint firstItem="RlX-FF-cFU" firstAttribute="top" secondItem="XlX-4S-hCi" secondAttribute="top" id="SeV-aW-NAM"/>
+                            <constraint firstItem="hWj-e7-ccm" firstAttribute="top" secondItem="RlX-FF-cFU" secondAttribute="bottom" id="ULD-hB-3ZT"/>
+                            <constraint firstItem="XlX-4S-hCi" firstAttribute="bottom" secondItem="hWj-e7-ccm" secondAttribute="bottom" constant="20" id="fN6-vv-Qrz"/>
+                            <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="hWj-e7-ccm" secondAttribute="trailing" constant="20" id="g0C-Ns-eKR"/>
+                            <constraint firstItem="RlX-FF-cFU" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" id="gJa-QP-q2h"/>
+                            <constraint firstItem="hWj-e7-ccm" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" constant="20" id="hUf-XD-bgW"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="RlX-FF-cFU" id="DRQ-lg-eOE"/>
+                        <outlet property="textField" destination="hWj-e7-ccm" id="y4P-0a-uKf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qo-KS-DFr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
