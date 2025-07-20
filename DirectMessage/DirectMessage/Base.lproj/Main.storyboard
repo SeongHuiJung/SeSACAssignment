@@ -83,38 +83,52 @@
                                 <rect key="frame" x="0.0" y="118" width="393" height="602"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="hWj-e7-ccm">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qhO-AX-Jl3">
                                 <rect key="frame" x="20" y="720" width="353" height="44"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="Cud-Fc-6TE"/>
+                                    <constraint firstAttribute="height" constant="44" id="Ikz-5v-aev"/>
                                 </constraints>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HhD-NO-zPM">
+                                <rect key="frame" x="333" y="724" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="HhD-NO-zPM" secondAttribute="height" multiplier="1:1" id="rPd-Ea-oUg"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain"/>
                                 <connections>
-                                    <action selector="textFieldDidEndOnExit:" destination="jdb-WY-OIs" eventType="editingDidEndOnExit" id="E7v-OC-GcA"/>
+                                    <action selector="sendChatButtonTapped:" destination="jdb-WY-OIs" eventType="touchUpInside" id="ch9-eh-onw"/>
                                 </connections>
-                            </textField>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XlX-4S-hCi"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="qhO-AX-Jl3" firstAttribute="top" secondItem="RlX-FF-cFU" secondAttribute="bottom" id="0yu-TG-VTF"/>
+                            <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="qhO-AX-Jl3" secondAttribute="trailing" constant="20" id="5EO-Yu-1PT"/>
                             <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="RlX-FF-cFU" secondAttribute="trailing" id="90Z-zD-8ia"/>
+                            <constraint firstItem="qhO-AX-Jl3" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" constant="20" id="DCW-sg-vBa"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="bottom" secondItem="qhO-AX-Jl3" secondAttribute="bottom" constant="-8" id="S0b-Id-J59"/>
                             <constraint firstItem="RlX-FF-cFU" firstAttribute="top" secondItem="XlX-4S-hCi" secondAttribute="top" id="SeV-aW-NAM"/>
-                            <constraint firstItem="hWj-e7-ccm" firstAttribute="top" secondItem="RlX-FF-cFU" secondAttribute="bottom" id="ULD-hB-3ZT"/>
-                            <constraint firstItem="XlX-4S-hCi" firstAttribute="bottom" secondItem="hWj-e7-ccm" secondAttribute="bottom" constant="20" id="fN6-vv-Qrz"/>
-                            <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="hWj-e7-ccm" secondAttribute="trailing" constant="20" id="g0C-Ns-eKR"/>
+                            <constraint firstItem="XlX-4S-hCi" firstAttribute="bottom" secondItem="qhO-AX-Jl3" secondAttribute="bottom" constant="20" id="UIj-hq-moR"/>
                             <constraint firstItem="RlX-FF-cFU" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" id="gJa-QP-q2h"/>
-                            <constraint firstItem="hWj-e7-ccm" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" constant="20" id="hUf-XD-bgW"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="top" secondItem="qhO-AX-Jl3" secondAttribute="top" constant="8" id="gs9-d5-x6m"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="trailing" secondItem="qhO-AX-Jl3" secondAttribute="trailing" constant="-12" id="suH-uo-hPv"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="sendChatButton" destination="HhD-NO-zPM" id="2JB-1d-pM5"/>
                         <outlet property="tableView" destination="RlX-FF-cFU" id="DRQ-lg-eOE"/>
-                        <outlet property="textField" destination="hWj-e7-ccm" id="y4P-0a-uKf"/>
+                        <outlet property="textView" destination="qhO-AX-Jl3" id="wk5-8B-qjG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0qo-KS-DFr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2040" y="-35"/>
+            <point key="canvasLocation" x="2038.9312977099237" y="-35.211267605633807"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="jif-Tc-hf3">
@@ -136,6 +150,9 @@
         </scene>
     </scenes>
     <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
