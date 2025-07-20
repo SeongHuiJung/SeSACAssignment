@@ -47,7 +47,7 @@ class ChatBubbleOtherUserTableViewCell: UITableViewCell {
     func configure(item: Chat) {
         profileImage.image = UIImage(named: item.user.image)
         nameLabel.text = item.user.name
-        timeLabel.text = item.getFormattedDateString()
+        timeLabel.text = item.getFormattedDateString
         contentLabel.text = item.message
     }
 }

@@ -39,7 +39,7 @@ class ChatBubbleUserTableViewCell: UITableViewCell {
     }
     
     func configure(item: Chat) {
-        timeLabel.text = item.getFormattedDateString()
+        timeLabel.text = item.getFormattedDateString
         contentLabel.text = item.message
     }
 }

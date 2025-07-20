@@ -25,7 +25,7 @@ struct Chat {
         return result
     }
     
-    func getFormattedDateString() -> String? {
+    var getFormattedDateString: String? {
         format.locale = Locale(identifier: "ko_KR")
         
         format.dateFormat = "yyyy-MM-dd HH:mm"
