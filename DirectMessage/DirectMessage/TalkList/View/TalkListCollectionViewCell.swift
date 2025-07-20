@@ -33,6 +33,8 @@ class TalkListCollectionViewCell: UICollectionViewCell {
         lastChatDateLabel.font = .systemFont(ofSize: 11)
         lastChatDateLabel.textColor = .lightGray
         lastChatDateLabel.textAlignment = .right
+        
+        profileImage.layer.cornerRadius = profileImage.frame.height / 2
     }
     
     func configureData(_ row: ChatRoom) {
