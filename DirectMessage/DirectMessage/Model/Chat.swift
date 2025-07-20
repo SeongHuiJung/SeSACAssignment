@@ -13,6 +13,18 @@ struct Chat {
     let message: String
     let format = DateFormatter()
     
+    var getDateDivisionFormattedString: String? {
+        format.locale = Locale(identifier: "ko_KR")
+        format.dateFormat = "yyyy-MM-dd HH:mm"
+        let date = format.date(from: date)
+        guard let date = date else { return nil }
+        
+        format.dateFormat = "yyyy-MM-dd"
+        let result = format.string(from: date)
+        
+        return result
+    }
+    
     func getFormattedDateString() -> String? {
         format.locale = Locale(identifier: "ko_KR")
         

@@ -17,6 +17,9 @@ class ChattingRoomViewController: UIViewController {
     
     var chatData = ChatRoom(chatroomId: 0, chatroomImage: "", chatroomName: "")
     
+    var sectionData: [[Chat]] = []
+    var dateDivisionLineSet: Set<String> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -39,6 +42,7 @@ extension ChattingRoomViewController {
         let newChat = Chat(user: User(name: "김새싹", image: "Me"), date: dateString, message: text)
         
         ChatList.list[chatRoomId - 1].chatList.append(newChat)
+        addNewChatSectionData(newChat: newChat)
         
         fetchData(chatRoomId: chatRoomId)
         showLastChat()
@@ -50,12 +54,11 @@ extension ChattingRoomViewController {
 // MARK: - Logic
 extension ChattingRoomViewController {
     private func showLastChat() {
-        let lastIndex = IndexPath(row: chatData.chatList.count - 1, section: 0)
-        tableView.scrollToRow(at: lastIndex, at: .bottom, animated: false)
+        let lastIndex = IndexPath(row: sectionData[sectionData.count - 1].count - 1, section: sectionData.count - 1)
+        tableView.scrollToRow(at: lastIndex, at: .middle, animated: false)
     }
     
     private func fetchData(chatRoomId: Int) {
-        chatData = ChatList.list[chatRoomId - 1]
         tableView.reloadData()
     }
     
@@ -77,6 +80,31 @@ extension ChattingRoomViewController {
             }
         }
         return true
+    }
+    
+    private func divisionSectionData() {
+        for chat in chatData.chatList {
+            guard let dateString = chat.getDateDivisionFormattedString else { return }
+            addChatDataToSectionData(dateString: dateString, chat: chat)
+        }
+    }
+    
+    private func addNewChatSectionData(newChat: Chat) {
+        guard let dateString = newChat.getDateDivisionFormattedString else { return }
+        addChatDataToSectionData(dateString: dateString, chat: newChat)
+    }
+    
+    private func addChatDataToSectionData(dateString: String, chat: Chat) {
+        // 이미 동일한 날짜 데이터가 있는 경우
+        if dateDivisionLineSet.contains(dateString) {
+            sectionData[sectionData.count - 1].append(chat)
+        }
+        
+        // 새로운 날짜 데이터 추가
+        else {
+            dateDivisionLineSet.insert(dateString)
+            sectionData.append([Chat(user: User(name: "", image: ""), date: "", message: ""),chat])
+        }
     }
 }
 
@@ -100,24 +128,39 @@ extension ChattingRoomViewController: UITextViewDelegate {
 
 // MARK: - TableView Delegate
 extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        sectionData.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        chatData.chatList.count
+        sectionData[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if chatData.chatList[indexPath.row].user.name == "김새싹" {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
+        
+        if indexPath.row == 0 {
+            let dateString = sectionData[indexPath.section][indexPath.row + 1].getDateDivisionFormattedString ?? ""
+            let cell = tableView.dequeueReusableCell(withIdentifier: DateLineTableViewCell.identifier, for: indexPath) as! DateLineTableViewCell
             
-            cell.configure(item: chatData.chatList[indexPath.row])
+            cell.configureData(text: dateString)
             
             return cell
         }
         else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
-            
-            cell.configure(item: chatData.chatList[indexPath.row])
+            if sectionData[indexPath.section][indexPath.row].user.name == "김새싹" {
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
+                
+                cell.configure(item: sectionData[indexPath.section][indexPath.row])
+                
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
+                
+                cell.configure(item: sectionData[indexPath.section][indexPath.row])
 
-            return cell
+                return cell
+            }
         }
     }
     
@@ -129,8 +172,11 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
 // MARK: - UI & Standard Setting
 extension ChattingRoomViewController {
     private func configure() {
+        divisionSectionData()
+
         setNib(identifier: ChatBubbleOtherUserTableViewCell.identifier, object: tableView)
         setNib(identifier: ChatBubbleUserTableViewCell.identifier, object: tableView)
+        setNib(identifier: DateLineTableViewCell.identifier, object: tableView)
         
         setDelegate()
         
