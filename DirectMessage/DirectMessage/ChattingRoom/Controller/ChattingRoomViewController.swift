@@ -26,10 +26,8 @@ class ChattingRoomViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        // 실행 시점 옮겨주기
-        // 더 나중에 실행하도록 함
         DispatchQueue.main.async { [weak self] in
-            self?.showLastChat()
+            self?.showLastChat(animated: false)
         }
     }
 }
@@ -53,17 +51,20 @@ extension ChattingRoomViewController {
         addNewChatSectionData(newChat: newChat)
         
         fetchData(chatRoomId: chatRoomId)
-        showLastChat()
         textView.text = ""
         resetTextViewSize()
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.showLastChat(animated: true)
+        }
     }
 }
 
 // MARK: - Logic
 extension ChattingRoomViewController {
-    private func showLastChat() {
+    private func showLastChat(animated: Bool) {
         let lastIndex = IndexPath(row: sectionData[sectionData.count - 1].count - 1, section: sectionData.count - 1)
-        tableView.scrollToRow(at: lastIndex, at: .middle, animated: false)
+        tableView.scrollToRow(at: lastIndex, at: .bottom, animated: animated)
     }
     
     private func fetchData(chatRoomId: Int) {
