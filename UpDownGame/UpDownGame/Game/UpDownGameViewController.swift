@@ -50,6 +50,8 @@ extension UpDownGameViewController {
         else {
             print("error")
         }
+        
+        selectedIndex = -1
     }
 }
 
