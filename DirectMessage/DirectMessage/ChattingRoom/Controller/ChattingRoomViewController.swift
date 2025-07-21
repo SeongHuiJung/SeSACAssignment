@@ -24,6 +24,14 @@ class ChattingRoomViewController: UIViewController {
         super.viewDidLoad()
         configure()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // 실행 시점 옮겨주기
+        // 더 나중에 실행하도록 함
+        DispatchQueue.main.async { [weak self] in
+            self?.showLastChat()
+        }
+    }
 }
 
 // MARK: - Action
@@ -138,7 +146,9 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        // cell 타입별로 분류하기
+        // switch 사용
+        // 실제 서비스라고 생각하고 "김새싹" 처리해줄것
         if indexPath.row == 0 {
             let dateString = sectionData[indexPath.section][indexPath.row + 1].getDateDivisionFormattedString ?? ""
             let cell = tableView.dequeueReusableCell(withIdentifier: DateLineTableViewCell.identifier, for: indexPath) as! DateLineTableViewCell
@@ -185,7 +195,7 @@ extension ChattingRoomViewController {
         setButton()
         setTextView()
         
-        showLastChat()
+        
     }
     
     private func setDelegate() {

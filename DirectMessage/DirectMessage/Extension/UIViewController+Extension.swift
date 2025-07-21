@@ -24,5 +24,4 @@ extension UIViewController {
         let viewController = storyboard.instantiateViewController(withIdentifier: identifier) as! UIViewController
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
 }
