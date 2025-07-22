@@ -13,7 +13,7 @@ class TalkListViewController: UIViewController {
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var chatNavigationItem: UINavigationItem!
     
-    var listData = ChatList.list
+    var listData: [ChatRoom] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +43,7 @@ extension TalkListViewController {
     }
     
     private func fetchData() {
+        ChatList.sortLatestTalkList()
         listData = ChatList.list
         collectionView.reloadData()
     }

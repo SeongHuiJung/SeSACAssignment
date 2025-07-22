@@ -226,4 +226,8 @@ struct ChatList {
                  ]
                 )
     ]
+    
+    static func sortLatestTalkList() {
+        ChatList.list.sort{$0.chatList.last?.date ?? "" > $1.chatList.last?.date ?? ""}
+    }
 }
