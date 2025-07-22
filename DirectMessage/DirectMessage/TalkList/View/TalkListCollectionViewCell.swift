@@ -18,10 +18,12 @@ class TalkListCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        configureUI()
+        configure()
     }
-    
-    func configureUI() {
+}
+
+extension TalkListCollectionViewCell: CellViewProtocol {
+    func configure() {
         nameLabel.font = .systemFont(ofSize: 15)
         nameLabel.textColor = .black
         nameLabel.textAlignment = .left

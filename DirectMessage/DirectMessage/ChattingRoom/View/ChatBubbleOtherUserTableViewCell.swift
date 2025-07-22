@@ -19,10 +19,12 @@ class ChatBubbleOtherUserTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        configureUI()
+        configure()
     }
-    
-    private func configureUI() {
+}
+
+extension ChatBubbleOtherUserTableViewCell: CellViewProtocol {
+    func configure() {
         nameLabel.font = .systemFont(ofSize: 12)
         nameLabel.textColor = .black
         nameLabel.textAlignment = .left
@@ -44,7 +46,7 @@ class ChatBubbleOtherUserTableViewCell: UITableViewCell {
         self.selectionStyle = .none
     }
     
-    func configure(item: Chat) {
+    func configureData(item: Chat) {
         profileImage.image = UIImage(named: item.user.image)
         nameLabel.text = item.user.name
         timeLabel.text = item.getFormattedDateString

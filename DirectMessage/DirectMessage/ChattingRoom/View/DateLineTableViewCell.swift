@@ -18,8 +18,10 @@ class DateLineTableViewCell: UITableViewCell {
         super.awakeFromNib()
         configure()
     }
-    
-    private func configure() {
+}
+
+extension DateLineTableViewCell: CellViewProtocol {
+    func configure() {
         dateLabel.font = .systemFont(ofSize: 12)
         dateLabel.textColor = .white
         dateLabel.textAlignment = .center

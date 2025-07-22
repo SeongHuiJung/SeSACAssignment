@@ -45,7 +45,7 @@ extension ChattingRoomViewController {
         format.dateFormat = "yyyy-MM-dd HH:mm"
         let dateString = format.string(from: Date())
         
-        let newChat = Chat(user: User(name: "김새싹", image: "Me"), date: dateString, message: text)
+        let newChat = Chat(user: User(name: ChatList.me.name, image: ChatList.me.image), date: dateString, message: text)
         
         ChatList.list[chatRoomId - 1].chatList.append(newChat)
         addNewChatSectionData(newChat: newChat)
@@ -149,7 +149,7 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // cell 타입별로 분류하기
         // switch 사용
-        // 실제 서비스라고 생각하고 "김새싹" 처리해줄것
+        // 실제 서비스라고 생각하고 "김새싹" 처리해줄것 > 어떻게 저장해야 좋은지
         if indexPath.row == 0 {
             let dateString = sectionData[indexPath.section][indexPath.row + 1].getDateDivisionFormattedString ?? ""
             let cell = tableView.dequeueReusableCell(withIdentifier: DateLineTableViewCell.identifier, for: indexPath) as! DateLineTableViewCell
@@ -159,17 +159,16 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
             return cell
         }
         else {
-            if sectionData[indexPath.section][indexPath.row].user.name == "김새싹" {
+            if sectionData[indexPath.section][indexPath.row].user.name == ChatList.me.name {
                 let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
                 
-                cell.configure(item: sectionData[indexPath.section][indexPath.row])
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
                 
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
                 
-                cell.configure(item: sectionData[indexPath.section][indexPath.row])
-
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
                 return cell
             }
         }
@@ -223,4 +222,3 @@ extension ChattingRoomViewController {
         resetTextViewSize()
     }
 }
-

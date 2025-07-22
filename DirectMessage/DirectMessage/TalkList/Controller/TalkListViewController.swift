@@ -27,7 +27,7 @@ class TalkListViewController: UIViewController {
 
 // MARK: - Logic
 extension TalkListViewController {
-    func filterChatList() {
+    private func filterChatList() {
         guard let text = searchBar.text else { return }
         let entireList = ChatList.list
         
@@ -42,7 +42,7 @@ extension TalkListViewController {
         listData = filteredList
     }
     
-    func fetchData() {
+    private func fetchData() {
         listData = ChatList.list
         collectionView.reloadData()
     }

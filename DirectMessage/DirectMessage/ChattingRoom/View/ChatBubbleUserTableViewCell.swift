@@ -17,10 +17,12 @@ class ChatBubbleUserTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        configureUI()
+        configure()
     }
+}
 
-    private func configureUI() {
+extension ChatBubbleUserTableViewCell: CellViewProtocol {
+    func configure() {
         contentLabel.font = .systemFont(ofSize: 13)
         contentLabel.textColor = .black
         contentLabel.textAlignment = .left
@@ -38,7 +40,7 @@ class ChatBubbleUserTableViewCell: UITableViewCell {
         self.selectionStyle = .none
     }
     
-    func configure(item: Chat) {
+    func configureData(item: Chat) {
         timeLabel.text = item.getFormattedDateString
         contentLabel.text = item.message
     }
