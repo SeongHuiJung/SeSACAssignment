@@ -9,6 +9,11 @@ import UIKit
 
 class ChattingRoomViewController: UIViewController {
 
+    enum CellType: Int {
+        case dateLine = 0
+        
+    }
+    
     static let identifier = "ChattingRoomViewController"
     
     @IBOutlet var textView: UITextView!
@@ -147,30 +152,25 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // cell 타입별로 분류하기
-        // switch 사용
-        // 실제 서비스라고 생각하고 "김새싹" 처리해줄것 > 어떻게 저장해야 좋은지
-        if indexPath.row == 0 {
+        // dateLine cell
+        if indexPath.row == CellType.dateLine.rawValue {
             let dateString = sectionData[indexPath.section][indexPath.row + 1].getDateDivisionFormattedString ?? ""
             let cell = tableView.dequeueReusableCell(withIdentifier: DateLineTableViewCell.identifier, for: indexPath) as! DateLineTableViewCell
-            
             cell.configureData(text: dateString)
-            
             return cell
         }
-        else {
-            if sectionData[indexPath.section][indexPath.row].user.name == ChatList.me.name {
-                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
-                
-                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
-                
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
-                
-                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
-                return cell
-            }
+        
+        let chatSenderName = sectionData[indexPath.section][indexPath.row].user.name
+        
+        switch chatSenderName {
+        case ChatList.me.name: // 내가 보낸 채팅 cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
+            cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+            return cell
+        default: // 남이 보낸 채팅 cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
+            cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+            return cell
         }
     }
     
