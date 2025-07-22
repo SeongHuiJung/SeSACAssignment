@@ -11,7 +11,6 @@ class ChattingRoomViewController: UIViewController {
 
     enum CellType: Int {
         case dateLine = 0
-        
     }
     
     static let identifier = "ChattingRoomViewController"
@@ -46,9 +45,7 @@ extension ChattingRoomViewController {
         
         let chatRoomId = chatData.chatroomId
         
-        let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd HH:mm"
-        let dateString = format.string(from: Date())
+        let dateString = DateFormatter.formatDateToString(date: Date(), format: "yyyy-MM-dd HH:mm")
         
         let newChat = Chat(user: User(name: ChatList.me.name, image: ChatList.me.image), date: dateString, message: text)
         
@@ -194,8 +191,6 @@ extension ChattingRoomViewController {
         setNavigation()
         setButton()
         setTextView()
-        
-        
     }
     
     private func setDelegate() {

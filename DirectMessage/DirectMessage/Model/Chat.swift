@@ -11,29 +11,23 @@ struct Chat {
     let user: User
     let date: String
     let message: String
-    let format = DateFormatter()
     
     var getDateDivisionFormattedString: String? {
-        format.locale = Locale(identifier: "ko_KR")
-        format.dateFormat = "yyyy-MM-dd HH:mm"
-        let date = format.date(from: date)
+        let date = DateFormatter.formatStringToDate(dateText: date, format: "yyyy-MM-dd HH:mm")
+        
         guard let date = date else { return nil }
         
-        format.dateFormat = "yyyy-MM-dd"
-        let result = format.string(from: date)
-        
+        let result = DateFormatter.formatDateToString(date: date, format: "yyyy-MM-dd")
+    
         return result
     }
     
     var getFormattedDateString: String? {
-        format.locale = Locale(identifier: "ko_KR")
+        let date = DateFormatter.formatStringToDate(dateText: date, format: "yyyy-MM-dd HH:mm")
         
-        format.dateFormat = "yyyy-MM-dd HH:mm"
-        let date = format.date(from: date)
         guard let date = date else { return nil }
         
-        format.dateFormat = "hh:mm a"
-        let result = format.string(from: date)
+        let result = DateFormatter.formatDateToString(date: date, format: "hh:mm a")
         
         return result
     }

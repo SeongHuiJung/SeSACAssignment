@@ -14,8 +14,6 @@ struct ChatRoom {
     let chatroomName: String //채팅방 이름
     var chatList: [Chat] = [] //채팅 화면에서 사용할 데이터
     
-    private let format = DateFormatter()
-    
     var getLastChatText: String? {
         return self.chatList.last?.message
     }
@@ -23,13 +21,12 @@ struct ChatRoom {
     var getLastChatDate: String? {
         let dateText = self.chatList.last?.date
         guard let dateText = dateText else { return nil }
-        
-        format.dateFormat = "yyyy-MM-dd HH:mm"
-        let date = format.date(from: dateText)
-        guard let date = date else { return nil }
     
-        format.dateFormat = "yy.MM.dd"
-        let result = format.string(from: date)
+        let date = DateFormatter.formatStringToDate(dateText: dateText, format: "yyyy-MM-dd HH:mm")
+        
+        guard let date = date else { return nil }
+        
+        let result = DateFormatter.formatDateToString(date: date, format: "yy.MM.dd")
         
         return result
     }
