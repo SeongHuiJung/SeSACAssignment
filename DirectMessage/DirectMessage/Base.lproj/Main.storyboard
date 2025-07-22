@@ -93,8 +93,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HhD-NO-zPM">
-                                <rect key="frame" x="333" y="724" width="35" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HhD-NO-zPM">
+                                <rect key="frame" x="339.66666666666669" y="736.66666666666663" width="21.333333333333314" height="21.333333333333371"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="HhD-NO-zPM" secondAttribute="height" multiplier="1:1" id="rPd-Ea-oUg"/>
                                 </constraints>
@@ -112,11 +112,12 @@
                             <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="qhO-AX-Jl3" secondAttribute="trailing" constant="20" id="5EO-Yu-1PT"/>
                             <constraint firstItem="XlX-4S-hCi" firstAttribute="trailing" secondItem="RlX-FF-cFU" secondAttribute="trailing" id="90Z-zD-8ia"/>
                             <constraint firstItem="qhO-AX-Jl3" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" constant="20" id="DCW-sg-vBa"/>
-                            <constraint firstItem="HhD-NO-zPM" firstAttribute="bottom" secondItem="qhO-AX-Jl3" secondAttribute="bottom" constant="-8" id="S0b-Id-J59"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="bottom" secondItem="qhO-AX-Jl3" secondAttribute="bottom" constant="-6" id="S0b-Id-J59"/>
                             <constraint firstItem="RlX-FF-cFU" firstAttribute="top" secondItem="XlX-4S-hCi" secondAttribute="top" id="SeV-aW-NAM"/>
                             <constraint firstItem="XlX-4S-hCi" firstAttribute="bottom" secondItem="qhO-AX-Jl3" secondAttribute="bottom" constant="20" id="UIj-hq-moR"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="width" secondItem="qhO-AX-Jl3" secondAttribute="width" multiplier="0.06" priority="999" id="aDv-wJ-JWI"/>
                             <constraint firstItem="RlX-FF-cFU" firstAttribute="leading" secondItem="XlX-4S-hCi" secondAttribute="leading" id="gJa-QP-q2h"/>
-                            <constraint firstItem="HhD-NO-zPM" firstAttribute="top" secondItem="qhO-AX-Jl3" secondAttribute="top" constant="8" id="gs9-d5-x6m"/>
+                            <constraint firstItem="HhD-NO-zPM" firstAttribute="top" relation="greaterThanOrEqual" secondItem="qhO-AX-Jl3" secondAttribute="top" priority="998" constant="6" id="gs9-d5-x6m"/>
                             <constraint firstItem="HhD-NO-zPM" firstAttribute="trailing" secondItem="qhO-AX-Jl3" secondAttribute="trailing" constant="-12" id="suH-uo-hPv"/>
                         </constraints>
                     </view>
