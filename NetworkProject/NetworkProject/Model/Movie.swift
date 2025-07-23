@@ -11,6 +11,12 @@ struct Movie {
     let title: String
     let releaseDate: String
     let audienceCount: Int
+    
+    var getFormattedDateString: String {
+        let date = DateFormatter.formatStringToDate(dateText: releaseDate, format: "yyyyMMdd")
+        guard let date = date else { return "" }
+        return DateFormatter.formatDateToString(date: date, format: "yyyy-MM-dd")
+    }
 }
 
 struct MovieInfo {
