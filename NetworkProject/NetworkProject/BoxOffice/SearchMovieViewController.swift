@@ -35,13 +35,7 @@ extension SearchMovieViewController {
     }
     
     func getRandomData() -> [Movie] {
-        // TODO: 랜덤값 중복되지 않도록 로직 설정
-        var result = [Movie]()
-        for _ in 0..<10 {
-            guard let data = MovieInfo.movies.randomElement() else { return [] }
-            result.append(data)
-        }
-        return result
+        return Array(MovieInfo.movies.shuffled()[0...9])
     }
     
     @objc func searchButtonTapped() {
