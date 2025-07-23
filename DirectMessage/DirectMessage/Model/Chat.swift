@@ -6,11 +6,21 @@
 //
 
 import Foundation
+
+enum BubbleType: String {
+    case me
+    case allData
+    case sequenceFirst
+    case sequenceMiddle
+    case sequenceLast
+}
+
 //채팅 화면에서 사용할 데이터 구조체
 struct Chat {
     let user: User
     let date: String
     let message: String
+    var bubbleType: BubbleType?
     
     var getDateDivisionFormattedString: String? {
         let date = DateFormatter.formatStringToDate(dateText: date, format: "yyyy-MM-dd HH:mm")
