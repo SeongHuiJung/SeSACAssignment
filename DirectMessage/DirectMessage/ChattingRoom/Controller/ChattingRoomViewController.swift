@@ -49,8 +49,12 @@ extension ChattingRoomViewController {
         
         let newChat = Chat(user: User(name: ChatList.me.name, image: ChatList.me.image), date: dateString, message: text)
         
-        ChatList.list[chatRoomId - 1].chatList.append(newChat)
-        ChatList.sortLatestTalkList()
+        for i in 0..<ChatList.list.count {
+            if ChatList.list[i].chatroomId == chatRoomId {
+                ChatList.list[i].chatList.append(newChat)
+                break
+            }
+        }
 
         addNewChatSectionData(newChat: newChat)
         
