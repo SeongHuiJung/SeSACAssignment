@@ -47,7 +47,7 @@ extension ChattingRoomViewController {
         
         let dateString = DateFormatter.formatDateToString(date: Date(), format: "yyyy-MM-dd HH:mm")
         
-        let newChat = Chat(user: User(name: ChatList.me.name, image: ChatList.me.image), date: dateString, message: text)
+        let newChat = Chat(user: User(name: ChatList.me.name, image: ChatList.me.image), date: dateString, message: text, bubbleType: .me)
         
         for i in 0..<ChatList.list.count {
             if ChatList.list[i].chatroomId == chatRoomId {
@@ -120,7 +120,7 @@ extension ChattingRoomViewController {
         // 새로운 날짜 데이터 추가
         else {
             dateDivisionLineSet.insert(dateString)
-            sectionData.append([Chat(user: User(name: "", image: ""), date: "", message: ""),chat])
+            sectionData.append([Chat(user: User(name: "", image: ""), date: "", message: "", bubbleType: nil),chat])
         }
     }
 }
@@ -170,10 +170,38 @@ extension ChattingRoomViewController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleUserTableViewCell.identifier, for: indexPath) as! ChatBubbleUserTableViewCell
             cell.configureData(item: sectionData[indexPath.section][indexPath.row])
             return cell
+            
         default: // 남이 보낸 채팅 cell
-            let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
-            cell.configureData(item: sectionData[indexPath.section][indexPath.row])
-            return cell
+            let cellBubbleType = sectionData[indexPath.section][indexPath.row].bubbleType
+            
+            // nil 처리
+            guard let cellBubbleType = cellBubbleType else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+                return cell
+            }
+            
+            switch cellBubbleType {
+            case BubbleType.sequenceFirst: // 연속채팅 첫번째
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserSequenceFirstTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserSequenceFirstTableViewCell
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+                return cell
+                
+            case BubbleType.sequenceMiddle: // 연속채팅 중간
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserSequenceMiddleTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserSequenceMiddleTableViewCell
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+                return cell
+                
+            case BubbleType.sequenceLast: // 연속채팅 마지막
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserSequenceLastTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserSequenceLastTableViewCell
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+                return cell
+                
+            default: // 단독채팅
+                let cell = tableView.dequeueReusableCell(withIdentifier: ChatBubbleOtherUserTableViewCell.identifier, for: indexPath) as! ChatBubbleOtherUserTableViewCell
+                cell.configureData(item: sectionData[indexPath.section][indexPath.row])
+                return cell
+            }
         }
     }
     
@@ -188,6 +216,9 @@ extension ChattingRoomViewController {
         divisionSectionData()
 
         setNib(identifier: ChatBubbleOtherUserTableViewCell.identifier, object: tableView)
+        setNib(identifier: ChatBubbleOtherUserSequenceFirstTableViewCell.identifier, object: tableView)
+        setNib(identifier: ChatBubbleOtherUserSequenceMiddleTableViewCell.identifier, object: tableView)
+        setNib(identifier: ChatBubbleOtherUserSequenceLastTableViewCell.identifier, object: tableView)
         setNib(identifier: ChatBubbleUserTableViewCell.identifier, object: tableView)
         setNib(identifier: DateLineTableViewCell.identifier, object: tableView)
         
@@ -223,3 +254,4 @@ extension ChattingRoomViewController {
         resetTextViewSize()
     }
 }
+

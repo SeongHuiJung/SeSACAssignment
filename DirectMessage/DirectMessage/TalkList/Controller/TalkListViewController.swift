@@ -18,10 +18,12 @@ class TalkListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
+        ChatList.setAllBubbleType()
+        dump(ChatList.list)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchData()
+        fetchData()   
     }
 }
 
