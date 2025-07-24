@@ -10,10 +10,33 @@ import SnapKit
 
 class SearchMovieViewController: UIViewController {
 
-    let searchTextField = UITextField()
-    let searchTextFieldLine = UIView()
-    let searchButton = UIButton()
-    let tableView = UITableView()
+    let searchTextField = {
+        let textField = UITextField()
+        textField.backgroundColor = .clear
+        textField.textColor = .white
+        textField.font = UIFont.systemFont(ofSize: 12)
+        return textField
+    }()
+    let searchTextFieldLine = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.tintColor = .white
+        return view
+    }()
+    let searchButton = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.setTitle("검색", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.setTitleColor(.black, for: .normal)
+        return button
+    }()
+    let tableView = {
+        let tableView = UITableView()
+        tableView.rowHeight = 44
+        tableView.backgroundColor = .clear
+        return tableView
+    }()
     
     var rankList = [Movie]()
     
@@ -109,23 +132,10 @@ extension SearchMovieViewController: ViewDesignProtocol {
     
     func configureView() {
         view.backgroundColor = .black
-        tableView.rowHeight = 44
-        tableView.backgroundColor = .clear
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchMovieTableViewCell.self, forCellReuseIdentifier: SearchMovieTableViewCell.identifier)
-        
         searchTextField.delegate = self
-        searchTextField.backgroundColor = .clear
-        searchTextField.textColor = .white
-        searchTextField.font = UIFont.systemFont(ofSize: 12)
-        
-        searchTextFieldLine.backgroundColor = .white
-        searchTextFieldLine.tintColor = .white
-        
-        searchButton.backgroundColor = .white
-        searchButton.setTitle("검색", for: .normal)
-        searchButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        searchButton.setTitleColor(.black, for: .normal)
     }
 }
