@@ -12,7 +12,7 @@ class LottoWinViewController: UIViewController {
     let lottoRoundList = Array(1...1181)
     var lottoNumRange = Array(1...45)
     
-    let textField = {
+    lazy var textField = {
         let textField = UITextField()
         textField.borderStyle = .line
         textField.textAlignment = .center
@@ -23,6 +23,7 @@ class LottoWinViewController: UIViewController {
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.cornerRadius = 5
         textField.clipsToBounds = true
+        textField.inputView = pickerView
         
         return textField
     }()
@@ -32,14 +33,6 @@ class LottoWinViewController: UIViewController {
         return pickerView
     }()
 
-    
-//    private lazy var pickerView: UIPickerView = {
-//            let pickerView = UIPickerView()
-//            textField.inputView = pickerView
-//            return pickerView
-//    }()
-
-    
     let infoLabel = {
         let label = LottoBlackUILabel()
         label.text = "당첨번호 안내"
@@ -245,6 +238,5 @@ extension LottoWinViewController: ViewDesignProtocol {
         
         pickerView.delegate = self
         pickerView.dataSource = self
-        textField.inputView = pickerView
     }
 }
