@@ -18,7 +18,7 @@ struct Lotto: Codable {
     let returnValue: String?
     
     var numList: [Int?] {
-        [num1, num2, num3, num4, num5]
+        [num1, num2, num3, num4, num5, num6]
     }
     
     enum CodingKeys: String, CodingKey {
