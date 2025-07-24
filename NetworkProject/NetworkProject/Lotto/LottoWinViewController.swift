@@ -13,16 +13,7 @@ class LottoWinViewController: UIViewController {
     var lottoNumRange = Array(1...45)
     
     lazy var textField = {
-        let textField = UITextField()
-        textField.borderStyle = .line
-        textField.textAlignment = .center
-        textField.backgroundColor = .white
-        textField.font = .systemFont(ofSize: 20, weight: .semibold)
-        textField.textColor = .black
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.cornerRadius = 5
-        textField.clipsToBounds = true
+        let textField = CustomTextField()
         textField.inputView = pickerView
         
         return textField
@@ -34,17 +25,12 @@ class LottoWinViewController: UIViewController {
     }()
 
     let infoLabel = {
-        let label = LottoBlackUILabel()
-        label.text = "당첨번호 안내"
-        label.font = .systemFont(ofSize: 12, weight: .regular)
+        let label = CustomUILabel(text: "당첨번호 안내", alignment: .left, size: 12)
         return label
     }()
     
     let dateLabel = {
-        let label = UILabel()
-        label.text = "2020-05-30 추첨"
-        label.font = .systemFont(ofSize: 11, weight: .regular)
-        label.textColor = .lightGray
+        let label = CustomUILabel(text: "2020-05-30 추첨", textColor: .lightGray, alignment: .left, size: 11)
         return label
     }()
     
@@ -55,17 +41,12 @@ class LottoWinViewController: UIViewController {
     }()
     
     let roundLabel = {
-        let label = UILabel()
-        label.text = "888회"
-        label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.textColor = .blue
+        let label = CustomUILabel(text: "888회", textColor: .blue, alignment: .left, size: 22, weight: .bold)
         return label
     }()
     
     let resultLabel = {
-        let label = LottoBlackUILabel()
-        label.text = "당첨결과"
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        let label = CustomUILabel(text: "당첨결과", alignment: .left, size: 22, weight: .bold)
         return label
     }()
     
@@ -86,50 +67,32 @@ class LottoWinViewController: UIViewController {
     }()
     
     let lottoWinViewList: [LottoWinView] = [{
-        let view = LottoWinView()
-        view.backgroundColor = .systemYellow
-        view.label.text = "6"
+        let view = LottoWinView(text: "6", backgroundColor: .systemYellow)
         return view
     }(),{
-        let view = LottoWinView()
-        view.backgroundColor = .systemBlue
-        view.label.text = "14"
+        let view = LottoWinView(text: "14", backgroundColor: .systemBlue)
         return view
     }(),{
-        let view = LottoWinView()
-        view.backgroundColor = .systemBlue
-        view.label.text = "16"
+        let view = LottoWinView(text: "16", backgroundColor: .systemBlue)
         return view
     }(),{
-        let view = LottoWinView()
-        view.backgroundColor = .systemRed
-        view.label.text = "21"
+        let view = LottoWinView(text: "21", backgroundColor: .systemRed)
         return view
     }(),{
-        let view = LottoWinView()
-        view.backgroundColor = .systemRed
-        view.label.text = "27"
+        let view = LottoWinView(text: "27", backgroundColor: .systemRed)
         return view
     }(),{
-        let view = LottoWinView()
-        view.backgroundColor = .systemGray3
-        view.label.text = "37"
+        let view = LottoWinView(text: "37", backgroundColor: .systemGray3)
         return view
     }(),]
     
     let additionalWinView = {
-        let view = LottoWinView()
-        view.backgroundColor = .systemGray3
-        view.label.text = "40"
+        let view = LottoWinView(text: "40", backgroundColor: .systemGray3)
         return view
     }()
     
     let addLabel = {
-        let label = UILabel()
-        label.textColor = .black
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 15)
-        label.text = "+"
+        let label = CustomUILabel(text: "+", alignment: .center, size: 15)
         return label
     }()
 

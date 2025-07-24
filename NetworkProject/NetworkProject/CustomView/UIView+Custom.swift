@@ -16,9 +16,15 @@ class LottoWinView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+    }
+    
+    init(text: String, backgroundColor: UIColor) {
+        super.init(frame: .zero)
+        
         self.addSubview(label)
         label.textColor = .white
+        label.text = text
+        self.backgroundColor = backgroundColor
         label.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
