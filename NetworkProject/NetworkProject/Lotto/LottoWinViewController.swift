@@ -10,7 +10,8 @@ import Alamofire
 
 class LottoWinViewController: UIViewController {
 
-    let lottoRoundList = Array(1...1181)
+    let lastRoundOf20250719 = 1181
+    var currentRound = 0
     var lottoNumRange = Array(1...45)
     
     lazy var textField = {
@@ -102,11 +103,56 @@ class LottoWinViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        
+        // 가장 최신 회차의 로또 값 로드
+        getLatestRound { latestRound in
+            self.currentRound = latestRound
+            self.callRequestLottoNum(round: latestRound) { Lotto in
+                if self.isValidLottoData(lotto: Lotto) {
+                    self.fetchUI(lotto: Lotto, round: latestRound)
+                }
+            }
+        }
     }
 }
 
 // MARK: - Logic
 extension LottoWinViewController {
+    
+    func getLatestRound(completion: @escaping (Int)->()) {
+        let myDateComponents = DateComponents(year: 2025, month: 7, day: 19)
+        let startDate = Calendar.current.date(from: myDateComponents)!
+        let dayInterval = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day!
+        
+        let round = lastRoundOf20250719 + dayInterval / 7
+        var resultRound = 0
+        
+        // 로또 api가 토요일 중 언제 업데이트 될 지 모르기 때문에 (토요일 저녁에 로또를 뽑음)
+        // 우선 토요일 자정이 되면 현재 회차를 +1 하여 업데이트 시키되,
+        // 업데이트 된 회차로 데이터를 받아오는 것에 성공하는지 확인하여 업데이트 된 회차가 옳은 값인지 확인하는 절차를 거친다
+        isRoundInRange(round: round) { data in
+            if data.returnValue == nil { resultRound = round - 1 }
+            else if data.returnValue! == "fail" { resultRound = round - 1 }
+            else if data.returnValue! == "success" { resultRound = round }
+
+            completion(resultRound) // 최종적으로 결정된 최신 회차를 completion 으로 보냄
+        }
+    }
+    
+    func isRoundInRange(round: Int, completion: @escaping (Lotto)->()) {
+        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + String(round)
+        AF.request(url, method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: Lotto.self) { response in
+                switch response.result {
+                case .success(let value):
+                    completion(value)
+                case .failure(let error):
+                    print("fail", error)
+                }
+            }
+    }
+    
     // data get
     func callRequestLottoNum(round: Int, completion: @escaping (Lotto)->()) {
         let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + String(round)
@@ -167,21 +213,25 @@ extension LottoWinViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
         
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return lottoRoundList.count
+        return currentRound
     }
         
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(lottoRoundList[row]) + "회차"
+        return String(row + 1) + "회차"
     }
         
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         callRequestLottoNum(round: row + 1) { Lotto in
             if self.isValidLottoData(lotto: Lotto) {
-                self.updateLottoData(lotto: Lotto)
-                self.roundLabel.text = "\(self.lottoRoundList[row])회"
-                self.textField.text = "\(self.lottoRoundList[row])회차"
+                self.fetchUI(lotto: Lotto, round: row + 1)
             }
         }
+    }
+    
+    func fetchUI(lotto: Lotto, round: Int) {
+        self.updateLottoData(lotto: lotto)
+        self.roundLabel.text = "\(round)회"
+        self.textField.text = "\(round)회차"
     }
 }
 

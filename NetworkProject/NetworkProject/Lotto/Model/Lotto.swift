@@ -15,6 +15,7 @@ struct Lotto: Codable {
     let num5: Int?
     let num6: Int?
     let bonusNum: Int?
+    let returnValue: String?
     
     var numList: [Int?] {
         [num1, num2, num3, num4, num5]
@@ -29,6 +30,7 @@ struct Lotto: Codable {
         case num5 = "drwtNo5"
         case num6 = "drwtNo6"
         case bonusNum = "bnusNo"
+        case returnValue = "returnValue"
     }
     
     init(from decoder: any Decoder) throws {
@@ -41,5 +43,6 @@ struct Lotto: Codable {
         self.num5 = try container.decodeIfPresent(Int.self, forKey: .num5)
         self.num6 = try container.decodeIfPresent(Int.self, forKey: .num6)
         self.bonusNum = try container.decodeIfPresent(Int.self, forKey: .bonusNum)
+        self.returnValue = try container.decodeIfPresent(String.self, forKey: .returnValue)
     }
 }
