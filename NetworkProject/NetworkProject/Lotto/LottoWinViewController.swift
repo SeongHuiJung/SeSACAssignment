@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class LottoWinViewController: UIViewController {
 
@@ -106,11 +107,51 @@ class LottoWinViewController: UIViewController {
 
 // MARK: - Logic
 extension LottoWinViewController {
+    // data get
+    func callRequestLottoNum(round: Int, completion: @escaping (Lotto)->()) {
+        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + String(round)
+        AF.request(url, method: .get)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: Lotto.self) { response in
+                switch response.result {
+                case .success(let value):
+                    completion(value)
+                case .failure(let error):
+                    print("fail", error)
+                }
+            }
+    }
+    
+    // 불러온 데이터 ui에 반영
+    func updateLottoData(lotto: Lotto) {
+
+        for i in 0..<lotto.numList.count {
+            lottoWinViewList[i].label.text = String(lotto.numList[i]!)
+        }
+
+        additionalWinView.label.text = String(lotto.bonusNum!)
+        dateLabel.text = lotto.date! + " 추첨"
+    }
+    
+    // 불러온 데이터 nil 검사
+    func isValidLottoData(lotto: Lotto) -> Bool {
+        
+        for i in 0..<lotto.numList.count {
+            if lotto.numList[i] == nil { print("올바른 데이터를 받지 못했습니다"); return false }
+        }
+        guard lotto.bonusNum != nil else { print("올바른 데이터를 받지 못했습니다"); return false }
+        guard lotto.date != nil else { print("올바른 데이터를 받지 못했습니다"); return false }
+        
+        return true
+    }
+    
+    // 랜덤관련 함수
     func getRandomLottoNum() -> [Int] {
         lottoNumRange.shuffle()
         return Array(lottoNumRange[0...6])
     }
     
+    // 랜덤관련 함수
     func setNewLottoNum(numList: [Int]) {
         for i in 0..<numList.count - 1 {
             lottoWinViewList[i].label.text = String(numList[i])
@@ -134,10 +175,13 @@ extension LottoWinViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
         
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let numList = getRandomLottoNum().sorted()
-        setNewLottoNum(numList: numList)
-        
-        roundLabel.text = "\(lottoRoundList[row])회"
+        callRequestLottoNum(round: row + 1) { Lotto in
+            if self.isValidLottoData(lotto: Lotto) {
+                self.updateLottoData(lotto: Lotto)
+                self.roundLabel.text = "\(self.lottoRoundList[row])회"
+                self.textField.text = "\(self.lottoRoundList[row])회차"
+            }
+        }
     }
 }
 
