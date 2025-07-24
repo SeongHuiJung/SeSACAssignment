@@ -81,6 +81,6 @@ extension SearchMovieTableViewCell {
     func configure(index: String, item: Movie) {
         indexLabel.text = index
         titleLabel.text = item.title
-        dateLabel.text = item.getFormattedDateString
+        dateLabel.text = item.releaseDate
     }
 }
