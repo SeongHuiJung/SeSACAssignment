@@ -10,90 +10,90 @@ import Alamofire
 
 class LottoWinViewController: UIViewController {
 
-    let lastRoundOf20250719 = 1181
-    var currentRound = 0
-    var lottoNumRange = Array(1...45)
+    private let lastRoundOf20250719 = 1181
+    private var currentRound = 0
+    private var lottoNumRange = Array(1...45)
     
-    lazy var textField = {
+    private lazy var textField = {
         let textField = CustomTextField()
         textField.inputView = pickerView
         
         return textField
     }()
     
-    var pickerView: UIPickerView = {
+    private var pickerView: UIPickerView = {
         let pickerView = UIPickerView()
         return pickerView
     }()
 
-    let infoLabel = {
+    private let infoLabel = {
         let label = CustomUILabel(text: "당첨번호 안내", alignment: .left, size: 12)
         return label
     }()
     
-    let dateLabel = {
+    private let dateLabel = {
         let label = CustomUILabel(text: "2020-05-30 추첨", textColor: .lightGray, alignment: .left, size: 11)
         return label
     }()
     
-    let lineView = {
+    private let lineView = {
         let view = UIView()
         view.backgroundColor = .lightGray
         return view
     }()
     
-    let roundLabel = {
+    private let roundLabel = {
         let label = CustomUILabel(text: "888회", textColor: .blue, alignment: .left, size: 22, weight: .bold)
         return label
     }()
     
-    let resultLabel = {
+    private let resultLabel = {
         let label = CustomUILabel(text: "당첨결과", alignment: .left, size: 22, weight: .bold)
         return label
     }()
     
-    let labelStackView = {
+    private let labelStackView = {
         let stackView = CustomStackViewHorizontal()
         return stackView
     }()
     
-    let lottoWinNumberStackView = {
+    private let lottoWinNumberStackView = {
         let stackView = CustomStackViewHorizontal()
         return stackView
     }()
     
-    let allLottoStackView = {
+    private let allLottoStackView = {
         let stackView = CustomStackViewHorizontal()
         stackView.spacing = 20
         return stackView
     }()
     
-    let lottoWinViewList: [LottoWinView] = [{
-        let view = LottoWinView(text: "6", backgroundColor: .systemYellow)
+    private let lottoWinViewList: [LottoWinView] = [{
+        let view = LottoWinView(text: "", backgroundColor: .systemYellow)
         return view
     }(),{
-        let view = LottoWinView(text: "14", backgroundColor: .systemBlue)
+        let view = LottoWinView(text: "", backgroundColor: .systemBlue)
         return view
     }(),{
-        let view = LottoWinView(text: "16", backgroundColor: .systemBlue)
+        let view = LottoWinView(text: "", backgroundColor: .systemBlue)
         return view
     }(),{
-        let view = LottoWinView(text: "21", backgroundColor: .systemRed)
+        let view = LottoWinView(text: "", backgroundColor: .systemRed)
         return view
     }(),{
-        let view = LottoWinView(text: "27", backgroundColor: .systemRed)
+        let view = LottoWinView(text: "", backgroundColor: .systemRed)
         return view
     }(),{
-        let view = LottoWinView(text: "37", backgroundColor: .systemGray3)
+        let view = LottoWinView(text: "", backgroundColor: .systemGray3)
         return view
     }(),]
     
-    let additionalWinView = {
-        let view = LottoWinView(text: "40", backgroundColor: .systemGray3)
+    private let additionalWinView = {
+        let view = LottoWinView(text: "", backgroundColor: .systemGray3)
         return view
     }()
     
-    let addLabel = {
+    private let addLabel = {
         let label = CustomUILabel(text: "+", alignment: .center, size: 15)
         return label
     }()
@@ -105,11 +105,21 @@ class LottoWinViewController: UIViewController {
         configureView()
         
         // 가장 최신 회차의 로또 값 로드
-        getLatestRound { latestRound in
-            self.currentRound = latestRound
-            self.callRequestLottoNum(round: latestRound) { Lotto in
-                if self.isValidLottoData(lotto: Lotto) {
-                    self.fetchUI(lotto: Lotto, round: latestRound)
+        getLatestRound { data in
+            self.currentRound = data.0
+            let lottoData = data.1
+            
+            // 알맞은 최신 회차의 데이터를 불러온 경우
+            if self.isValidLottoData(lotto: lottoData) {
+                self.fetchUI(lotto: lottoData, round: self.currentRound)
+            }
+            
+            // (토요일인 경우에만) 토요일에 새로운 회차의 로또 값이 업데이트 되기 전이라면, 이전회차의 로또값이 나오도록 함
+            else {
+                self.callRequestLottoNum(round: self.currentRound) { lottoData in
+                    if self.isValidLottoData(lotto: lottoData) {
+                        self.fetchUI(lotto: lottoData, round: self.currentRound)
+                    }
                 }
             }
         }
@@ -119,7 +129,7 @@ class LottoWinViewController: UIViewController {
 // MARK: - Logic
 extension LottoWinViewController {
     
-    func getLatestRound(completion: @escaping (Int)->()) {
+    private func getLatestRound(completion: @escaping ((Int, Lotto))->()) {
         let myDateComponents = DateComponents(year: 2025, month: 7, day: 19)
         let startDate = Calendar.current.date(from: myDateComponents)!
         let dayInterval = Calendar.current.dateComponents([.day], from: startDate, to: Date()).day!
@@ -130,32 +140,18 @@ extension LottoWinViewController {
         // 로또 api가 토요일 중 언제 업데이트 될 지 모르기 때문에 (토요일 저녁에 로또를 뽑음)
         // 우선 토요일 자정이 되면 현재 회차를 +1 하여 업데이트 시키되,
         // 업데이트 된 회차로 데이터를 받아오는 것에 성공하는지 확인하여 업데이트 된 회차가 옳은 값인지 확인하는 절차를 거친다
-        isRoundInRange(round: round) { data in
+        callRequestLottoNum(round: round) { data in
             if data.returnValue == nil { resultRound = round - 1 }
             else if data.returnValue! == "fail" { resultRound = round - 1 }
             else if data.returnValue! == "success" { resultRound = round }
 
-            completion(resultRound) // 최종적으로 결정된 최신 회차를 completion 으로 보냄
+            completion((resultRound, data)) // 최종적으로 결정된 최신 회차를 completion 으로 보냄
         }
-    }
-    
-    func isRoundInRange(round: Int, completion: @escaping (Lotto)->()) {
-        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + String(round)
-        AF.request(url, method: .get)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: Lotto.self) { response in
-                switch response.result {
-                case .success(let value):
-                    completion(value)
-                case .failure(let error):
-                    print("fail", error)
-                }
-            }
     }
     
     // data get
     func callRequestLottoNum(round: Int, completion: @escaping (Lotto)->()) {
-        let url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + String(round)
+        let url = URLType.LottoURL.rawValue + String(round)
         AF.request(url, method: .get)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: Lotto.self) { response in
@@ -169,7 +165,7 @@ extension LottoWinViewController {
     }
     
     // 불러온 데이터 ui에 반영
-    func updateLottoData(lotto: Lotto) {
+    private func updateLottoData(lotto: Lotto) {
 
         for i in 0..<lotto.numList.count {
             lottoWinViewList[i].label.text = String(lotto.numList[i]!)
@@ -180,7 +176,7 @@ extension LottoWinViewController {
     }
     
     // 불러온 데이터 nil 검사
-    func isValidLottoData(lotto: Lotto) -> Bool {
+    private func isValidLottoData(lotto: Lotto) -> Bool {
         
         for i in 0..<lotto.numList.count {
             if lotto.numList[i] == nil { print("올바른 데이터를 받지 못했습니다"); return false }
@@ -192,13 +188,13 @@ extension LottoWinViewController {
     }
     
     // 랜덤관련 함수
-    func getRandomLottoNum() -> [Int] {
+    private func getRandomLottoNum() -> [Int] {
         lottoNumRange.shuffle()
         return Array(lottoNumRange[0...6])
     }
     
     // 랜덤관련 함수
-    func setNewLottoNum(numList: [Int]) {
+    private func setNewLottoNum(numList: [Int]) {
         for i in 0..<numList.count - 1 {
             lottoWinViewList[i].label.text = String(numList[i])
         }
@@ -217,13 +213,13 @@ extension LottoWinViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
         
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return String(row + 1) + "회차"
+        return String(currentRound - row) + "회차"
     }
         
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        callRequestLottoNum(round: row + 1) { Lotto in
+        callRequestLottoNum(round: currentRound - row) { Lotto in
             if self.isValidLottoData(lotto: Lotto) {
-                self.fetchUI(lotto: Lotto, round: row + 1)
+                self.fetchUI(lotto: Lotto, round: self.currentRound - row)
             }
         }
     }

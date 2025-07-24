@@ -11,23 +11,23 @@ import Alamofire
 
 class SearchMovieViewController: UIViewController {
     
-    var searchDateString = ""
+    private var searchDateString = ""
     private let movieKey = Bundle.main.infoDictionary?["MovieKey"] as! String
     
-    let searchTextField = {
+    private let searchTextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
         textField.textColor = .white
         textField.font = UIFont.systemFont(ofSize: 12)
         return textField
     }()
-    let searchTextFieldLine = {
+    private let searchTextFieldLine = {
         let view = UIView()
         view.backgroundColor = .white
         view.tintColor = .white
         return view
     }()
-    let searchButton = {
+    private let searchButton = {
         let button = UIButton()
         button.backgroundColor = .white
         button.setTitle("검색", for: .normal)
@@ -35,14 +35,14 @@ class SearchMovieViewController: UIViewController {
         button.setTitleColor(.black, for: .normal)
         return button
     }()
-    let tableView = {
+    private let tableView = {
         let tableView = UITableView()
         tableView.rowHeight = 44
         tableView.backgroundColor = .clear
         return tableView
     }()
     
-    var rankList = [Movie]()
+    private var rankList = [Movie]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +66,9 @@ extension SearchMovieViewController {
     }
 
     @objc func callRequestMovieRank() {
-        let url = "https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=" + movieKey + "&targetDt=" + searchDateString + "#"
+        guard searchDateString != "" else { return }
+        
+        let url =  URLType.MovieURL.rawValue + movieKey + "&targetDt=" + searchDateString + "#"
         AF.request(url, method: .get)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: MovieRank.self) { response in
@@ -88,7 +90,7 @@ extension SearchMovieViewController {
             }
     }
     
-    func isValidMovieData(movieData: MovieRank) -> Bool {
+    private func isValidMovieData(movieData: MovieRank) -> Bool {
         let list = movieData.boxOfficeResult.movieData
 
         for i in 0..<list.count {
@@ -100,7 +102,7 @@ extension SearchMovieViewController {
         return true
     }
     
-    func getUpdateRankListData(movieData: MovieRank) -> [Movie] {
+    private func getUpdateRankListData(movieData: MovieRank) -> [Movie] {
         let list = movieData.boxOfficeResult.movieData
         var newMovieList = [Movie]()
         for item in list {
@@ -110,7 +112,7 @@ extension SearchMovieViewController {
         return newMovieList
     }
     
-    func getYesterDayString() -> String {
+    private func getYesterDayString() -> String {
         let date = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
         return DateFormatter.formatDateToString(date: date, format: "yyyyMMdd")
     }
@@ -118,7 +120,7 @@ extension SearchMovieViewController {
 
 // MARK: - AddTarget
 extension SearchMovieViewController {
-    func addTarget() {
+    private func addTarget() {
         searchButton.addTarget(self, action: #selector(updateSearchDateString), for: .touchUpInside)
         searchButton.addTarget(self, action: #selector(callRequestMovieRank), for: .touchUpInside)
     }
@@ -178,7 +180,7 @@ extension SearchMovieViewController: ViewDesignProtocol {
         tableView.snp.makeConstraints { make in
             make.top.equalTo(searchTextField.snp.bottom).offset(20)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(350)
+            make.height.equalTo(500)
         }
     }
     
