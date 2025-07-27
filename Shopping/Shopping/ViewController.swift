@@ -11,7 +11,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        navigationItem.backButtonTitle = ""
+    }
+    @IBAction func shoppingButtonTapped(_ sender: Any) {
+        let viewController = SearchViewController()
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
