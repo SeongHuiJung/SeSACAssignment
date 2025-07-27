@@ -38,6 +38,7 @@ class SearchViewController: UIViewController {
     }
 }
 
+// MARK: - Logic
 extension SearchViewController {
     private func isHaveOnlyWhiteSpace() -> Bool {
         guard let text = searchBar.text else { return true }
@@ -50,6 +51,7 @@ extension SearchViewController {
     }
 }
 
+// MARK: - SearchBar Delegate
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -64,6 +66,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: UI Delegate
 extension SearchViewController: ViewDesignProtocol {
     func configureHierarchy() {
         [searchBar].forEach { view.addSubview($0) }

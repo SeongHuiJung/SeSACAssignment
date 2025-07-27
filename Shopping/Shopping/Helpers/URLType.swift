@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: url endpoint 관리
-
 enum URLType{
     case naverShop(params: [String: String])
     

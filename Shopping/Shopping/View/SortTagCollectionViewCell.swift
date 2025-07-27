@@ -46,20 +46,9 @@ extension SortTagCollectionViewCell {
     func configureData(text: String) {
         tagCell.textLabel.text = text
     }
-    
-//    func changeCellUISelected() {
-//        tagCell.backgroundColor = .white
-//        tagCell.layer.borderColor = UIColor.black.cgColor
-//        tagCell.textLabel.textColor = .black
-//    }
-//    
-//    func changeCellUINonSelected() {
-//        tagCell.backgroundColor = .black
-//        tagCell.layer.borderColor = UIColor.white.cgColor
-//        tagCell.textLabel.textColor = .white
-//    }
 }
 
+// MARK: UI Delegate
 extension SortTagCollectionViewCell: ViewDesignProtocol {
     func configureHierarchy() {
         contentView.addSubview(tagCell)

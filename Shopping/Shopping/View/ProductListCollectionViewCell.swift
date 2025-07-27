@@ -78,6 +78,7 @@ extension ProductListCollectionViewCell {
     }
 }
 
+// MARK: UI Delegate
 extension ProductListCollectionViewCell: ViewDesignProtocol {
     func configureHierarchy() {
         [imageView, likeButton, brandLabel, titleLabel, priceLabel].forEach { contentView.addSubview($0) }

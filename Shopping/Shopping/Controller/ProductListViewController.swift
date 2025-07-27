@@ -47,6 +47,7 @@ class ProductListViewController: UIViewController {
     }
 }
 
+// MARK: - Network
 extension ProductListViewController {
     func callRequest(sort: SortType = SortType.sim) {
 
@@ -81,6 +82,7 @@ extension ProductListViewController {
     }
 }
 
+// MARK: - CollectionView Delegate
 extension ProductListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == productCollectionView {
@@ -137,6 +139,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
+// MARK: UI Delegate
 extension ProductListViewController: ViewDesignProtocol {
     func configureHierarchy() {
         [totalProductLabel, tagCollectionView, productCollectionView].forEach { view.addSubview($0) }
