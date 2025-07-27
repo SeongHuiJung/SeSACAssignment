@@ -8,8 +8,30 @@
 import Foundation
 
 // TODO: url endpoint 관리
-enum URLType: String {
-    case ShopUrl = "https://openapi.naver.com/v1/search/shop.json?"
+
+enum URLType{
+    case naverShop(params: [String: String])
+    
+    var url: String {
+        switch self {
+        case .naverShop(let params):
+            var result = "?"
+            for (key,value) in params {
+                result += "\(key)=\(value)&"
+            }
+            result.popLast()
+            result = Host.naverShop.rawValue + Path.naverShop.rawValue + result
+            return result
+        }
+    }
+}
+
+enum Host: String {
+    case naverShop = "https://openapi.naver.com"
+}
+
+enum Path: String {
+    case naverShop = "/v1/search/shop.json"
 }
 
 enum SortType: String {

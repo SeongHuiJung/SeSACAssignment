@@ -49,10 +49,16 @@ class ProductListViewController: UIViewController {
 
 extension ProductListViewController {
     func callRequest(sort: SortType = SortType.sim) {
-        // TODO: 구조화
+
         let display = 100
-        let query = "query=\(searchText)&display=\(display)&sort=\(sort.rawValue)"
-        let url = URLType.ShopUrl.rawValue + query
+
+        let params = [
+            "query" : searchText,
+            "display" : String(display),
+            "sort" : sort.rawValue
+        ]
+        
+        let url = URLType.naverShop(params: params).url
         
         let header: HTTPHeaders = [
             "X-Naver-Client-Id" : NaverClientId,
