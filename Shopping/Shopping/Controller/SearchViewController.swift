@@ -41,7 +41,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text, text.count > 2 else { return }
+        guard let text = searchBar.text, text.count >= 2 else { return }
         let viewController = ProductListViewController()
         viewController.searchText = text
         navigationController?.pushViewController(viewController, animated: true)

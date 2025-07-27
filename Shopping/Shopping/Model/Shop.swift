@@ -8,10 +8,11 @@
 import Foundation
 
 struct Shop: Codable {
-    let items: [item]
+    let items: [ShopItem]
+    let total: Int
 }
 
-struct item: Codable {
+struct ShopItem: Codable {
     let title: String
     let image: String
     let link: String
