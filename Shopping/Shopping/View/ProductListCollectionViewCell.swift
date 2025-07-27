@@ -13,6 +13,17 @@ class ProductListCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "ProductListCollectionViewCell"
     
+    private var isLike = false {
+        didSet {
+            if isLike {
+                likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            }
+            else {
+                likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            }
+        }
+    }
+    
     private let imageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 10
@@ -23,6 +34,21 @@ class ProductListCollectionViewCell: UICollectionViewCell {
     private let titleLabel = CustomUILabel(text: "", textColor: .white, alignment: .left, size: 14)
     private let priceLabel = CustomUILabel(text: "", textColor: .white, alignment: .left, size: 15, weight: .semibold)
     
+    private let likeButton = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setImage(UIImage(systemName: "heart"), for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
+        
+        // View Cycle 고려하여 나중에 호출되도록 함
+        DispatchQueue.main.async {
+            button.layer.cornerRadius = button.bounds.width / 2
+            button.clipsToBounds = true
+        }
+        return button
+    }()
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -32,6 +58,13 @@ class ProductListCollectionViewCell: UICollectionViewCell {
         configureHierarchy()
         configureLayout()
         configureView()
+    }
+}
+
+// MARK: - Loginc
+extension ProductListCollectionViewCell {
+    @objc func likeButtonTapped() {
+        isLike = !isLike
     }
 }
 
@@ -47,7 +80,7 @@ extension ProductListCollectionViewCell {
 
 extension ProductListCollectionViewCell: ViewDesignProtocol {
     func configureHierarchy() {
-        [imageView, brandLabel, titleLabel, priceLabel].forEach { contentView.addSubview($0) }
+        [imageView, likeButton, brandLabel, titleLabel, priceLabel].forEach { contentView.addSubview($0) }
     }
     
     func configureLayout() {
@@ -55,6 +88,12 @@ extension ProductListCollectionViewCell: ViewDesignProtocol {
             make.horizontalEdges.equalTo(contentView)
             make.top.equalTo(contentView)
             make.height.equalTo(imageView.snp.width)
+        }
+        
+        likeButton.snp.makeConstraints { make in
+            make.right.equalTo(imageView.snp.right).inset(10)
+            make.bottom.equalTo(imageView.snp.bottom).inset(10)
+            make.size.equalTo(32)
         }
         
         brandLabel.snp.makeConstraints { make in
@@ -75,5 +114,6 @@ extension ProductListCollectionViewCell: ViewDesignProtocol {
     
     func configureView() {
         contentView.backgroundColor = .clear
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
     }
 }
