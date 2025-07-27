@@ -48,7 +48,8 @@ extension ProductListViewController {
                 switch response.result {
                 case .success(let value):
                     self.produtList = value
-                    self.totalProductLabel.text = "\(String(value.total)) 개의 검색 결과"
+                    let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
+                    self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
                     self.collectionView.reloadData()
                 case .failure(let error):
                     print("fail", error)
@@ -90,6 +91,7 @@ extension ProductListViewController: ViewDesignProtocol {
     func configureView() {
         view.backgroundColor = .black
         navigationItem.title = searchText
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         collectionView.register(ProductListCollectionViewCell.self, forCellWithReuseIdentifier: ProductListCollectionViewCell.identifier)
         collectionView.delegate = self

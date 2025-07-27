@@ -13,7 +13,12 @@ class ProductListCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "ProductListCollectionViewCell"
     
-    private let imageView = UIImageView()
+    private let imageView = {
+        let image = UIImageView()
+        image.layer.cornerRadius = 10
+        image.clipsToBounds = true
+        return image
+    }()
     private let brandLabel = CustomUILabel(text: "brand", textColor: .lightGray, alignment: .left, size: 13, weight: .light)
     private let titleLabel = CustomUILabel(text: "", textColor: .white, alignment: .left, size: 14)
     private let priceLabel = CustomUILabel(text: "", textColor: .white, alignment: .left, size: 15, weight: .semibold)
@@ -35,7 +40,7 @@ extension ProductListCollectionViewCell {
     func configureData(data: ShopItem) {
         imageView.setDownSamplingImage(url: data.image)
         brandLabel.text = data.brand
-        priceLabel.text = data.lprice
+        priceLabel.text = NumberFomatterSingleton.shared.foarmatter.string(from: Int(data.lprice)! as NSNumber)
         titleLabel.text = data.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
     }
 }

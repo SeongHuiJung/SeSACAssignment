@@ -76,7 +76,8 @@ extension SearchViewController: ViewDesignProtocol {
         navigationItem.title = "영캠러의 쇼핑쇼핑"
         navigationItem.titleView?.tintColor = .white
         navigationController?.navigationBar.tintColor = .white
-        
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
     
     func setDelegate() {
