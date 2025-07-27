@@ -38,10 +38,22 @@ class SearchViewController: UIViewController {
     }
 }
 
+extension SearchViewController {
+    private func isHaveOnlyWhiteSpace() -> Bool {
+        guard let text = searchBar.text else { return true }
+        for char in text {
+            if char != " " {
+                return false
+            }
+        }
+        return true
+    }
+}
+
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text, text.count >= 2 else { return }
+        guard let text = searchBar.text, text.count >= 2, !isHaveOnlyWhiteSpace() else { return }
         let viewController = ProductListViewController()
         viewController.searchText = text
         navigationController?.pushViewController(viewController, animated: true)
