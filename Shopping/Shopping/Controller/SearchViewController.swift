@@ -68,8 +68,6 @@ extension SearchViewController: ViewDesignProtocol {
         view.backgroundColor = .black
         setNavigation()
         setDelegate()
-        
-        
     }
     
     func setNavigation() {

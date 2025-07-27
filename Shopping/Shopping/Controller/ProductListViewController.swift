@@ -12,14 +12,31 @@ class ProductListViewController: UIViewController {
 
     var searchText = ""
     var produtList = Shop(items: [], total: 0)
+    let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
     
     private let NaverClientId = Bundle.main.infoDictionary?["NaverClientId"] as! String
     private let NaverClientSecret = Bundle.main.infoDictionary?["NaverClientSecret"] as! String
-    
-    
     private var totalProductLabel = CustomUILabel(text: "", textColor: .systemGreen, alignment: .left, size: 12)
-    private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutVertical(cellCount: 2, gap: 10))
-   
+    
+    lazy private var productCollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutVertical(cellCount: 2, gap: 10))
+        collectionView.register(ProductListCollectionViewCell.self, forCellWithReuseIdentifier: ProductListCollectionViewCell.identifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
+    lazy private var tagCollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 2, gap: 10))
+        collectionView.register(SortTagCollectionViewCell.self, forCellWithReuseIdentifier: SortTagCollectionViewCell.identifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +48,10 @@ class ProductListViewController: UIViewController {
 }
 
 extension ProductListViewController {
-    func callRequest() {
-        // 구조화
+    func callRequest(sort: SortType = SortType.sim) {
+        // TODO: 구조화
         let display = 100
-        let query = "query=\(searchText)&display=\(display)"
+        let query = "query=\(searchText)&display=\(display)&sort=\(sort.rawValue)"
         let url = URLType.ShopUrl.rawValue + query
         
         let header: HTTPHeaders = [
@@ -50,7 +67,7 @@ extension ProductListViewController {
                     self.produtList = value
                     let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
                     self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
-                    self.collectionView.reloadData()
+                    self.productCollectionView.reloadData()
                 case .failure(let error):
                     print("fail", error)
                 }
@@ -60,19 +77,63 @@ extension ProductListViewController {
 
 extension ProductListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        produtList.items.count
+        if collectionView == productCollectionView {
+            produtList.items.count
+        }
+        else {
+            sortTypeList.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
-        cell.configureData(data: produtList.items[indexPath.item])
-        return cell
+        
+        if collectionView == productCollectionView {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
+            cell.configureData(data: produtList.items[indexPath.item])
+            return cell
+        }
+        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortTagCollectionViewCell.identifier, for: indexPath) as! SortTagCollectionViewCell
+            cell.configureData(text: sortTypeList[indexPath.item])
+            if indexPath.row == 0 {
+                cell.isSelectedTag = true
+            }
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == tagCollectionView {
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
+                cell.isSelectedTag = true
+                
+                for i in 0..<sortTypeList.count {
+                    if i != indexPath.row {
+                        if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
+                            cell.isSelectedTag = false
+                        }
+                    }
+                }
+            }
+            
+            var sortType = ""
+            
+            switch indexPath.row {
+            case 0: sortType = SortType.sim.rawValue
+            case 1: sortType = SortType.date.rawValue
+            case 2: sortType = SortType.dsc.rawValue
+            case 3: sortType = SortType.asc.rawValue
+            default: sortType = SortType.sim.rawValue
+            }
+            callRequest(sort: SortType(rawValue: sortType) ?? SortType.sim)
+        }
     }
 }
 
 extension ProductListViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [totalProductLabel, collectionView].forEach { view.addSubview($0) }
+        [totalProductLabel, tagCollectionView, productCollectionView].forEach { view.addSubview($0) }
     }
     
     func configureLayout() {
@@ -81,8 +142,14 @@ extension ProductListViewController: ViewDesignProtocol {
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
-        collectionView.snp.makeConstraints { make in
+        tagCollectionView.snp.makeConstraints { make in
             make.top.equalTo(totalProductLabel.snp.bottom).offset(10)
+            make.height.equalTo(32)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        productCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(tagCollectionView.snp.bottom).offset(10)
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -92,10 +159,5 @@ extension ProductListViewController: ViewDesignProtocol {
         view.backgroundColor = .black
         navigationItem.title = searchText
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        collectionView.register(ProductListCollectionViewCell.self, forCellWithReuseIdentifier: ProductListCollectionViewCell.identifier)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = .clear
     }
 }

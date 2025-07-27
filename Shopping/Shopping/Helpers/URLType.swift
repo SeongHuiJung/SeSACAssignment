@@ -11,3 +11,11 @@ import Foundation
 enum URLType: String {
     case ShopUrl = "https://openapi.naver.com/v1/search/shop.json?"
 }
+
+enum SortType: String {
+    case sim
+    case date
+    case asc
+    case dsc
+}
+
