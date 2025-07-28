@@ -63,16 +63,15 @@ extension ProductListViewController {
             "query" : searchText,
             "display" : String(display),
             "sort" : sort.rawValue,
-            "start" : start.formatted()
+            "start" : String(start)
         ]
         
         let url = URLType.naverShop(params: params).url
-        
         let header: HTTPHeaders = [
             "X-Naver-Client-Id" : NaverClientId,
             "X-Naver-Client-Secret" : NaverClientSecret
         ]
-        
+ 
         AF.request(url, method: .get, headers: header)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: Shop.self) { response in
