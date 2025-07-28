@@ -55,7 +55,20 @@ extension SearchViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text, text.count >= 2, !isHaveOnlyWhiteSpace() else { return }
+        guard let text = searchBar.text else { return }
+        
+        guard !isHaveOnlyWhiteSpace() else {
+            let alert = AlertSingleton.shared.getAlert(title: "", message: "검색어를 입력해 주세요")
+            present(alert, animated: true)
+            return
+        }
+        
+        guard text.count >= 2 else {
+            let alert = AlertSingleton.shared.getAlert(title: "", message: "2글자 이상 입력해 주세요")
+            present(alert, animated: true)
+            return
+        }
+        
         let viewController = ProductListViewController()
         viewController.searchText = text
         navigationController?.pushViewController(viewController, animated: true)
