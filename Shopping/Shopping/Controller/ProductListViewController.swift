@@ -166,7 +166,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard collectionView == productCollectionView else { return }
-        if indexPath.row == produtList.count - 3 {
+        if indexPath.row == produtList.count - 3 && page != endPage {
             page += 1
             start = page * display
             callRequest(sort: sortType)
