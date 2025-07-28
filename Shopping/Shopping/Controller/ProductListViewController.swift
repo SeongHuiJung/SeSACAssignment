@@ -11,8 +11,16 @@ import Alamofire
 class ProductListViewController: UIViewController {
 
     var searchText = ""
-    var produtList = Shop(items: [], total: 0)
+    var produtList = [ShopItem]()
+    
+    var page = 1 // 현재 페이지
+    var endPage = 0 // 최대 페이지
+    var start = 1
+    var display = 20
+    
     let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
+    let sortTypeListEng = ["sim", "date", "dsc", "asc"]
+    var sortType: SortType = SortType.sim
     
     private let NaverClientId = Bundle.main.infoDictionary?["NaverClientId"] as! String
     private let NaverClientSecret = Bundle.main.infoDictionary?["NaverClientSecret"] as! String
@@ -50,13 +58,12 @@ class ProductListViewController: UIViewController {
 // MARK: - Network
 extension ProductListViewController {
     func callRequest(sort: SortType = SortType.sim) {
-
-        let display = 100
-
+        // TODO: 합쳐서 개선
         let params = [
             "query" : searchText,
             "display" : String(display),
-            "sort" : sort.rawValue
+            "sort" : sort.rawValue,
+            "start" : start.formatted()
         ]
         
         let url = URLType.naverShop(params: params).url
@@ -71,14 +78,34 @@ extension ProductListViewController {
             .responseDecodable(of: Shop.self) { response in
                 switch response.result {
                 case .success(let value):
-                    self.produtList = value
-                    let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
-                    self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
+                    
+                    self.produtList.append(contentsOf: value.items)
                     self.productCollectionView.reloadData()
+                    
+                    if self.page == 1 {
+                        self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                        self.setEndPage(value: value)
+                        let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
+                        self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
+                    }
+                    
                 case .failure(let error):
                     print("fail", error)
                 }
             }
+    }
+    
+    func resetData() {
+        page = 1
+        start = 1
+        produtList = []
+    }
+    
+    func setEndPage(value: Shop) {
+        var quotient = value.total / display
+        let remainder = value.total % display
+        if remainder != 0 { quotient += 1 }
+        endPage = quotient
     }
 }
 
@@ -86,7 +113,7 @@ extension ProductListViewController {
 extension ProductListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == productCollectionView {
-            produtList.items.count
+            produtList.count
         }
         else {
             sortTypeList.count
@@ -97,7 +124,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
-            cell.configureData(data: produtList.items[indexPath.item])
+            cell.configureData(data: produtList[indexPath.item])
             return cell
         }
         else {
@@ -111,7 +138,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == tagCollectionView {
+        if collectionView == tagCollectionView && sortType.rawValue != sortTypeListEng[indexPath.row] {
             
             if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
                 cell.isSelectedTag = true
@@ -125,16 +152,24 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
                 }
             }
             
-            var sortType = ""
-            
             switch indexPath.row {
-            case 0: sortType = SortType.sim.rawValue
-            case 1: sortType = SortType.date.rawValue
-            case 2: sortType = SortType.dsc.rawValue
-            case 3: sortType = SortType.asc.rawValue
-            default: sortType = SortType.sim.rawValue
+            case 0: sortType = SortType.sim
+            case 1: sortType = SortType.date
+            case 2: sortType = SortType.dsc
+            case 3: sortType = SortType.asc
+            default: sortType = SortType.sim
             }
-            callRequest(sort: SortType(rawValue: sortType) ?? SortType.sim)
+            resetData()
+            callRequest(sort: sortType)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard collectionView == productCollectionView else { return }
+        if indexPath.row == produtList.count - 3 {
+            page += 1
+            start = page * display
+            callRequest(sort: sortType)
         }
     }
 }

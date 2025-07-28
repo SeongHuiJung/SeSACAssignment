@@ -38,4 +38,3 @@ enum SortType: String {
     case asc
     case dsc
 }
-
