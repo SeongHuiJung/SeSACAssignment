@@ -12,6 +12,7 @@ class ProductListViewController: UIViewController {
 
     var searchText = ""
     var produtList = [ShopItem]()
+    var recommendProductList = [ShopItem]()
     
     var page = 1 // 현재 페이지
     var endPage = 0 // 최대 페이지
@@ -35,8 +36,18 @@ class ProductListViewController: UIViewController {
     }()
     
     lazy private var tagCollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 2, gap: 10))
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 1, gap: 10, itemSize: CGSize(width: 80, height: 32)))
         collectionView.register(SortTagCollectionViewCell.self, forCellWithReuseIdentifier: SortTagCollectionViewCell.identifier)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+    
+    lazy private var recommendProductCollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 1, gap: 10, itemSize: CGSize(width: 100, height: 100)))
+        collectionView.register(RecommendProductCollectionViewCell.self, forCellWithReuseIdentifier: RecommendProductCollectionViewCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -49,14 +60,37 @@ class ProductListViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
-        callRequest()
+        
+        updateProductImage()
+        updateRecommendProductImage()
     }
 }
 
 // MARK: - Network
 extension ProductListViewController {
     
-    func callRequest(sort: SortType = SortType.sim) {
+    func updateProductImage() {
+        callRequest(sort: sortType) { value in
+            self.produtList.append(contentsOf: value.items)
+            self.productCollectionView.reloadData()
+            
+            if self.page == 1 {
+                self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                self.setEndPage(value: value)
+                let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
+                self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
+            }
+        }
+    }
+    
+    func updateRecommendProductImage() {
+        callRequest(sort: sortType) { value in
+            self.recommendProductList.append(contentsOf: value.items)
+            self.recommendProductCollectionView.reloadData()
+        }
+    }
+    
+    func callRequest(sort: SortType = SortType.sim, comopletionHandler: @escaping (Shop)->()) {
         
         let params = [
             "query" : searchText,
@@ -72,15 +106,8 @@ extension ProductListViewController {
         ]
         
         NetworkManager.shared.callRequest(url: url, header: header, sort: sort) { value in
-            self.produtList.append(contentsOf: value.items)
-            self.productCollectionView.reloadData()
+            comopletionHandler(value)
             
-            if self.page == 1 {
-                self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                self.setEndPage(value: value)
-                let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
-                self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
-            }
         } fail: { errorType in
             
             switch errorType {
@@ -122,8 +149,11 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == productCollectionView {
             produtList.count
         }
-        else {
+        else if collectionView == tagCollectionView {
             sortTypeList.count
+        }
+        else {
+            recommendProductList.count
         }
     }
     
@@ -131,15 +161,22 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
+
             cell.configureData(data: produtList[indexPath.item])
             return cell
         }
-        else {
+        else if collectionView == tagCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortTagCollectionViewCell.identifier, for: indexPath) as! SortTagCollectionViewCell
             cell.configureData(text: sortTypeList[indexPath.item])
             if indexPath.row == 0 {
                 cell.isSelectedTag = true
             }
+            return cell
+        }
+        else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendProductCollectionViewCell.identifier, for: indexPath) as! RecommendProductCollectionViewCell
+
+            cell.configureData(data: recommendProductList[indexPath.item])
             return cell
         }
     }
@@ -167,7 +204,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
             default: sortType = SortType.sim
             }
             resetData()
-            callRequest(sort: sortType)
+            updateProductImage()
         }
     }
     
@@ -176,7 +213,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if indexPath.row == produtList.count - 3 && page != endPage {
             page += 1
             start = page * display
-            callRequest(sort: sortType)
+            updateProductImage()
         }
     }
 }
@@ -184,12 +221,18 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
 // MARK: UI Delegate
 extension ProductListViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [totalProductLabel, tagCollectionView, productCollectionView].forEach { view.addSubview($0) }
+        [recommendProductCollectionView, totalProductLabel, tagCollectionView, productCollectionView].forEach { view.addSubview($0) }
     }
     
     func configureLayout() {
-        totalProductLabel.snp.makeConstraints { make in
+        recommendProductCollectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(4)
+            make.height.equalTo(100)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        totalProductLabel.snp.makeConstraints { make in
+            make.top.equalTo(recommendProductCollectionView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         

@@ -22,9 +22,9 @@ extension UICollectionView {
         return layout
     }
     
-    static func getLayoutHorizontal(cellCount: CGFloat, gap: CGFloat) -> UICollectionViewFlowLayout {
+    static func getLayoutHorizontal(cellCount: CGFloat, gap: CGFloat, itemSize: CGSize) -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 80, height: 32)
+        layout.itemSize = CGSize(width: itemSize.width, height: itemSize.height)
         layout.sectionInset = UIEdgeInsets(top: gap, left: gap, bottom: gap, right: gap)
         layout.minimumLineSpacing = gap
         layout.minimumInteritemSpacing = gap
