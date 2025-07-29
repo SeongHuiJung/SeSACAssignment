@@ -22,8 +22,6 @@ class ProductListViewController: UIViewController {
     let sortTypeListEng = ["sim", "date", "dsc", "asc"]
     var sortType: SortType = SortType.sim
     
-    private let NaverClientId = Bundle.main.infoDictionary?["NaverClientId"] as! String
-    private let NaverClientSecret = Bundle.main.infoDictionary?["NaverClientSecret"] as! String
     private var totalProductLabel = CustomUILabel(text: "", textColor: .systemGreen, alignment: .left, size: 12)
     
     lazy private var productCollectionView = {
@@ -68,8 +66,8 @@ extension ProductListViewController {
         
         let url = URLType.naverShop(params: params).url
         let header: HTTPHeaders = [
-            "X-Naver-Client-Id" : NaverClientId,
-            "X-Naver-Client-Secret" : NaverClientSecret
+            "X-Naver-Client-Id" : APIKey.naverClientId,
+            "X-Naver-Client-Secret" : APIKey.naverClientSecret
         ]
  
         AF.request(url, method: .get, headers: header)
