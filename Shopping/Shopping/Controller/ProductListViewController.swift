@@ -81,8 +81,24 @@ extension ProductListViewController {
                 let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
                 self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
             }
-        } fail: { error in
-            print("에러: ", error)
+        } fail: { errorType in
+            
+            switch errorType {
+            case .errorCode(num: 1): self.showAlert(title: "Error!", message: "잘못된 쿼리요청 이에요", ok: "확인")
+            case .errorCode(num: 2): self.showAlert(title: "Error!", message: "부적절한 display 값입니다", ok: "확인")
+            case .errorCode(num: 3): self.showAlert(title: "Error!", message: "부적절한 start 값입니다", ok: "확인")
+            case .errorCode(num: 4): self.showAlert(title: "Error!", message: "부적절한 sort 값 입니다", ok: "확인")
+            case .errorCode(num: 5): self.showAlert(title: "Error!", message: "존재하지 않는 검색 api 입니다", ok: "확인")
+            case .errorCode(num: 6): self.showAlert(title: "Error!", message: "잘못된 형식의 인코딩 입니다", ok: "확인")
+            case .errorCode(num: 99): self.showAlert(title: "Error!", message: "시스템 에러", ok: "확인")
+            case .statusCode(num: 400): self.showAlert(title: "Error!", message: "요청 변수를 확인해 주세요", ok: "확인")
+            case .statusCode(num: 401): self.showAlert(title: "Error!", message: "인증을 실패했습니다", ok: "확인")
+            case .statusCode(num: 403): self.showAlert(title: "Error!", message: "서버가 허용하지 않는 호출값 입니다", ok: "확인")
+            case .statusCode(num: 404): self.showAlert(title: "Error!", message: "API 요청 URL이 잘못되었습니다", ok: "확인")
+            case .statusCode(num: 500): self.showAlert(title: "Error!", message: "서버 오류입니다", ok: "확인")
+            case .decodingError: self.showAlert(title: "Error!", message: "디코딩 에러입니다", ok: "확인")
+            default: self.showAlert(title: "Error!", message: "알 수 없는 오류입니다", ok: "확인")
+            }
         }
     }
     

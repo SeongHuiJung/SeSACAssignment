@@ -41,3 +41,9 @@ enum SortType: String {
     case asc
     case dsc
 }
+
+enum ErrorType {
+    case errorCode(num: Int)
+    case statusCode(num: Int)
+    case decodingError
+}
