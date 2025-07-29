@@ -55,8 +55,9 @@ class ProductListViewController: UIViewController {
 
 // MARK: - Network
 extension ProductListViewController {
+    
     func callRequest(sort: SortType = SortType.sim) {
-        // TODO: 합쳐서 개선
+        
         let params = [
             "query" : searchText,
             "display" : String(display),
@@ -69,27 +70,20 @@ extension ProductListViewController {
             "X-Naver-Client-Id" : APIKey.naverClientId,
             "X-Naver-Client-Secret" : APIKey.naverClientSecret
         ]
- 
-        AF.request(url, method: .get, headers: header)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: Shop.self) { response in
-                switch response.result {
-                case .success(let value):
-                    
-                    self.produtList.append(contentsOf: value.items)
-                    self.productCollectionView.reloadData()
-                    
-                    if self.page == 1 {
-                        self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                        self.setEndPage(value: value)
-                        let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
-                        self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
-                    }
-                    
-                case .failure(let error):
-                    print("fail", error)
-                }
+        
+        NetworkManager.shared.callRequest(url: url, header: header, sort: sort) { value in
+            self.produtList.append(contentsOf: value.items)
+            self.productCollectionView.reloadData()
+            
+            if self.page == 1 {
+                self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+                self.setEndPage(value: value)
+                let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
+                self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
             }
+        } fail: { error in
+            print("에러: ", error)
+        }
     }
     
     func resetData() {
