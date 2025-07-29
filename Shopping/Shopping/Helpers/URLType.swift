@@ -7,6 +7,9 @@
 
 import Foundation
 
+// 라우터패턴 적용
+// 중첩 enum
+// struct 로 parmas 넘겨줄 수 있지 않을까?
 enum URLType{
     case naverShop(params: [String: String])
     

@@ -14,6 +14,7 @@ class SortTagCollectionViewCell: UICollectionViewCell {
     
     let tagCell = CustomSortTagView(text: "")
     
+    // enum, 매서드로 개선
     var isSelectedTag: Bool = false {
         didSet {
             if isSelectedTag {

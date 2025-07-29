@@ -13,6 +13,7 @@ class ProductListCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "ProductListCollectionViewCell"
     
+    // 옵셔널로 받기
     private var isLike = false {
         didSet {
             if isLike {
@@ -49,6 +50,7 @@ class ProductListCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    // required init? 은 왜 필요할까?
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

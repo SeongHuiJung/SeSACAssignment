@@ -12,6 +12,7 @@ struct Shop: Codable {
     let total: Int
 }
 
+// 코딩키의 역할?
 struct ShopItem: Codable {
     let title: String
     let image: String
