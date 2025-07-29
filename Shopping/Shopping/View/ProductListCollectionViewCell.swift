@@ -59,6 +59,10 @@ class ProductListCollectionViewCell: UICollectionViewCell {
         configureLayout()
         configureView()
     }
+    
+    override func prepareForReuse() {
+        likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+    }
 }
 
 // MARK: - Loginc
