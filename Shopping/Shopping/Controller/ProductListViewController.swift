@@ -162,7 +162,13 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
 
-            cell.configureData(data: produtList[indexPath.item])
+            
+            print(indexPath.item, "번째 cell 로드")
+
+            if !produtList.isEmpty {
+                cell.configureData(data: produtList[indexPath.item], isLike: false)
+            }
+            
             return cell
         }
         else if collectionView == tagCollectionView {
