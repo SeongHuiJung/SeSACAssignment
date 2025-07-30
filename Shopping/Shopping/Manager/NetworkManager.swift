@@ -29,23 +29,27 @@ final class NetworkManager {
     
     private func getErrorType(response: DataResponse<Shop, AFError>) -> ErrorType {
         let data = response.data
-        guard let data = data else { return ErrorType.decodingError }
+        guard let data = data else { return CommonErrorType.decodingError}
 
         do {
             let decoder = JSONDecoder()
             let result = try decoder.decode(APIError.self, from: data)
             var errorCode = result.errorCode
             
+            // Naver Search API Error
             if errorCode.contains("SE") {
-                errorCode.removeLast(2)
-                return ErrorType.errorCode(num: Int(errorCode)!)
+                errorCode.removeFirst(2)
+                let errorType = NaverSearchErrorType(value: Int(errorCode) ?? 0)
+               return errorType
             }
+            
+            // Naver Common API Error
             else {
-                let responseCode = response.response?.statusCode
-                return ErrorType.statusCode(num: responseCode!)
+                let responseCode = response.response?.statusCode ?? 1001
+                return CommonErrorType(value: responseCode)
             }
         } catch {
-            return ErrorType.decodingError
+            return CommonErrorType.decodingError
         }
     }
 }

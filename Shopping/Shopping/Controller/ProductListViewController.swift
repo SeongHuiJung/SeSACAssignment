@@ -114,22 +114,7 @@ extension ProductListViewController {
             // VC 에서 분리처리하지 말고 errorType 자체를 shorAlert 함수로 넘겨주자
             // shorAlert 에서 errorType 분리처리를 해주면 좋을 것
             // 이렇게 해야 다른 네트워킹 에러처리에서도 errorType 을 매번 분기처리 하지 않으면서 shorAlert 를 재활용할 수 있을 것
-            switch errorType {
-            case .errorCode(num: 1): self.showAlert(title: "Error!", message: "잘못된 쿼리요청 이에요", ok: "확인")
-            case .errorCode(num: 2): self.showAlert(title: "Error!", message: "부적절한 display 값입니다", ok: "확인")
-            case .errorCode(num: 3): self.showAlert(title: "Error!", message: "부적절한 start 값입니다", ok: "확인")
-            case .errorCode(num: 4): self.showAlert(title: "Error!", message: "부적절한 sort 값 입니다", ok: "확인")
-            case .errorCode(num: 5): self.showAlert(title: "Error!", message: "존재하지 않는 검색 api 입니다", ok: "확인")
-            case .errorCode(num: 6): self.showAlert(title: "Error!", message: "잘못된 형식의 인코딩 입니다", ok: "확인")
-            case .errorCode(num: 99): self.showAlert(title: "Error!", message: "시스템 에러", ok: "확인")
-            case .statusCode(num: 400): self.showAlert(title: "Error!", message: "요청 변수를 확인해 주세요", ok: "확인")
-            case .statusCode(num: 401): self.showAlert(title: "Error!", message: "인증을 실패했습니다", ok: "확인")
-            case .statusCode(num: 403): self.showAlert(title: "Error!", message: "서버가 허용하지 않는 호출값 입니다", ok: "확인")
-            case .statusCode(num: 404): self.showAlert(title: "Error!", message: "API 요청 URL이 잘못되었습니다", ok: "확인")
-            case .statusCode(num: 500): self.showAlert(title: "Error!", message: "서버 오류입니다", ok: "확인")
-            case .decodingError: self.showAlert(title: "Error!", message: "디코딩 에러입니다", ok: "확인")
-            default: self.showAlert(title: "Error!", message: "알 수 없는 오류입니다", ok: "확인")
-            }
+            self.showErrorAlert(errorType: errorType)
         }
     }
     
