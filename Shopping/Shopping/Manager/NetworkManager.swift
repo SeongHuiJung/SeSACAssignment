@@ -12,6 +12,8 @@ final class NetworkManager {
     static let shared = NetworkManager()
     private init() { }
     
+    // retry
+    // 로딩화면
     func callRequest(url: String, header: HTTPHeaders, sort: SortType = SortType.sim, success: @escaping (Shop) -> (), fail: @escaping (ErrorType) -> ()) {
         AF.request(url, method: .get, headers: header)
             .validate(statusCode: 200..<300)

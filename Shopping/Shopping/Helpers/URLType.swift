@@ -42,6 +42,8 @@ enum SortType: String {
     case dsc
 }
 
+// 에러 타입을 보편적으로 사용하는 것과
+// 특정 서비스에서만 사용될 수 있는 에러로 분리하자
 enum ErrorType {
     case errorCode(num: Int)
     case statusCode(num: Int)

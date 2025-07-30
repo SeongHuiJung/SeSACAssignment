@@ -12,6 +12,7 @@ class ProductListViewController: UIViewController {
 
     var searchText = ""
     var produtList = [ShopItem]()
+    //   var produtList = [(ShopItem, Bool)]()
     var recommendProductList = [ShopItem]()
     
     var page = 1 // 현재 페이지
@@ -110,6 +111,9 @@ extension ProductListViewController {
             
         } fail: { errorType in
             
+            // VC 에서 분리처리하지 말고 errorType 자체를 shorAlert 함수로 넘겨주자
+            // shorAlert 에서 errorType 분리처리를 해주면 좋을 것
+            // 이렇게 해야 다른 네트워킹 에러처리에서도 errorType 을 매번 분기처리 하지 않으면서 shorAlert 를 재활용할 수 있을 것
             switch errorType {
             case .errorCode(num: 1): self.showAlert(title: "Error!", message: "잘못된 쿼리요청 이에요", ok: "확인")
             case .errorCode(num: 2): self.showAlert(title: "Error!", message: "부적절한 display 값입니다", ok: "확인")
