@@ -14,8 +14,9 @@ class ProductListCollectionViewCell: UICollectionViewCell {
     static let identifier = "ProductListCollectionViewCell"
     
     // 옵셔널로 받기
-    private var isLike = false {
+    private var isLike: Bool? {
         didSet {
+            guard let isLike = isLike else { return }
             if isLike {
                 likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             }
@@ -70,14 +71,15 @@ class ProductListCollectionViewCell: UICollectionViewCell {
 // MARK: - Loginc
 extension ProductListCollectionViewCell {
     @objc func likeButtonTapped() {
-        isLike = !isLike
+        isLike?.toggle()
     }
 }
 
 // MARK: - Data Set
 extension ProductListCollectionViewCell {
-    func configureData(data: ShopItem) {
+    func configureData(data: ShopItem, isLike: Bool) {
         imageView.setDownSamplingImage(url: data.image)
+        self.isLike = isLike
         brandLabel.text = data.brand
         priceLabel.text = NumberFomatterSingleton.shared.foarmatter.string(from: Int(data.lprice)! as NSNumber)
         titleLabel.text = data.title.replacingOccurrences(of: "<b>", with: "").replacingOccurrences(of: "</b>", with: "")
