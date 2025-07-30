@@ -56,6 +56,8 @@ class ProductListViewController: UIViewController {
         return collectionView
     }()
     
+    let emptyLabel = CustomUILabel(text: "텅", textColor: .white, alignment: .center, size: 50, weight: .heavy)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
@@ -75,11 +77,17 @@ extension ProductListViewController {
             self.produtList.append(contentsOf: value.items)
             self.productCollectionView.reloadData()
             
-            if self.page == 1 {
+            if self.page == 1 && !self.produtList.isEmpty {
+                self.emptyLabel.isHidden = true
                 self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
                 self.setEndPage(value: value)
                 let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
                 self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
+            }
+            
+            // 검색결과가 없는 경우 빈 리스트임을 알리는 UI 표현
+            if self.produtList.isEmpty {
+                self.emptyLabel.isHidden = false
             }
         }
     }
@@ -216,7 +224,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
 // MARK: UI Delegate
 extension ProductListViewController: ViewDesignProtocol {
     func configureHierarchy() {
-        [recommendProductCollectionView, totalProductLabel, tagCollectionView, productCollectionView].forEach { view.addSubview($0) }
+        [recommendProductCollectionView, totalProductLabel, tagCollectionView, productCollectionView, emptyLabel].forEach { view.addSubview($0) }
     }
     
     func configureLayout() {
@@ -242,11 +250,16 @@ extension ProductListViewController: ViewDesignProtocol {
             make.bottom.equalTo(view.safeAreaLayoutGuide).inset(10)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        emptyLabel.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
     }
     
     func configureView() {
         view.backgroundColor = .black
         navigationItem.title = searchText
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        emptyLabel.isHidden = true
     }
 }
