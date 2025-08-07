@@ -10,6 +10,13 @@ import UIKit
 enum InfoType: String {
     case height = "키"
     case weight = "몸무게"
+    
+    var unit: String {
+        switch self {
+        case .height: "cm"
+        case .weight: "kg"
+        }
+    }
 }
 
 class BMIViewController: UIViewController {
@@ -90,45 +97,34 @@ class BMIViewController: UIViewController {
     
     @objc func resultButtonTapped() {
         view.endEditing(true)
+
+        guard let heightText = heightTextField.text else { return }
+        height = setValue(text: heightText, type: InfoType.height, min: 100, max: 200)
         
-        height = nil
-        weight = nil
+
+        guard height != nil, let weightText = weightTextField.text else { return }
+        weight = setValue(text: weightText, type: InfoType.weight, min: 10, max: 150)
         
-        setHeightValue()
-        guard let height = height else { return }
-        
-        setWeightValue()
-        guard let weight = weight else { return }
+        guard let height, let weight else { return }
         
         resultLabel.text = "BMI: \(String(calculateBMI(height: height, weight: weight)))"
     }
-    
+
     func calculateBMI(height: Double, weight: Double) -> Double {
         let heightMeter = height * 0.01
         let bmi = weight / ( heightMeter * heightMeter )
-        return Double(Int(bmi * 100) / 100)
+        return Double(Int(bmi * 10)) / 10.0
     }
     
-    func setHeightValue() {
-        guard let text = heightTextField.text else { return }
-        let result = checkIsValiDouble(text: text, type: InfoType.height)
+    func setValue(text: String, type: InfoType, min: Double, max: Double) -> Double? {
+        let result = checkIsValiDouble(text: text, type: type)
         let isDouble = result.0
         let height = result.1
         
         if isDouble {
-            self.height = checkIsValidRangeAndReturn(value: height, min: 100.0, max: 200.0, type: InfoType.height)
+            return checkIsValidRangeAndReturn(value: height, min: min, max: max, type: type)
         }
-    }
-    
-    func setWeightValue() {
-        guard let text = weightTextField.text else { return }
-        let result = checkIsValiDouble(text: text, type: InfoType.weight)
-        let isDouble = result.0
-        let weight = result.1
-        
-        if isDouble {
-            self.weight = checkIsValidRangeAndReturn(value: weight, min: 30.0, max: 150.0, type: InfoType.weight)
-        }
+        return nil
     }
     
     func checkIsValiDouble(text: String, type: InfoType) -> (Bool, Double) {
@@ -152,16 +148,8 @@ class BMIViewController: UIViewController {
             return value
         } catch {
             switch error {
-            case .lowerTHanMinimum: 
-                switch type {
-                case .height: makeAlert(message: "키는 \(min)cm 이상으로 입력해주세요!")
-                case .weight: makeAlert(message: "몸무게는 \(min)kg 이상으로 입력해주세요!")
-                }
-            case .upperTHanMaximum:
-                switch type {
-                case .height: makeAlert(message: "키는 \(min)cm 이하로 입력해주세요!")
-                case .weight: makeAlert(message: "몸무게는 \(min)kg 이하로 입력해주세요!")
-                }
+            case .lowerTHanMinimum: makeAlert(message: "\(type.rawValue)는 \(min)\(type.unit) 이상으로 입력해주세요!")
+            case .upperTHanMaximum: makeAlert(message: "\(type.rawValue)는 \(max)\(type.unit) 이하로 입력해주세요!")
             }
             return nil
         }
