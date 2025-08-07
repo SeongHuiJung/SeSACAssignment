@@ -20,6 +20,10 @@ enum NumberRangeError: Error {
     case upperTHanMaximum
 }
 
+enum DateError: Error {
+    case nonExistentDate
+}
+
 final class ErrorManager {
     static let shared = ErrorManager()
     private init() {}
