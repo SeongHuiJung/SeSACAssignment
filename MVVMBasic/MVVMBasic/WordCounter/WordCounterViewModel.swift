@@ -5,7 +5,7 @@
 //  Created by 정성희 on 8/8/25.
 //
 
-import UIKit
+import Foundation
 
 class WordCounterViewModel {
     var inputText = "" {
