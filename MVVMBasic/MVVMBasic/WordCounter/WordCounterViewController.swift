@@ -10,6 +10,8 @@ import SnapKit
  
 class WordCounterViewController: UIViewController {
     
+    let viewModel = WordCounterViewModel()
+    
     private let textView: UITextView = {
         let textView = UITextView()
         textView.font = .systemFont(ofSize: 16)
@@ -34,6 +36,10 @@ class WordCounterViewController: UIViewController {
         setupUI()
         setupConstraints()
         setupTextView()
+        
+        viewModel.reloadCountLable = {
+            self.countLabel.text = self.viewModel.outputText
+        }
     }
      
     private func setupUI() {
@@ -61,15 +67,11 @@ class WordCounterViewController: UIViewController {
     private func setupTextView() {
         textView.delegate = self
     }
-     
-    private func updateCharacterCount() {
-        let count = textView.text.count
-        countLabel.text = "현재까지 \(count)글자 작성중"
-    }
 }
  
 extension WordCounterViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        updateCharacterCount()
+        guard let text = textView.text else { return }
+        viewModel.inputText = text
     }
 }

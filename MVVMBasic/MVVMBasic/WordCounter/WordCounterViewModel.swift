@@ -1,0 +1,29 @@
+//
+//  WordCounterViewModel.swift
+//  MVVMBasic
+//
+//  Created by 정성희 on 8/8/25.
+//
+
+import UIKit
+
+class WordCounterViewModel {
+    var inputText = "" {
+        didSet {
+            updateCharacterCount()
+        }
+    }
+    
+    var outputText = "" {
+        didSet {
+            reloadCountLable?()
+        }
+    }
+    
+    var reloadCountLable: (() -> ())?
+    
+    private func updateCharacterCount() {
+        let count = inputText.count
+        outputText = "현재까지 \(count)글자 작성중"
+    }
+}
