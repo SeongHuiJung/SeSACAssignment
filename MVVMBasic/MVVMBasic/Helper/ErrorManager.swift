@@ -55,4 +55,3 @@ final class ErrorManager {
         guard value <= max else { throw NumberRangeError.upperTHanMaximum }
     }
 }
-
