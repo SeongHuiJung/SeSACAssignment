@@ -8,6 +8,9 @@
 import UIKit
 
 class AgeViewController: UIViewController {
+    
+    let viewModel = AgeViewModel()
+    
     let textField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "나이를 입력해주세요"
@@ -28,14 +31,16 @@ class AgeViewController: UIViewController {
         return label
     }()
     
-    var age = -1
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHierarchy()
         configureLayout()
         
-        resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+        setupActions()
+        
+        viewModel.showResult = {
+            self.label.text = self.viewModel.outputResultLabel
+        }
     }
     
     func configureHierarchy() {
@@ -68,40 +73,12 @@ class AgeViewController: UIViewController {
         view.endEditing(true)
     }
     
+    private func setupActions() {
+        resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+    }
+    
     @objc func resultButtonTapped() {
         view.endEditing(true)
-        
-        guard let text = textField.text else { return }
-        
-        if checkIsValidInteger(text: text) {
-            checkIsValidRange(age: age)
-        }
-    }
-    
-    func checkIsValidInteger(text: String) -> Bool {
-        do {
-            age = try ErrorManager.shared.validateUserInput(text: text, transferType: Int.self)
-            return true
-        } catch {
-            switch error {
-            case .EmptyString: label.text = "값이 비어있습니다"
-            case .haveWhiteSpace: label.text = "띄어쓰기를 포함할 수 없습니다"
-            case .isNotInt:    label.text = "정수가 아닙니다"
-            default:           label.text = "올바른 타입이 아닙니다"
-            }
-            return false
-        }
-    }
-    
-    func checkIsValidRange(age: Int) {
-        do {
-            try ErrorManager.shared.validateNumberRange(value: age, min: 1, max: 100)
-            label.text = "\(age)살 입니다"
-        } catch {
-            switch error {
-            case .lowerTHanMinimum: label.text = "1살 이상의 값을 입력해주세요!"
-            case .upperTHanMaximum: label.text = "100살 이하의 값을 입력해주세요!"
-            }
-        }
+        viewModel.inputAge = textField.text
     }
 }
