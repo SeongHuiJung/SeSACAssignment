@@ -8,25 +8,9 @@
 import UIKit
 import SnapKit
 
-enum DateType: String, CaseIterable {
-    case year
-    case month
-    case day
-    
-    var unit: String {
-        switch self {
-        case .year: "년"
-        case .month: "월"
-        case .day: "일"
-        }
-    }
-}
-
 class BirthDayViewController: UIViewController {
     
-    var year: Int?
-    var month: Int?
-    var day: Int?
+    let viewModel = BirthDayViewModel()
     
     let yearTextField: UITextField = {
         let textField = UITextField()
@@ -80,8 +64,8 @@ class BirthDayViewController: UIViewController {
         super.viewDidLoad()
         configureHierarchy()
         configureLayout()
-        
-        resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+        setupActions()
+        setupViewModelClosure()
     }
     
     func configureHierarchy() {
@@ -148,85 +132,26 @@ class BirthDayViewController: UIViewController {
         view.endEditing(true)
     }
     
+    func setupActions() {
+        resultButton.addTarget(self, action: #selector(resultButtonTapped), for: .touchUpInside)
+    }
+    
+    func setupViewModelClosure() {
+        viewModel.fetchUI = {
+            self.resultLabel.text = self.viewModel.outputResultText
+        }
+        viewModel.showErrorALert = {
+            self.makeAlert(message: self.viewModel.outputErrorText)
+        }
+    }
+    
     @objc func resultButtonTapped() {
         view.endEditing(true)
         
-        guard let yearText = yearTextField.text else { return }
-        year = setDateValue(text: yearText, type: DateType.year, min: 1, max: Int.max)
+        viewModel.inputYearText = yearTextField.text
+        viewModel.inputMonthText = monthTextField.text
+        viewModel.inputDayText = dayTextField.text
         
-        guard year != nil, let monthText = monthTextField.text else { return }
-        month = setDateValue(text: monthText, type: DateType.month, min: 1, max: 12)
-        
-        guard month != nil, let dayText = dayTextField.text else { return }
-        day = setDateValue(text: dayText, type: DateType.day, min: 1, max: 31)
-        
-        guard let year, let month, let day else { return }
-        
-        do {
-            let dDay = try checkValidateDate(year: year, month: month, day: day)
-            if dDay > 0 {
-                resultLabel.text = "오늘은 \(year)년 \(month)월 \(day)일로부터 \(dDay)일 지났어요 🍀"
-            } else if dDay < 0 {
-                resultLabel.text = "\(year)년 \(month)월 \(day)일까지 \(-dDay)일 남았어요 🍀"
-            } else {
-                resultLabel.text = "오늘은 지정하신 \(year)년 \(month)월 \(day)일 이에요 🍀"
-            }
-            
-        } catch {
-            makeAlert(message: "\(year)년 \(month)월 \(day)일은 존재하지 않는 날이에요")
-        }
-    }
-    
-    func setDateValue(text: String, type: DateType, min: Int, max: Int) -> Int? {
-        let result = checkIsValidInt(text: text, type: type)
-        let isInt = result.0
-        let value = result.1
-        
-        if isInt {
-            return checkIsValidRangeAndReturn(value: value, min: min, max: max, type: type)
-        }
-        return nil
-    }
-    
-    func checkIsValidInt(text: String, type: DateType) -> (Bool, Int) {
-        do {
-            let value = try ErrorManager.shared.validateUserInput(text: text, transferType: Int.self)
-            return (true, value)
-        } catch {
-            switch error {
-            case .EmptyString:    makeAlert(message: "\(type.rawValue) 값이 비어 있습니다")
-            case .haveWhiteSpace: makeAlert(message: "\(type.rawValue) 값에 띄어쓰기를 포함할 수 없습니다")
-            case .isNotInt:       makeAlert(message: "입력한 \(type.rawValue) 값이 정수가 아닙니다")
-            default:              makeAlert(message: "입력한 \(type.rawValue) 값이 올바른 타입이 아닙니다")
-            }
-            return (false, 0)
-        }
-    }
-    
-    func checkIsValidRangeAndReturn(value: Int, min: Int, max: Int, type: DateType) -> Int? {
-        do {
-            try ErrorManager.shared.validateNumberRange(value: value, min: min, max: max)
-            return value
-        } catch {
-            switch error {
-            case .lowerTHanMinimum: makeAlert(message: "\(type.rawValue)는 \(min)\(type.unit) 부터 입력할 수 있어요")
-            case .upperTHanMaximum: makeAlert(message: "\(type.rawValue)는 \(max)\(type.unit) 까지만 입력할 수 있어요")
-            }
-            return nil
-        }
-    }
-    
-    func checkValidateDate(year: Int, month: Int, day: Int) throws(DateError) -> Int {
-        var calendar = Calendar.current
-        calendar.locale = Locale(identifier: "ko_KR")
-        let startDateComponents = DateComponents(year: year, month: month, day: day)
-        guard let startDate = calendar.date(from: startDateComponents) else {
-            throw DateError.nonExistentDate
-        }
-
-        let offsetComps = Calendar.current.dateComponents([.day], from: startDate, to: Date())
-        guard let dDay = offsetComps.day else { throw DateError.nonExistentDate }
-        
-        return dDay
+        viewModel.inputCheckBirthDaySignal = ()
     }
 }
