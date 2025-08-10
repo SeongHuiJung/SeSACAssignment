@@ -196,6 +196,15 @@ class MBTISetViewController: BaseViewController {
         viewModel.fetchPStatus = {
             self.fetchMBTIUI(result: self.viewModel.outputPResult, index: MBTIType.P.index)
         }
+        
+        viewModel.fetchCompleteStatus = {
+            if self.viewModel.outputIsValideSetUpProfile {
+                self.completeButton.backgroundColor = .buttonActive
+            }
+            else {
+                self.completeButton.backgroundColor = .buttonDeactivate
+            }
+        }
     }
     
     private func fetchMBTIUI(result: Bool, index: Int) {
