@@ -22,6 +22,7 @@ class MBTISetViewModel {
     var checkMBTISignal = () {
         didSet {
             checkMBTI()
+            updateMBTICount()
         }
     }
     
@@ -80,6 +81,12 @@ class MBTISetViewModel {
         }
     }
     
+    var outputIsValideSetUpProfile = false {
+        didSet {
+            fetchCompleteStatus?()
+        }
+    }
+    
     // closure
     var fetchHintText : (() -> ())?
     
@@ -91,6 +98,22 @@ class MBTISetViewModel {
     var fetchFStatus: (() -> ())?
     var fetchJStatus: (() -> ())?
     var fetchPStatus: (() -> ())?
+    
+    var fetchCompleteStatus: (() -> ())?
+    
+    // private property
+    private var isOnCount = 0
+    
+    private var isValideNickname = false {
+        didSet {
+            checkisValideSetUpProfile()
+        }
+    }
+    private var isValideMBTI = false {
+        didSet {
+            checkisValideSetUpProfile()
+        }
+    }
 }
 
 // MARK: - Logic
@@ -100,26 +123,31 @@ extension MBTISetViewModel {
 
         guard nickname.count != 0 else {
             hintText = ""
+            isValideNickname = false
             return
         }
         
         let (hasSpecial, specialChar) = isContainSpecialCharacter(text: nickname)
         guard !hasSpecial else {
             hintText = "닉네임에 \(specialChar ?? "")는 포함할 수 없어요."
+            isValideNickname = false
             return
         }
         
         guard !isContainNumber(text: nickname) else {
             hintText = "닉네임에 숫자는 포함할 수 없어요."
+            isValideNickname = false
             return
         }
         
         guard 2 <= nickname.count && nickname.count <= 9 else {
             hintText = "닉네임은 2글자 이상, 9글자 이하로 작성해주세요."
+            isValideNickname = false
             return
         }
 
         hintText = "사용할 수 있는 닉네임이에요."
+        isValideNickname = true
     }
     
     private func isContainSpecialCharacter(text: String) -> (Bool, String?) {
@@ -147,8 +175,6 @@ extension MBTISetViewModel {
         guard let selectMBTIType else { return }
         let partnerMBTI = selectMBTIType.partner.rawValue
         
-        print("pick: \(selectMBTI) partner: \(partnerMBTI)")
-        
         var pickMbtiIsOn = false
         var partnerMbtiIsOn = false
         
@@ -163,9 +189,7 @@ extension MBTISetViewModel {
         }
         
         let result = getResult(pickMbtiIsOn: pickMbtiIsOn, partnerMbtiIsOn: partnerMbtiIsOn)
-        
-        print("클릭 후 되어야 하는 result: \(result)")
-        
+
         switch selectMBTIType {
         case .E:
             outputEResult = result.0
@@ -198,6 +222,7 @@ extension MBTISetViewModel {
         }
     }
     
+    // E/I , N/S ... 각 짝끼리 라디오 기능 설정
     //  0 0 -> 둘다 false 인지 확인 후 클릭한거 true
     //  1 0 -> 파트너가 false 라면 -> 내꺼만 반대로하기
     //         파트너가 true 라면  -> 둘다 반대로
@@ -213,6 +238,30 @@ extension MBTISetViewModel {
         }
         else {
             return (false, false)
+        }
+    }
+    
+    private func updateMBTICount() {
+        isOnCount = 0
+        
+        for item in mbtiButtonList {
+            isOnCount += item.isOn ? 1 : 0
+        }
+        
+        if isOnCount == 4 {
+            isValideMBTI = true
+        }
+        else {
+            isValideMBTI = false
+        }
+    }
+    
+    private func checkisValideSetUpProfile() {
+        if isValideMBTI && isValideNickname && !outputIsValideSetUpProfile {
+            outputIsValideSetUpProfile = true
+        }
+        else if (!isValideMBTI || !isValideNickname) && outputIsValideSetUpProfile {
+            outputIsValideSetUpProfile = false
         }
     }
 }
