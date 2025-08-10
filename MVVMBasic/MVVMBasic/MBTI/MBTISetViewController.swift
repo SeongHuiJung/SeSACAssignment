@@ -10,6 +10,8 @@ import SnapKit
 
 class MBTISetViewController: BaseViewController {
 
+    let viewModel = MBTISetViewModel()
+    
     private let profileSetView = ProfileSetView()
     private let textField = CustomTextField(text: "", placeholder: "닉네임을 입력해주세요 :)", size: 15)
     private let textFieldLine = {
@@ -19,7 +21,6 @@ class MBTISetViewController: BaseViewController {
     }()
     private let hintLabel = {
         let lable = CustomUILabel(text: "", alignment: .left, size: 13, textColor: .blue)
-        lable.isHidden = true
         return lable
     }()
     private let MBTILable = CustomUILabel(text: "MBTI", alignment: .left, size: 18, weight: .semibold, numberOfLines: 1)
@@ -55,6 +56,8 @@ class MBTISetViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        setupActions()
+        setViewModelClosure()
     }
     
     override func configureHierarchy() {
@@ -119,5 +122,17 @@ class MBTISetViewController: BaseViewController {
     
     private func setupActions() {
         
+        textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+    }
+    
+    private func setViewModelClosure() {
+        viewModel.fetchHintText = {
+            self.hintLabel.text = self.viewModel.hintText
+        }
+    }
+    
+    @objc func textFieldChanged() {
+        print(#function)
+        viewModel.nickname = textField.text
     }
 }
