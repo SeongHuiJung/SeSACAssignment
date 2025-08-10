@@ -56,7 +56,8 @@ class MBTIButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let label = CustomUILabel(text: "", alignment: .center, size: 20, textColor: .gray)
+    let label = CustomUILabel(text: "", alignment: .center, size: 20, textColor: .gray)
+    var isOn = false
     
     init(text: String, borderColor: UIColor = .lightGray) {
         super.init(frame: .zero)
