@@ -39,7 +39,7 @@ enum MBTIType: String {
 }
 
 class MBTISetViewController: BaseViewController {
-
+    
     let viewModel = MBTISetViewModel()
     
     private let profileSetView = ProfileSetView()
@@ -55,7 +55,7 @@ class MBTISetViewController: BaseViewController {
     }()
     private let MBTILable = CustomUILabel(text: "MBTI", alignment: .left, size: 18, weight: .semibold, numberOfLines: 1)
     private let completeButton = RoundButton(title: "완료", size: 18, background: .buttonDeactivate)
-
+    
     private let MBTIButtons = [
         MBTIButton(text: "E"),
         MBTIButton(text: "S"),
@@ -66,7 +66,7 @@ class MBTISetViewController: BaseViewController {
         MBTIButton(text: "F"),
         MBTIButton(text: "P"),
     ]
-
+    
     private let estjStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -75,7 +75,7 @@ class MBTISetViewController: BaseViewController {
         stack.spacing = 12
         return stack
     }()
-
+    
     private let infpStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
@@ -95,7 +95,7 @@ class MBTISetViewController: BaseViewController {
     override func configureHierarchy() {
         super.configureHierarchy()
         [profileSetView, textField, textFieldLine, hintLabel, MBTILable, estjStackView, infpStackView, completeButton].forEach { view.addSubview($0) }
-
+        
         
         MBTIButtons[0...3].forEach {
             estjStackView.addArrangedSubview($0)
@@ -103,7 +103,7 @@ class MBTISetViewController: BaseViewController {
         MBTIButtons[4...7].forEach {
             infpStackView.addArrangedSubview($0)
         }
-
+        
     }
     
     override func configureConstraint() {
@@ -158,6 +158,8 @@ class MBTISetViewController: BaseViewController {
         }
         
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        
+        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
     private func setViewModelClosure() {
@@ -225,9 +227,23 @@ class MBTISetViewController: BaseViewController {
     }
     
     @objc func mbtiButtonTapped(_ sender: MBTIButton) {
-        print(#function)
         viewModel.mbtiSelect = sender
         viewModel.mbtiButtonList = MBTIButtons
         viewModel.checkMBTISignal = ()
+    }
+    
+    @objc func completeButtonTapped() {
+        if viewModel.outputIsValideSetUpProfile {
+            let alert = UIAlertController(title: "프로필 저장", message: "프로필 내용을 성공적으로 저장했어요!", preferredStyle: .alert)
+            let okButton = UIAlertAction(title: "확인", style: .default)
+            alert.addAction(okButton)
+            present(alert, animated: true)
+        }
+        else {
+            let alert = UIAlertController(title: "프로필 저장", message: "아직 프로필 내용이 모두 기입되지 않았어요‼️", preferredStyle: .alert)
+            let okButton = UIAlertAction(title: "확인", style: .default)
+            alert.addAction(okButton)
+            present(alert, animated: true)
+        }
     }
 }
