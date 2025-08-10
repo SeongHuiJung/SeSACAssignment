@@ -8,6 +8,36 @@
 import UIKit
 import SnapKit
 
+enum MBTIType: String {
+    case E, S, T, J, I, N, F, P
+    
+    var partner: MBTIType {
+        switch self {
+        case .E : .I
+        case .S : .N
+        case .T : .F
+        case .J : .P
+        case .I : .E
+        case .N : .S
+        case .F : .T
+        case .P : .J
+        }
+    }
+    
+    var index: Int {
+        switch self {
+        case .E : 0
+        case .S : 1
+        case .T : 2
+        case .J : 3
+        case .I : 4
+        case .N : 5
+        case .F : 6
+        case .P : 7
+        }
+    }
+}
+
 class MBTISetViewController: BaseViewController {
 
     let viewModel = MBTISetViewModel()
@@ -24,16 +54,18 @@ class MBTISetViewController: BaseViewController {
         return lable
     }()
     private let MBTILable = CustomUILabel(text: "MBTI", alignment: .left, size: 18, weight: .semibold, numberOfLines: 1)
-    private let completeButton = RoundButton(title: "완료", size: 18, background: .gray)
+    private let completeButton = RoundButton(title: "완료", size: 18, background: .buttonDeactivate)
 
-    private let eButton = MBTIButton(text: "E")
-    private let sButton = MBTIButton(text: "S")
-    private let tButton = MBTIButton(text: "T")
-    private let jButton = MBTIButton(text: "J")
-    private let iButton = MBTIButton(text: "I")
-    private let nButton = MBTIButton(text: "N")
-    private let fButton = MBTIButton(text: "F")
-    private let pButton = MBTIButton(text: "P")
+    private let MBTIButtons = [
+        MBTIButton(text: "E"),
+        MBTIButton(text: "S"),
+        MBTIButton(text: "T"),
+        MBTIButton(text: "J"),
+        MBTIButton(text: "I"),
+        MBTIButton(text: "N"),
+        MBTIButton(text: "F"),
+        MBTIButton(text: "P"),
+    ]
 
     private let estjStackView: UIStackView = {
         let stack = UIStackView()
@@ -64,10 +96,11 @@ class MBTISetViewController: BaseViewController {
         super.configureHierarchy()
         [profileSetView, textField, textFieldLine, hintLabel, MBTILable, estjStackView, infpStackView, completeButton].forEach { view.addSubview($0) }
 
-        [eButton, sButton, tButton, jButton].forEach {
+        
+        MBTIButtons[0...3].forEach {
             estjStackView.addArrangedSubview($0)
         }
-        [iButton, nButton, fButton, pButton].forEach {
+        MBTIButtons[4...7].forEach {
             infpStackView.addArrangedSubview($0)
         }
 
@@ -107,7 +140,7 @@ class MBTISetViewController: BaseViewController {
             make.left.equalTo(estjStackView)
             make.right.equalTo(estjStackView)
         }
-        [eButton, sButton, tButton, jButton, iButton, nButton, fButton, pButton].forEach {
+        MBTIButtons.forEach {
             $0.snp.makeConstraints { make in
                 make.size.equalTo(50)
             }
@@ -121,6 +154,8 @@ class MBTISetViewController: BaseViewController {
     }
     
     private func setupActions() {
+        MBTIButtons.forEach { $0.addTarget(self, action: #selector(mbtiButtonTapped), for: .touchUpInside)
+        }
         
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
     }
@@ -129,10 +164,61 @@ class MBTISetViewController: BaseViewController {
         viewModel.fetchHintText = {
             self.hintLabel.text = self.viewModel.hintText
         }
+        
+        viewModel.fetchEStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputEResult, index: MBTIType.E.index)
+        }
+        
+        viewModel.fetchIStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputIResult, index: MBTIType.I.index)
+        }
+        
+        viewModel.fetchSStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputSResult, index: MBTIType.S.index)
+        }
+        
+        viewModel.fetchNStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputNResult, index: MBTIType.N.index)
+        }
+        
+        viewModel.fetchTStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputTResult, index: MBTIType.T.index)
+        }
+        
+        viewModel.fetchFStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputFResult, index: MBTIType.F.index)
+        }
+        
+        viewModel.fetchJStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputJResult, index: MBTIType.J.index)
+        }
+        
+        viewModel.fetchPStatus = {
+            self.fetchMBTIUI(result: self.viewModel.outputPResult, index: MBTIType.P.index)
+        }
+    }
+    
+    private func fetchMBTIUI(result: Bool, index: Int) {
+        if result {
+            self.MBTIButtons[index].backgroundColor = .systemBlue
+            self.MBTIButtons[index].label.textColor = .white
+        }
+        else {
+            self.MBTIButtons[index].backgroundColor = .white
+            self.MBTIButtons[index].label.textColor = .gray
+        }
+        self.MBTIButtons[index].isOn = result
     }
     
     @objc func textFieldChanged() {
         print(#function)
         viewModel.nickname = textField.text
+    }
+    
+    @objc func mbtiButtonTapped(_ sender: MBTIButton) {
+        print(#function)
+        viewModel.mbtiSelect = sender
+        viewModel.mbtiButtonList = MBTIButtons
+        viewModel.checkMBTISignal = ()
     }
 }

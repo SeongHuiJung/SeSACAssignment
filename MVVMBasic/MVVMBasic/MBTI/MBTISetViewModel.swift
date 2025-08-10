@@ -15,7 +15,15 @@ class MBTISetViewModel {
         }
     }
     
+    var mbtiSelect: MBTIButton = MBTIButton()
+    var mbtiButtonList: [MBTIButton] = []
+    
     // input  - Method Signal
+    var checkMBTISignal = () {
+        didSet {
+            checkMBTI()
+        }
+    }
     
     // output
     var hintText: String = "" {
@@ -24,8 +32,65 @@ class MBTISetViewModel {
         }
     }
     
+    var outputEResult: Bool = false {
+        didSet {
+            fetchEStatus?()
+        }
+    }
+    
+    var outputIResult: Bool = false {
+        didSet {
+            fetchIStatus?()
+        }
+    }
+    
+    var outputSResult: Bool = false {
+        didSet {
+            fetchSStatus?()
+        }
+    }
+    
+    var outputNResult: Bool = false {
+        didSet {
+            fetchNStatus?()
+        }
+    }
+    
+    var outputTResult: Bool = false {
+        didSet {
+            fetchTStatus?()
+        }
+    }
+    
+    var outputFResult: Bool = false {
+        didSet {
+            fetchFStatus?()
+        }
+    }
+    
+    var outputJResult: Bool = false {
+        didSet {
+            fetchJStatus?()
+        }
+    }
+    
+    var outputPResult: Bool = false {
+        didSet {
+            fetchPStatus?()
+        }
+    }
+    
     // closure
     var fetchHintText : (() -> ())?
+    
+    var fetchEStatus: (() -> ())?
+    var fetchIStatus: (() -> ())?
+    var fetchSStatus: (() -> ())?
+    var fetchNStatus: (() -> ())?
+    var fetchTStatus: (() -> ())?
+    var fetchFStatus: (() -> ())?
+    var fetchJStatus: (() -> ())?
+    var fetchPStatus: (() -> ())?
 }
 
 // MARK: - Logic
@@ -74,5 +139,80 @@ extension MBTISetViewModel {
             }
         }
         return false
+    }
+    
+    private func checkMBTI() {
+        guard let selectMBTI = mbtiSelect.label.text else { return }
+        let selectMBTIType = MBTIType(rawValue: selectMBTI)
+        guard let selectMBTIType else { return }
+        let partnerMBTI = selectMBTIType.partner.rawValue
+        
+        print("pick: \(selectMBTI) partner: \(partnerMBTI)")
+        
+        var pickMbtiIsOn = false
+        var partnerMbtiIsOn = false
+        
+        for item in mbtiButtonList {
+            if selectMBTI == item.label.text! {
+                pickMbtiIsOn = item.isOn
+            }
+            
+            if partnerMBTI == item.label.text! {
+                partnerMbtiIsOn = item.isOn
+            }
+        }
+        
+        let result = getResult(pickMbtiIsOn: pickMbtiIsOn, partnerMbtiIsOn: partnerMbtiIsOn)
+        
+        print("클릭 후 되어야 하는 result: \(result)")
+        
+        switch selectMBTIType {
+        case .E:
+            outputEResult = result.0
+            outputIResult = result.1
+        case .I:
+            outputEResult = result.1
+            outputIResult = result.0
+            
+        case .S:
+            outputSResult = result.0
+            outputNResult = result.1
+        case .N:
+            outputSResult = result.1
+            outputNResult = result.0
+            
+        case .T:
+            outputTResult = result.0
+            outputFResult = result.1
+        case .F:
+            outputTResult = result.1
+            outputFResult = result.0
+            
+            
+        case .J:
+            outputJResult = result.0
+            outputPResult = result.1
+        case .P:
+            outputJResult = result.1
+            outputPResult = result.0
+        }
+    }
+    
+    //  0 0 -> 둘다 false 인지 확인 후 클릭한거 true
+    //  1 0 -> 파트너가 false 라면 -> 내꺼만 반대로하기
+    //         파트너가 true 라면  -> 둘다 반대로
+    private func getResult(pickMbtiIsOn: Bool, partnerMbtiIsOn: Bool) -> (Bool, Bool) {
+        if !pickMbtiIsOn  && !partnerMbtiIsOn {
+            return (true, false)
+        }
+        else if !partnerMbtiIsOn {
+            return (false, false)
+        }
+        else if partnerMbtiIsOn {
+            return (true, false)
+        }
+        else {
+            return (false, false)
+        }
     }
 }
