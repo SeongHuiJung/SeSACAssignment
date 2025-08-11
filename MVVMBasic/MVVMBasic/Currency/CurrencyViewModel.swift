@@ -12,7 +12,7 @@ class CurrencyViewModel {
     var outputMoney = CustomObservable("")
 
     init() {
-        inputMoney.bind {
+        inputMoney.bind { _ in
             self.validate()
         }
     }

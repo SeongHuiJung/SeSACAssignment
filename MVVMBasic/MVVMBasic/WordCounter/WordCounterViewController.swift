@@ -37,8 +37,8 @@ class WordCounterViewController: UIViewController {
         setupConstraints()
         setupTextView()
         
-        viewModel.outputText.bind {
-            self.countLabel.text = self.viewModel.outputText.value
+        viewModel.outputText.bind { value in
+            self.countLabel.text = value
         }
     }
      

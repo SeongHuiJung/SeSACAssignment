@@ -54,8 +54,8 @@ class CurrencyViewController: UIViewController {
         setupConstraints()
         setupActions()
         
-        viewModel.outputMoney.bind {
-            self.resultLabel.text = self.viewModel.outputMoney.value
+        viewModel.outputMoney.bind { value in
+            self.resultLabel.text = value
         }
     }
      

@@ -14,8 +14,10 @@ class BMIViewModel {
     var inputWeight: String? = ""
     
     // input  - Method Signal
-    var calculateBMISignal: () = () {
-        didSet {
+    var calculateBMISignal = CustomObservable(())
+    
+    init() {
+        calculateBMISignal.bind { [self] in
             guard let inputHeight else { return }
             height = validate(text: inputHeight, type: .height, min: 10, max: 200)
             
@@ -23,26 +25,13 @@ class BMIViewModel {
             weight = validate(text: inputWeight, type: .weight, min: 5, max: 150)
             
             guard let height, let weight else { return }
-            outputResultLabel = "BMI: \(String(calculateBMI(height: height, weight: weight)))"
-            
+            outputResultLabel.value = "BMI: \(String(calculateBMI(height: height, weight: weight)))"
         }
     }
     
     // output
-    var outputResultLabel: String = "" {
-        didSet {
-            fetchUI?()
-        }
-    }
-    var errorMessage = "" {
-        didSet {
-            showErrorAlert?()
-        }
-    }
-
-    // closure
-    var fetchUI: (() -> ())?
-    var showErrorAlert: (() -> ())?
+    var outputResultLabel = CustomObservable("")
+    var errorMessage = CustomObservable("")
     
     private var height: Double?
     private var weight: Double?
@@ -73,10 +62,10 @@ extension BMIViewModel {
             return (true, value)
         } catch {
             switch error {
-            case .EmptyString:    errorMessage = "\(type.rawValue) 값이 비어 있습니다"
-            case .haveWhiteSpace: errorMessage = "\(type.rawValue) 값에 띄어쓰기를 포함할 수 없습니다"
-            case .isNotDouble:    errorMessage = "입력한 \(type.rawValue) 값이 double이 아닙니다"
-            default:              errorMessage = "입력한 \(type.rawValue) 값이 올바른 타입이 아닙니다"
+            case .EmptyString:    errorMessage.value = "\(type.rawValue) 값이 비어 있습니다"
+            case .haveWhiteSpace: errorMessage.value = "\(type.rawValue) 값에 띄어쓰기를 포함할 수 없습니다"
+            case .isNotDouble:    errorMessage.value = "입력한 \(type.rawValue) 값이 double이 아닙니다"
+            default:              errorMessage.value = "입력한 \(type.rawValue) 값이 올바른 타입이 아닙니다"
             }
             return (false, 0)
         }
@@ -88,8 +77,8 @@ extension BMIViewModel {
             return value
         } catch {
             switch error {
-            case .lowerTHanMinimum: errorMessage = "\(type.rawValue)는 \(min)\(type.unit) 이상으로 입력해주세요!"
-            case .upperTHanMaximum: errorMessage = "\(type.rawValue)는 \(max)\(type.unit) 이하로 입력해주세요!"
+            case .lowerTHanMinimum: errorMessage.value = "\(type.rawValue)는 \(min)\(type.unit) 이상으로 입력해주세요!"
+            case .upperTHanMaximum: errorMessage.value = "\(type.rawValue)는 \(max)\(type.unit) 이하로 입력해주세요!"
             }
             return nil
         }

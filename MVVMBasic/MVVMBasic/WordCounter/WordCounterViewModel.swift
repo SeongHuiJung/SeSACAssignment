@@ -12,7 +12,7 @@ class WordCounterViewModel {
     var outputText = CustomObservable("")
     
     init() {
-        inputText.bind {
+        inputText.bind { _ in
             self.updateCharacterCount()
         }
     }

@@ -17,7 +17,7 @@ class AgeViewModel {
     private var age = 0
     
     init() {
-        inputAge.bind {
+        inputAge.bind { _ in
             self.validate()
         }
     }

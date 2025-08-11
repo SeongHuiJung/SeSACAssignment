@@ -88,12 +88,12 @@ class BMIViewController: UIViewController {
     }
     
     private func setupModelViewClosure() {
-        viewModel.fetchUI = {
-            self.resultLabel.text = self.viewModel.outputResultLabel
+        viewModel.outputResultLabel.bind { value in
+            self.resultLabel.text = value
         }
         
-        viewModel.showErrorAlert = {
-            self.makeAlert(message: self.viewModel.errorMessage)
+        viewModel.errorMessage.bind { value in
+            self.makeAlert(message: value)
         }
     }
     
@@ -102,6 +102,6 @@ class BMIViewController: UIViewController {
         
         viewModel.inputHeight = heightTextField.text
         viewModel.inputWeight = weightTextField.text
-        viewModel.calculateBMISignal = ()
+        viewModel.calculateBMISignal.value = ()
     }
 }
