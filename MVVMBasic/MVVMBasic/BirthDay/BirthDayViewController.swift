@@ -137,11 +137,11 @@ class BirthDayViewController: UIViewController {
     }
     
     func setupViewModelClosure() {
-        viewModel.fetchUI = {
-            self.resultLabel.text = self.viewModel.outputResultText
+        viewModel.outputResultText.bind { value in
+            self.resultLabel.text = value
         }
-        viewModel.showErrorALert = {
-            self.makeAlert(message: self.viewModel.outputErrorText)
+        viewModel.outputErrorText.bind { value in
+            self.makeAlert(message: value)
         }
     }
     
@@ -152,6 +152,6 @@ class BirthDayViewController: UIViewController {
         viewModel.inputMonthText = monthTextField.text
         viewModel.inputDayText = dayTextField.text
         
-        viewModel.inputCheckBirthDaySignal = ()
+        viewModel.inputCheckBirthDaySignal.value = ()
     }
 }

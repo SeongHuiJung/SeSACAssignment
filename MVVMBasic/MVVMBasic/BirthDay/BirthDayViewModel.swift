@@ -14,8 +14,10 @@ class BirthDayViewModel {
     var inputDayText: String?
     
     // input  - Method Signal
-    var inputCheckBirthDaySignal = () {
-        didSet {
+    var inputCheckBirthDaySignal = CustomObservable(())
+    
+    init() {
+        inputCheckBirthDaySignal.bind { [self] in
             guard let inputYearText else { return }
             year = validateValue(text: inputYearText, type: DateType.year, min: 1, max: Int.max)
             
@@ -30,23 +32,9 @@ class BirthDayViewModel {
         }
     }
     
-    
     // output
-    var outputResultText = "" {
-        didSet {
-            fetchUI?()
-        }
-    }
-    
-    var outputErrorText = "" {
-        didSet {
-            showErrorALert?()
-        }
-    }
-
-    // closure
-    var fetchUI: (() -> ())?
-    var showErrorALert: (() -> ())?
+    var outputResultText = CustomObservable("")
+    var outputErrorText = CustomObservable("")
     
     private var year: Int?
     private var month: Int?
@@ -69,15 +57,15 @@ extension BirthDayViewModel {
         do {
             let dDay = try checkValidateDate(year: year, month: month, day: day)
             if dDay > 0 {
-                outputResultText = "오늘은 \(year)년 \(month)월 \(day)일로부터 \(dDay)일 지났어요 🍀"
+                outputResultText.value = "오늘은 \(year)년 \(month)월 \(day)일로부터 \(dDay)일 지났어요 🍀"
             } else if dDay < 0 {
-                outputResultText = "\(year)년 \(month)월 \(day)일까지 \(-dDay)일 남았어요 🍀"
+                outputResultText.value = "\(year)년 \(month)월 \(day)일까지 \(-dDay)일 남았어요 🍀"
             } else {
-                outputResultText = "오늘은 지정하신 \(year)년 \(month)월 \(day)일 이에요 🍀"
+                outputResultText.value = "오늘은 지정하신 \(year)년 \(month)월 \(day)일 이에요 🍀"
             }
             
         } catch {
-            outputErrorText = "\(year)년 \(month)월 \(day)일은 존재하지 않는 날이에요"
+            outputErrorText.value = "\(year)년 \(month)월 \(day)일은 존재하지 않는 날이에요"
         }
     }
     
@@ -87,10 +75,10 @@ extension BirthDayViewModel {
             return (true, value)
         } catch {
             switch error {
-            case .EmptyString:    outputErrorText = "\(type.rawValue) 값이 비어 있습니다"
-            case .haveWhiteSpace: outputErrorText = "\(type.rawValue) 값에 띄어쓰기를 포함할 수 없습니다"
-            case .isNotInt:       outputErrorText = "입력한 \(type.rawValue) 값이 정수가 아닙니다"
-            default:              outputErrorText = "입력한 \(type.rawValue) 값이 올바른 타입이 아닙니다"
+            case .EmptyString:    outputErrorText.value = "\(type.rawValue) 값이 비어 있습니다"
+            case .haveWhiteSpace: outputErrorText.value = "\(type.rawValue) 값에 띄어쓰기를 포함할 수 없습니다"
+            case .isNotInt:       outputErrorText.value = "입력한 \(type.rawValue) 값이 정수가 아닙니다"
+            default:              outputErrorText.value = "입력한 \(type.rawValue) 값이 올바른 타입이 아닙니다"
             }
             return (false, 0)
         }
@@ -102,8 +90,8 @@ extension BirthDayViewModel {
             return value
         } catch {
             switch error {
-            case .lowerTHanMinimum: outputErrorText = "\(type.rawValue)는 \(min)\(type.unit) 부터 입력할 수 있어요"
-            case .upperTHanMaximum: outputErrorText = "\(type.rawValue)는 \(max)\(type.unit) 까지만 입력할 수 있어요"
+            case .lowerTHanMinimum: outputErrorText.value = "\(type.rawValue)는 \(min)\(type.unit) 부터 입력할 수 있어요"
+            case .upperTHanMaximum: outputErrorText.value = "\(type.rawValue)는 \(max)\(type.unit) 까지만 입력할 수 있어요"
             }
             return nil
         }
