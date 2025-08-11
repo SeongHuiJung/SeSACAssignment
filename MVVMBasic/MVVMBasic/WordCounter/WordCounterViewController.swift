@@ -37,8 +37,8 @@ class WordCounterViewController: UIViewController {
         setupConstraints()
         setupTextView()
         
-        viewModel.reloadCountLable = {
-            self.countLabel.text = self.viewModel.outputText
+        viewModel.outputText.bind {
+            self.countLabel.text = self.viewModel.outputText.value
         }
     }
      
@@ -72,6 +72,6 @@ class WordCounterViewController: UIViewController {
 extension WordCounterViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         guard let text = textView.text else { return }
-        viewModel.inputText = text
+        viewModel.inputText.value = text
     }
 }

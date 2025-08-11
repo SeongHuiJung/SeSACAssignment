@@ -8,22 +8,17 @@
 import Foundation
 
 class WordCounterViewModel {
-    var inputText = "" {
-        didSet {
-            updateCharacterCount()
+    var inputText = CustomObservable("")
+    var outputText = CustomObservable("")
+    
+    init() {
+        inputText.bind {
+            self.updateCharacterCount()
         }
     }
-    
-    var outputText = "" {
-        didSet {
-            reloadCountLable?()
-        }
-    }
-    
-    var reloadCountLable: (() -> ())?
     
     private func updateCharacterCount() {
-        let count = inputText.count
-        outputText = "현재까지 \(count)글자 작성중"
+        let count = inputText.value.count
+        outputText.value = "현재까지 \(count)글자 작성중"
     }
 }
