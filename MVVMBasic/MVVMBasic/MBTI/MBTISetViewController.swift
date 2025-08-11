@@ -10,7 +10,7 @@ import SnapKit
 
 enum MBTIType: String {
     case E, S, T, J, I, N, F, P
-    
+      
     var partner: MBTIType {
         switch self {
         case .E : .I
@@ -162,6 +162,9 @@ class MBTISetViewController: BaseViewController {
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
+    // 1. enum 으로 받기
+    // 2. enum 없이 변경
+    // 3. dictionary 으로 변경하기
     private func setViewModelClosure() {
         viewModel.fetchHintText = {
             self.hintLabel.text = self.viewModel.hintText
@@ -195,6 +198,7 @@ class MBTISetViewController: BaseViewController {
             self.fetchMBTIUI(result: self.viewModel.outputJResult, index: MBTIType.J.index)
         }
         
+        // fetchPStatus.. fetchEStatus.. 다 없애고 fetchMBTIUI 하나로 관리할 수 있지 않을까?
         viewModel.fetchPStatus = {
             self.fetchMBTIUI(result: self.viewModel.outputPResult, index: MBTIType.P.index)
         }
@@ -209,6 +213,7 @@ class MBTISetViewController: BaseViewController {
         }
     }
     
+    // result 에 두개 넣기?
     private func fetchMBTIUI(result: Bool, index: Int) {
         if result {
             self.MBTIButtons[index].backgroundColor = .systemBlue
@@ -229,7 +234,7 @@ class MBTISetViewController: BaseViewController {
     @objc func mbtiButtonTapped(_ sender: MBTIButton) {
         viewModel.mbtiSelect = sender
         viewModel.mbtiButtonList = MBTIButtons
-        viewModel.checkMBTISignal = ()
+        viewModel.checkMBTISignal = () // index 랑 t/f 값 같이 넘겨주기
     }
     
     @objc func completeButtonTapped() {

@@ -15,9 +15,11 @@ class MBTISetViewModel {
         }
     }
     
+    // 타입 int 로
     var mbtiSelect: MBTIButton = MBTIButton()
     var mbtiButtonList: [MBTIButton] = []
     
+    // 데이터 매개변수로 넣기
     // input  - Method Signal
     var checkMBTISignal = () {
         didSet {
