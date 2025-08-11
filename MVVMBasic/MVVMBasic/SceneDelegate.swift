@@ -35,8 +35,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mbtiVC = OnBoardingMBTIViewController()
         mbtiVC.tabBarItem = UITabBarItem(title: "MBTI", image: UIImage(systemName: "star.fill"), tag: 5)
         
+        let mapVC = MapViewController()
+        mapVC.tabBarItem = UITabBarItem(title: "음식점", image: UIImage(systemName: "fork.knife.circle.fill"), tag: 6)
         
-        tabBarController.viewControllers = [ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC, mbtiVC]
+        
+        tabBarController.viewControllers = [ageVC, bmiVC, birthDayVC, wordCounterVC, currencyVC, mbtiVC, mapVC]
         tabBarController.tabBar.tintColor = .systemBlue
         tabBarController.tabBar.unselectedItemTintColor = .systemGray
         
