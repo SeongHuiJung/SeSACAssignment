@@ -8,29 +8,22 @@
 import Foundation
 
 class AgeViewModel {
-    // input
-    var inputAge: String? = "" {
-        didSet {
-            validate()
-        }
-    }
+    // input validate
+    var inputAge = CustomObservable("")
     
     // output
-    var outputResultLabel = "" {
-        didSet {
-            showResult?()
-        }
-    }
-    
-    // closure
-    var showResult: (() -> ())?
+    var outputResultLabel = CustomObservable("")
     
     private var age = 0
     
+    init() {
+        inputAge.bind {
+            self.validate()
+        }
+    }
+    
     private func validate() {
-        guard let inputAge = inputAge else { return }
-        
-        if checkIsValidInteger(text: inputAge) {
+        if checkIsValidInteger(text: inputAge.value) {
             checkIsValidRange(age: age)
         }
     }
@@ -41,10 +34,10 @@ class AgeViewModel {
             return true
         } catch {
             switch error {
-            case .EmptyString:    outputResultLabel = "값이 비어있습니다"
-            case .haveWhiteSpace: outputResultLabel = "띄어쓰기를 포함할 수 없습니다"
-            case .isNotInt:       outputResultLabel = "정수가 아닙니다"
-            default:              outputResultLabel = "올바른 타입이 아닙니다"
+            case .EmptyString:    outputResultLabel.value = "값이 비어있습니다"
+            case .haveWhiteSpace: outputResultLabel.value = "띄어쓰기를 포함할 수 없습니다"
+            case .isNotInt:       outputResultLabel.value = "정수가 아닙니다"
+            default:              outputResultLabel.value = "올바른 타입이 아닙니다"
             }
             return false
         }
@@ -53,11 +46,11 @@ class AgeViewModel {
     private func checkIsValidRange(age: Int) {
         do {
             try ErrorManager.shared.validateNumberRange(value: age, min: 1, max: 100)
-            outputResultLabel = "\(age)살 입니다"
+            outputResultLabel.value = "\(age)살 입니다"
         } catch {
             switch error {
-            case .lowerTHanMinimum: outputResultLabel = "1살 이상의 값을 입력해주세요!"
-            case .upperTHanMaximum: outputResultLabel = "100살 이하의 값을 입력해주세요!"
+            case .lowerTHanMinimum: outputResultLabel.value = "1살 이상의 값을 입력해주세요!"
+            case .upperTHanMaximum: outputResultLabel.value = "100살 이하의 값을 입력해주세요!"
             }
         }
     }

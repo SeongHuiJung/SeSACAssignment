@@ -38,8 +38,9 @@ class AgeViewController: UIViewController {
         
         setupActions()
         
-        viewModel.showResult = {
-            self.label.text = self.viewModel.outputResultLabel
+        // 값이 바뀌면 실행할 내용 클로저로 전달
+        viewModel.outputResultLabel.bind {
+            self.label.text = self.viewModel.outputResultLabel.value
         }
     }
     
@@ -79,6 +80,6 @@ class AgeViewController: UIViewController {
     
     @objc func resultButtonTapped() {
         view.endEditing(true)
-        viewModel.inputAge = textField.text
+        viewModel.inputAge.value = textField.text!
     }
 }
