@@ -9,15 +9,35 @@ import UIKit
 import MapKit
 import SnapKit
 
+enum FoodType: String {
+    case all = "전체"
+    case korean = "한식"
+    case western = "양식"
+    case chinese = "중식"
+    case japenese = "일식"
+    case snack = "분식"
+}
+
 class MapViewController: UIViewController {
      
+    let viewModel = MapViewModel()
+    
     private let mapView = MKMapView()
      
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupMapView()
-        addSeoulStationAnnotation()
+        setUpOutputClosure()
+    }
+    
+    // 탭에서 해당 뷰에 들어가야 실행됨
+    private func setUpOutputClosure() {
+        // bind 에 closure 전달하면서 바로 실행될 수 있도록 매개변수 isfirstExecute에 true 값 전달
+        viewModel.outputFoodList.bind(isfirstExecute: true) { restaurantList in
+            self.removeAllAnnotations()
+            self.addAnnotations(restaurantList: restaurantList)
+        }
     }
      
     private func setupUI() {
@@ -43,18 +63,21 @@ class MapViewController: UIViewController {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
          
-        let seoulStationCoordinate = CLLocationCoordinate2D(latitude: 37.5547, longitude: 126.9706)
+        let centerCoordinate = CLLocationCoordinate2D(latitude: 37.517768, longitude: 126.885785)
         let region = MKCoordinateRegion(
-            center: seoulStationCoordinate,
+            center: centerCoordinate,
             latitudinalMeters: 2000,
             longitudinalMeters: 2000
         )
         mapView.setRegion(region, animated: true)
     }
     
-    private func addSeoulStationAnnotation() {
-        for location in RestaurantList.restaurantArray {
-            
+    private func removeAllAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
+    }
+    
+    private func addAnnotations(restaurantList: [Restaurant]) {
+        for location in restaurantList {
             let annotation = MKPointAnnotation()
             annotation.coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
             annotation.title = location.name
@@ -62,7 +85,7 @@ class MapViewController: UIViewController {
             mapView.addAnnotation(annotation)
         }
     }
-     
+    
     @objc private func rightBarButtonTapped() {
         let alertController = UIAlertController(
             title: "메뉴 선택",
@@ -70,25 +93,46 @@ class MapViewController: UIViewController {
             preferredStyle: .actionSheet
         )
         
-        let alert1Action = UIAlertAction(title: "얼럿 1", style: .default) { _ in
-            print("얼럿 1이 선택되었습니다.")
+        let alert1Action = UIAlertAction(title: "전체", style: .default) { _ in
+            print("전체 음식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.all
         }
         
-        let alert2Action = UIAlertAction(title: "얼럿 2", style: .default) { _ in
-            print("얼럿 2가 선택되었습니다.")
+        let alert2Action = UIAlertAction(title: "한식", style: .default) { _ in
+            print("한식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.korean
         }
         
-        let alert3Action = UIAlertAction(title: "얼럿 3", style: .default) { _ in
-            print("얼럿 3이 선택되었습니다.")
+        let alert3Action = UIAlertAction(title: "양식", style: .default) { _ in
+            print("양식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.western
+        }
+        
+        let alert4Action = UIAlertAction(title: "중식", style: .default) { _ in
+            print("중식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.chinese
+        }
+        
+        let alert5Action = UIAlertAction(title: "일식", style: .default) { _ in
+            print("일식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.japenese
+        }
+        
+        let alert6Action = UIAlertAction(title: "분식", style: .default) { _ in
+            print("분식이 선택되었습니다.")
+            self.viewModel.inputFoodType.value = FoodType.snack
         }
         
         let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
-            print("취소가 선택되었습니다.")
+            print("취소되었습니다.")
         }
         
         alertController.addAction(alert1Action)
         alertController.addAction(alert2Action)
         alertController.addAction(alert3Action)
+        alertController.addAction(alert4Action)
+        alertController.addAction(alert5Action)
+        alertController.addAction(alert6Action)
         alertController.addAction(cancelAction)
          
         present(alertController, animated: true, completion: nil)
