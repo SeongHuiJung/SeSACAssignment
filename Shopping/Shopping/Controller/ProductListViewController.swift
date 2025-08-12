@@ -6,23 +6,21 @@
 //
 
 import UIKit
-import Alamofire
 
 class ProductListViewController: UIViewController {
 
-    var searchText = ""
-    var produtList = [ShopItem]()
+    let viewModel = ProductListViewModel()
+
+    //var produtList = [ShopItem]()
     //   var produtList = [(ShopItem, Bool)]()
-    var recommendProductList = [ShopItem]()
+    //var recommendProductList = [ShopItem]()
     
-    var page = 1 // 현재 페이지
-    var endPage = 0 // 최대 페이지
-    var start = 1
-    var display = 20
+    
     
     let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
     let sortTypeListEng = ["sim", "date", "dsc", "asc"]
-    var sortType: SortType = SortType.sim
+    
+    
     
     private var totalProductLabel = CustomUILabel(text: "", textColor: .systemGreen, alignment: .left, size: 12)
     
@@ -63,80 +61,50 @@ class ProductListViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        setBind()
         
-        updateProductImage()
-        updateRecommendProductImage()
+        loadProducts()
+    }
+    
+    func setBind() {
+        viewModel.outputSearchText.bind { text in
+            self.navigationItem.title = text
+        }
+        
+        viewModel.outputProductCollectionViewReload.lazyBind {
+            self.productCollectionView.reloadData()
+            print("productCollectionView reload !")
+        }
+        
+        viewModel.outputProductCollectionViewScrollTop.lazyBind {
+            self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+            print("productCollectionView 스크롤업 !")
+        }
+        
+        viewModel.outputProductTotalCount.lazyBind { text in
+            self.totalProductLabel.text = text
+        }
+        
+        viewModel.outputIsHintLabelHidden.bind { isHidden in
+            self.emptyLabel.isHidden = isHidden
+        }
+        
+        viewModel.outputShowAlert.lazyBind { errorType in
+            self.showErrorAlert(errorType: errorType)
+        }
+        
+        viewModel.outputRecommendCollectionViewReload.lazyBind {
+            self.recommendProductCollectionView.reloadData()
+        }
     }
 }
 
 // MARK: - Network
 extension ProductListViewController {
     
-    func updateProductImage() {
-        callRequest(sort: sortType) { value in
-            self.produtList.append(contentsOf: value.items)
-            self.productCollectionView.reloadData()
-            
-            if self.page == 1 && !self.produtList.isEmpty {
-                self.emptyLabel.isHidden = true
-                self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-                self.setEndPage(value: value)
-                let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
-                self.totalProductLabel.text = "\(totalProductNum) 개의 검색 결과"
-            }
-            
-            // 검색결과가 없는 경우 빈 리스트임을 알리는 UI 표현
-            if self.produtList.isEmpty {
-                self.emptyLabel.isHidden = false
-            }
-        }
-    }
-    
-    func updateRecommendProductImage() {
-        callRequest(sort: sortType) { value in
-            self.recommendProductList.append(contentsOf: value.items)
-            self.recommendProductCollectionView.reloadData()
-        }
-    }
-    
-    func callRequest(sort: SortType = SortType.sim, comopletionHandler: @escaping (Shop)->()) {
-        
-        let params = [
-            "query" : searchText,
-            "display" : String(display),
-            "sort" : sort.rawValue,
-            "start" : String(start)
-        ]
-        
-        let url = URLType.naverShop(params: params).url
-        let header: HTTPHeaders = [
-            "X-Naver-Client-Id" : APIKey.naverClientId,
-            "X-Naver-Client-Secret" : APIKey.naverClientSecret
-        ]
-        
-        NetworkManager.shared.callRequest(url: url, header: header, sort: sort) { value in
-            comopletionHandler(value)
-            
-        } fail: { errorType in
-            
-            // VC 에서 분리처리하지 말고 errorType 자체를 shorAlert 함수로 넘겨주자
-            // shorAlert 에서 errorType 분리처리를 해주면 좋을 것
-            // 이렇게 해야 다른 네트워킹 에러처리에서도 errorType 을 매번 분기처리 하지 않으면서 shorAlert 를 재활용할 수 있을 것
-            self.showErrorAlert(errorType: errorType)
-        }
-    }
-    
-    func resetData() {
-        page = 1
-        start = 1
-        produtList = []
-    }
-    
-    func setEndPage(value: Shop) {
-        var quotient = value.total / display
-        let remainder = value.total % display
-        if remainder != 0 { quotient += 1 }
-        endPage = quotient
+    func loadProducts() {
+        viewModel.inputLoadProductImage.value = viewModel.outputSearchText.value
+        viewModel.inputLoadRecommendProductImage.value = viewModel.outputSearchText.value
     }
 }
 
@@ -144,13 +112,13 @@ extension ProductListViewController {
 extension ProductListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == productCollectionView {
-            produtList.count
+            viewModel.outputProductList.value.count
         }
         else if collectionView == tagCollectionView {
             sortTypeList.count
         }
         else {
-            recommendProductList.count
+            viewModel.outputRecommendProductList.value.count
         }
     }
     
@@ -159,11 +127,10 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
 
-            
             print(indexPath.item, "번째 cell 로드")
 
-            if !produtList.isEmpty {
-                cell.configureData(data: produtList[indexPath.item], isLike: false)
+            if !viewModel.outputProductList.value.isEmpty {
+                cell.configureData(data: viewModel.outputProductList.value[indexPath.item], isLike: false)
             }
             
             return cell
@@ -179,45 +146,42 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendProductCollectionViewCell.identifier, for: indexPath) as! RecommendProductCollectionViewCell
 
-            cell.configureData(data: recommendProductList[indexPath.item])
+            cell.configureData(data: viewModel.outputRecommendProductList.value[indexPath.item])
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == tagCollectionView && sortType.rawValue != sortTypeListEng[indexPath.row] {
-            
-            if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
-                cell.isSelectedTag = true
-                
-                for i in 0..<sortTypeList.count {
-                    if i != indexPath.row {
-                        if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
-                            cell.isSelectedTag = false
-                        }
-                    }
-                }
-            }
-            
-            switch indexPath.row {
-            case 0: sortType = SortType.sim
-            case 1: sortType = SortType.date
-            case 2: sortType = SortType.dsc
-            case 3: sortType = SortType.asc
-            default: sortType = SortType.sim
-            }
-            resetData()
-            updateProductImage()
-        }
+        // TODO: 필터 기능 MVVM 로 변환
+//        if collectionView == tagCollectionView && sortType.rawValue != sortTypeListEng[indexPath.row] {
+//            
+//            if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
+//                cell.isSelectedTag = true
+//                
+//                for i in 0..<sortTypeList.count {
+//                    if i != indexPath.row {
+//                        if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
+//                            cell.isSelectedTag = false
+//                        }
+//                    }
+//                }
+//            }
+//            
+//            switch indexPath.row {
+//            case 0: sortType = SortType.sim
+//            case 1: sortType = SortType.date
+//            case 2: sortType = SortType.dsc
+//            case 3: sortType = SortType.asc
+//            default: sortType = SortType.sim
+//            }
+//            resetData()
+//            updateProductImage()
+//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard collectionView == productCollectionView else { return }
-        if indexPath.row == produtList.count - 3 && page != endPage {
-            page += 1
-            start = page * display
-            updateProductImage()
-        }
+        viewModel.inputPagenationTrigger.value = (indexPath.row, viewModel.outputSearchText.value)
     }
 }
 
@@ -258,7 +222,6 @@ extension ProductListViewController: ViewDesignProtocol {
     
     func configureView() {
         view.backgroundColor = .black
-        navigationItem.title = searchText
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         emptyLabel.isHidden = true
     }
