@@ -35,11 +35,30 @@ enum Path: String {
     case naverShop = "/v1/search/shop.json"
 }
 
-enum SortType: String {
-    case sim
+enum SortType: Int, CaseIterable {
+    case sim = 0
     case date
-    case asc
     case dsc
+    case asc
+
+
+    var koreanName: String {
+        switch self {
+        case .sim: "정확도"
+        case .date: "날짜순"
+        case .dsc: "가격높은순"
+        case .asc: "가격낮은순"
+        }
+    }
+    
+    var englishName: String {
+        switch self {
+        case .sim: "sim"
+        case .date: "date"
+        case .dsc: "dsc"
+        case .asc: "asc"
+        }
+    }
 }
 
 // 에러 타입을 보편적으로 사용하는 것과

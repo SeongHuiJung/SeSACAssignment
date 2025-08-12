@@ -10,18 +10,10 @@ import UIKit
 class ProductListViewController: UIViewController {
 
     let viewModel = ProductListViewModel()
+    
+//    let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
+//    let sortTypeListEng = ["sim", "date", "dsc", "asc"]
 
-    //var produtList = [ShopItem]()
-    //   var produtList = [(ShopItem, Bool)]()
-    //var recommendProductList = [ShopItem]()
-    
-    
-    
-    let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
-    let sortTypeListEng = ["sim", "date", "dsc", "asc"]
-    
-    
-    
     private var totalProductLabel = CustomUILabel(text: "", textColor: .systemGreen, alignment: .left, size: 12)
     
     lazy private var productCollectionView = {
@@ -73,12 +65,10 @@ class ProductListViewController: UIViewController {
         
         viewModel.outputProductCollectionViewReload.lazyBind {
             self.productCollectionView.reloadData()
-            print("productCollectionView reload !")
         }
         
         viewModel.outputProductCollectionViewScrollTop.lazyBind {
             self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-            print("productCollectionView 스크롤업 !")
         }
         
         viewModel.outputProductTotalCount.lazyBind { text in
@@ -115,7 +105,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
             viewModel.outputProductList.value.count
         }
         else if collectionView == tagCollectionView {
-            sortTypeList.count
+            SortType.allCases.count
         }
         else {
             viewModel.outputRecommendProductList.value.count
@@ -127,8 +117,6 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
 
-            print(indexPath.item, "번째 cell 로드")
-
             if !viewModel.outputProductList.value.isEmpty {
                 cell.configureData(data: viewModel.outputProductList.value[indexPath.item], isLike: false)
             }
@@ -137,7 +125,7 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         }
         else if collectionView == tagCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortTagCollectionViewCell.identifier, for: indexPath) as! SortTagCollectionViewCell
-            cell.configureData(text: sortTypeList[indexPath.item])
+            cell.configureData(text: SortType(rawValue: indexPath.item)?.koreanName ?? "정확도")
             if indexPath.row == 0 {
                 cell.isSelectedTag = true
             }
@@ -152,31 +140,22 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: 필터 기능 MVVM 로 변환
-//        if collectionView == tagCollectionView && sortType.rawValue != sortTypeListEng[indexPath.row] {
-//            
-//            if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
-//                cell.isSelectedTag = true
-//                
-//                for i in 0..<sortTypeList.count {
-//                    if i != indexPath.row {
-//                        if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
-//                            cell.isSelectedTag = false
-//                        }
-//                    }
-//                }
-//            }
-//            
-//            switch indexPath.row {
-//            case 0: sortType = SortType.sim
-//            case 1: sortType = SortType.date
-//            case 2: sortType = SortType.dsc
-//            case 3: sortType = SortType.asc
-//            default: sortType = SortType.sim
-//            }
-//            resetData()
-//            updateProductImage()
-//        }
+        if collectionView == tagCollectionView && viewModel.outputSortType.value.rawValue != indexPath.row  {
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
+                cell.isSelectedTag = true
+                
+                for i in 0..<SortType.allCases.count {
+                    if i != indexPath.row {
+                        if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
+                            cell.isSelectedTag = false
+                        }
+                    }
+                }
+            }
+            
+            viewModel.inputTagSelect.value = indexPath.row
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

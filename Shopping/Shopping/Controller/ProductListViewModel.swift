@@ -12,6 +12,7 @@ class ProductListViewModel {
     var inputLoadProductImage = Observable("")
     var inputLoadRecommendProductImage = Observable("")
     var inputPagenationTrigger: Observable<(Int, String)> = Observable((0, ""))
+    var inputTagSelect = Observable(0)
     
     var outputProductList: Observable<[ShopItem]> = Observable([])
     var outputSearchText = Observable("")
@@ -20,12 +21,11 @@ class ProductListViewModel {
     var outputProductTotalCount = Observable("")
     var outputIsHintLabelHidden = Observable(true)
     var outputShowAlert: Observable<ErrorType> = Observable(CommonErrorType.unknownError)
+    var outputSortType: Observable<SortType> = Observable(SortType.sim)
     
     var outputRecommendProductList: Observable<[ShopItem]> = Observable([])
     var outputRecommendCollectionViewReload = Observable(())
     
- 
-    private var sortType: SortType = SortType.sim
     private var page = 1 // 현재 페이지
     private var endPage = 0 // 최대 페이지
     private var start = 1
@@ -47,13 +47,28 @@ class ProductListViewModel {
                 self.updateProductImage(searchText: searchText)
             }
         }
+        
+        inputTagSelect.lazyBind { row in
+            switch row {
+            case 0: self.outputSortType.value = SortType.sim
+            case 1: self.outputSortType.value = SortType.date
+            case 2: self.outputSortType.value = SortType.dsc
+            case 3: self.outputSortType.value = SortType.asc
+            default: self.outputSortType.value = SortType.sim
+            }
+        }
+        
+        outputSortType.lazyBind { _ in
+            self.resetData()
+            self.updateProductImage(searchText: self.outputSearchText.value)
+        }
     }
 }
 
 // MARK: - Logic
 extension ProductListViewModel {
     func updateProductImage(searchText: String) {
-        callRequest(searchText: searchText, sort: sortType) { value in
+        callRequest(searchText: searchText, sort: outputSortType.value) { value in
             self.outputProductList.value.append(contentsOf: value.items)
 
             self.outputProductCollectionViewReload.value = ()
@@ -76,7 +91,7 @@ extension ProductListViewModel {
     }
     
     func updateRecommendProductImage(searchText: String) {
-        callRequest(searchText: searchText, sort: sortType) { value in
+        callRequest(searchText: searchText, sort: outputSortType.value) { value in
             self.outputRecommendProductList.value.append(contentsOf: value.items)
             self.outputRecommendCollectionViewReload.value = ()
         }
@@ -87,7 +102,7 @@ extension ProductListViewModel {
         let params = [
             "query" : searchText,
             "display" : String(display),
-            "sort" : sort.rawValue,
+            "sort" : sort.englishName,
             "start" : String(start)
         ]
         
