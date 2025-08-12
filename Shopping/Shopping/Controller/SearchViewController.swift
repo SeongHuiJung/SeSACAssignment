@@ -10,6 +10,8 @@ import SnapKit
 
 class SearchViewController: UIViewController {
     
+    let viewModel = SearchViewModel()
+    
     let searchBar = {
         let searchBar = UISearchBar()
         
@@ -35,19 +37,24 @@ class SearchViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        setBind()
     }
-}
-
-// MARK: - Logic
-extension SearchViewController {
-    private func isHaveOnlyWhiteSpace() -> Bool {
-        guard let text = searchBar.text else { return true }
-        for char in text {
-            if char != " " {
-                return false
-            }
+    
+    func setBind() {
+        viewModel.outputShowAlert.lazyBind { message in
+            let alert = AlertSingleton.shared.getAlert(title: "", message: message)
+            self.present(alert, animated: true)
         }
-        return true
+        
+        viewModel.outputPushNextVC.lazyBind { searchText in
+            let viewController = ProductListViewController()
+            viewController.searchText = searchText
+            self.navigationController?.pushViewController(viewController, animated: true)
+        }
+        
+        viewModel.outputSearchBarCancelButtonTapped.lazyBind {
+            self.searchBar.text = ""
+        }
     }
 }
 
@@ -55,27 +62,11 @@ extension SearchViewController {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text else { return }
-        
-        guard !isHaveOnlyWhiteSpace() else {
-            let alert = AlertSingleton.shared.getAlert(title: "", message: "검색어를 입력해 주세요")
-            present(alert, animated: true)
-            return
-        }
-        
-        guard text.count >= 2 else {
-            let alert = AlertSingleton.shared.getAlert(title: "", message: "2글자 이상 입력해 주세요")
-            present(alert, animated: true)
-            return
-        }
-        
-        let viewController = ProductListViewController()
-        viewController.searchText = text
-        navigationController?.pushViewController(viewController, animated: true)
+        viewModel.inputSearchBarButtonTapped.value = searchBar.text
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text = ""
+        viewModel.inputSearchBarCancelButtonTapped.value = ()
     }
 }
 
