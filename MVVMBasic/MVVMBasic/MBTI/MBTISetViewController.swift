@@ -159,16 +159,14 @@ class MBTISetViewController: BaseViewController {
     }
     
     private func bindData() {
-        viewModel.outputHintText.lazyBind { text in
+        viewModel.output.hintText.lazyBind { text in
             self.hintLabel.text = text
         }
         
-        viewModel.outputMBTIResult.lazyBind { (selectMBTI, partnerMBTI) in
-            //let selectMBTI = self.viewModel.outputMBTIResult.0
+        viewModel.output.mBTIResult.lazyBind { (selectMBTI, partnerMBTI) in
             let selectMBTIIndex = selectMBTI.0
             let selectMBTIIsOn = selectMBTI.1
-            
-           // let partnerMBTI = self.viewModel.outputMBTIResult.1
+
             let partnerMBTIIndex = partnerMBTI.0
             let partnerMBTIIsOn = partnerMBTI.1
 
@@ -179,7 +177,7 @@ class MBTISetViewController: BaseViewController {
             self.fetchMBTIUI(result: partnerMBTIIsOn, index: partnerMBTIIndex)
         }
         
-        viewModel.outputIsValideSetUpProfile.lazyBind { isActive in
+        viewModel.output.isValideSetUpProfile.lazyBind { isActive in
             if isActive {
                 self.completeButton.backgroundColor = .buttonActive
             }
@@ -202,24 +200,24 @@ class MBTISetViewController: BaseViewController {
     }
     
     @objc func textFieldChanged() {
-        viewModel.nickname.value = textField.text!
+        viewModel.input.nickname.value = textField.text!
     }
     
     @objc func mbtiButtonTapped(_ sender: MBTIButton) {
         let partnerIndex = MBTIType(rawValue: sender.label.text!)?.partner.index ?? 0
-        viewModel.inputMBTIData = ["selectMBTI" :  sender.label.text!,
+        viewModel.MBTIData = ["selectMBTI" :  sender.label.text!,
                                    "selectIsOn" : "\(sender.isOn)",
                                    "partnerIsOn" : "\(MBTIButtons[partnerIndex].isOn)"]
         
-        viewModel.checkMBTISignal.value = ()
+        viewModel.input.checkMBTISignal.value = ()
         
         var isOnCount = 0
         MBTIButtons.forEach { if $0.isOn { isOnCount += 1 } }
-        viewModel.inputIsOnCount.value = isOnCount
+        viewModel.input.isOnCount.value = isOnCount
     }
     
     @objc func completeButtonTapped() {
-        if viewModel.outputIsValideSetUpProfile.value {
+        if viewModel.output.isValideSetUpProfile.value {
             let alert = UIAlertController(title: "프로필 저장", message: "프로필 내용을 성공적으로 저장했어요!", preferredStyle: .alert)
             let okButton = UIAlertAction(title: "확인", style: .default)
             alert.addAction(okButton)
