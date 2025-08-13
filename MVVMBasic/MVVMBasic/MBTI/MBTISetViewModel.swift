@@ -11,96 +11,83 @@ class MBTISetViewModel {
     
     var inputMBTIData: [String: String] = [:]
     
-    var inputIsOnCount = 0 {
-        didSet {
-            updateMBTIIsOnCount()
-        }
-    }
     // input - Parameter Signal
-    var nickname: String? = "" {
-        didSet {
-            validateNickname()
-        }
-    }
+    var inputIsOnCount = Observable(0)
+    var nickname = Observable("")
     
-    // 데이터 매개변수로 넣기
     // input  - Method Signal
-    var checkMBTISignal = () {
-        didSet {
-            setMBTIPariIndex()
-            updateMBTIIsOnData()
-            
+    var checkMBTISignal = Observable(())
+    
+    init() {
+        inputIsOnCount.lazyBind { _ in
+            self.updateMBTIIsOnCount()
+        }
+        
+        nickname.lazyBind { _ in
+            self.validateNickname()
+        }
+        
+        checkMBTISignal.lazyBind {
+            self.setMBTIPariIndex()
+            self.updateMBTIIsOnData()
+        }
+        
+        isValideNickname.bind { _ in
+            self.checkisValideSetUpProfile()
+        }
+        
+        isValideMBTI.bind { _ in
+            self.checkisValideSetUpProfile()
         }
     }
     
     // output
-    var outputHintText: String = "" {
-        didSet {
-            fetchHintText?()
-        }
-    }
-    
-    var outputMBTIResult: ((Int, Bool), (Int, Bool)) = ((0,false),(0,false)) {
-        didSet {
-            fetchMBTIButtonStatus?()
-        }
-    }
+    var outputHintText = Observable("")
+    var outputMBTIResult: Observable<((Int, Bool), (Int, Bool))> = Observable(((0,false),(0,false))) 
 
-    var outputIsValideSetUpProfile = false {
-        didSet {
-            fetchCompleteStatus?()
-        }
-    }
-    
-    // closure
+    var outputIsValideSetUpProfile = Observable(false)
+
+
     var fetchHintText : (() -> ())?
     var fetchMBTIButtonStatus: (() -> ())?
     var fetchCompleteStatus: (() -> ())?
     
-    private var isValideNickname = false {
-        didSet {
-            checkisValideSetUpProfile()
-        }
-    }
-    private var isValideMBTI = false {
-        didSet {
-            checkisValideSetUpProfile()
-        }
-    }
+    private var isValideNickname = Observable(false)
+    private var isValideMBTI = Observable(false)
+        
 }
 
 // MARK: - Logic
 extension MBTISetViewModel {
     private func validateNickname() {
-        guard let nickname = nickname else { return }
-        
+        let nickname = nickname.value
         guard nickname.count != 0 else {
-            outputHintText = ""
-            isValideNickname = false
+            outputHintText.value = ""
+            isValideNickname.value = false
             return
         }
         
         let (hasSpecial, specialChar) = isContainSpecialCharacter(text: nickname)
         guard !hasSpecial else {
-            outputHintText = "닉네임에 \(specialChar ?? "")는 포함할 수 없어요."
-            isValideNickname = false
+            outputHintText.value = "닉네임에 \(specialChar ?? "")는 포함할 수 없어요."
+            isValideNickname.value = false
             return
         }
         
         guard !isContainNumber(text: nickname) else {
-            outputHintText = "닉네임에 숫자는 포함할 수 없어요."
-            isValideNickname = false
+            outputHintText.value = "닉네임에 숫자는 포함할 수 없어요."
+            isValideNickname.value = false
             return
         }
         
         guard 2 <= nickname.count && nickname.count <= 9 else {
-            outputHintText = "닉네임은 2글자 이상, 9글자 이하로 작성해주세요."
-            isValideNickname = false
+            outputHintText.value = "닉네임은 2글자 이상, 9글자 이하로 작성해주세요."
+            isValideNickname.value = false
             return
         }
         
-        outputHintText = "사용할 수 있는 닉네임이에요."
-        isValideNickname = true
+        outputHintText.value = "사용할 수 있는 닉네임이에요."
+        isValideNickname.value = true
     }
     
     private func isContainSpecialCharacter(text: String) -> (Bool, String?) {
@@ -136,7 +123,7 @@ extension MBTISetViewModel {
         
         let result = getResult(pickMbtiIsOn: pickMbtiIsOn, partnerMbtiIsOn: partnerMbtiIsOn)
         
-        outputMBTIResult = ((Int(inputMBTIData["selectIndex"]!)!, result.0),
+        outputMBTIResult.value = ((Int(inputMBTIData["selectIndex"]!)!, result.0),
                             (Int(inputMBTIData["partnerIndex"]!)!, result.1))
     }
     
@@ -161,20 +148,20 @@ extension MBTISetViewModel {
     
     private func updateMBTIIsOnCount() {
         
-        if inputIsOnCount == 4 {
-            isValideMBTI = true
+        if inputIsOnCount.value == 4 {
+            isValideMBTI.value = true
         }
         else {
-            isValideMBTI = false
+            isValideMBTI.value = false
         }
     }
     
     private func checkisValideSetUpProfile() {
-        if isValideMBTI && isValideNickname && !outputIsValideSetUpProfile {
-            outputIsValideSetUpProfile = true
+        if isValideMBTI.value && isValideNickname.value && !outputIsValideSetUpProfile.value {
+            outputIsValideSetUpProfile.value = true
         }
-        else if (!isValideMBTI || !isValideNickname) && outputIsValideSetUpProfile {
-            outputIsValideSetUpProfile = false
+        else if (!isValideMBTI.value || !isValideNickname.value) && outputIsValideSetUpProfile.value {
+            outputIsValideSetUpProfile.value = false
         }
     }
 }

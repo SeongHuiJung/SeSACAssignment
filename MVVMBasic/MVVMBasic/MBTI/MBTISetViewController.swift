@@ -89,7 +89,7 @@ class MBTISetViewController: BaseViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupActions()
-        setViewModelClosure()
+        bindData()
     }
     
     override func configureHierarchy() {
@@ -154,26 +154,21 @@ class MBTISetViewController: BaseViewController {
     private func setupActions() {
         MBTIButtons.forEach { $0.addTarget(self, action: #selector(mbtiButtonTapped), for: .touchUpInside)
         }
-        
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
-        
         completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
     }
     
-    // 1. enum 으로 받기
-    // 2. enum 없이 변경
-    // 3. dictionary 으로 변경하기
-    private func setViewModelClosure() {
-        viewModel.fetchHintText = {
-            self.hintLabel.text = self.viewModel.outputHintText
+    private func bindData() {
+        viewModel.outputHintText.lazyBind { text in
+            self.hintLabel.text = text
         }
         
-        viewModel.fetchMBTIButtonStatus = {
-            let selectMBTI = self.viewModel.outputMBTIResult.0
+        viewModel.outputMBTIResult.lazyBind { (selectMBTI, partnerMBTI) in
+            //let selectMBTI = self.viewModel.outputMBTIResult.0
             let selectMBTIIndex = selectMBTI.0
             let selectMBTIIsOn = selectMBTI.1
             
-            let partnerMBTI = self.viewModel.outputMBTIResult.1
+           // let partnerMBTI = self.viewModel.outputMBTIResult.1
             let partnerMBTIIndex = partnerMBTI.0
             let partnerMBTIIsOn = partnerMBTI.1
 
@@ -183,9 +178,9 @@ class MBTISetViewController: BaseViewController {
             self.fetchMBTIUI(result: selectMBTIIsOn, index: selectMBTIIndex)
             self.fetchMBTIUI(result: partnerMBTIIsOn, index: partnerMBTIIndex)
         }
-    
-        viewModel.fetchCompleteStatus = {
-            if self.viewModel.outputIsValideSetUpProfile {
+        
+        viewModel.outputIsValideSetUpProfile.lazyBind { isActive in
+            if isActive {
                 self.completeButton.backgroundColor = .buttonActive
             }
             else {
@@ -193,7 +188,7 @@ class MBTISetViewController: BaseViewController {
             }
         }
     }
-    
+
     // result 에 두개 넣기?
     private func fetchMBTIUI(result: Bool, index: Int) {
         if result {
@@ -207,7 +202,7 @@ class MBTISetViewController: BaseViewController {
     }
     
     @objc func textFieldChanged() {
-        viewModel.nickname = textField.text
+        viewModel.nickname.value = textField.text!
     }
     
     @objc func mbtiButtonTapped(_ sender: MBTIButton) {
@@ -216,15 +211,15 @@ class MBTISetViewController: BaseViewController {
                                    "selectIsOn" : "\(sender.isOn)",
                                    "partnerIsOn" : "\(MBTIButtons[partnerIndex].isOn)"]
         
-        viewModel.checkMBTISignal = ()
+        viewModel.checkMBTISignal.value = ()
         
         var isOnCount = 0
         MBTIButtons.forEach { if $0.isOn { isOnCount += 1 } }
-        viewModel.inputIsOnCount = isOnCount
+        viewModel.inputIsOnCount.value = isOnCount
     }
     
     @objc func completeButtonTapped() {
-        if viewModel.outputIsValideSetUpProfile {
+        if viewModel.outputIsValideSetUpProfile.value {
             let alert = UIAlertController(title: "프로필 저장", message: "프로필 내용을 성공적으로 저장했어요!", preferredStyle: .alert)
             let okButton = UIAlertAction(title: "확인", style: .default)
             alert.addAction(okButton)
