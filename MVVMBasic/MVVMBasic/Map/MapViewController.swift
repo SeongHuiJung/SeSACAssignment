@@ -34,7 +34,7 @@ class MapViewController: UIViewController {
     // 탭에서 해당 뷰에 들어가야 실행됨
     private func setUpOutputClosure() {
         // bind 에 closure 전달하면서 바로 실행될 수 있도록 매개변수 isfirstExecute에 true 값 전달
-        viewModel.outputFoodList.bind(isfirstExecute: true) { restaurantList in
+        viewModel.outputFoodList.lazyBind { restaurantList in
             self.removeAllAnnotations()
             self.addAnnotations(restaurantList: restaurantList)
         }

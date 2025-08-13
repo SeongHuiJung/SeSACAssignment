@@ -14,7 +14,7 @@ class BirthDayViewModel {
     var inputDayText: String?
     
     // input  - Method Signal
-    var inputCheckBirthDaySignal = CustomObservable(())
+    var inputCheckBirthDaySignal = Observable(())
     
     init() {
         inputCheckBirthDaySignal.bind { [self] in
@@ -33,8 +33,8 @@ class BirthDayViewModel {
     }
     
     // output
-    var outputResultText = CustomObservable("")
-    var outputErrorText = CustomObservable("")
+    var outputResultText = Observable("")
+    var outputErrorText = Observable("")
     
     private var year: Int?
     private var month: Int?

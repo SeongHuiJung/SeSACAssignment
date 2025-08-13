@@ -8,8 +8,8 @@
 import Foundation
 
 class WordCounterViewModel {
-    var inputText = CustomObservable("")
-    var outputText = CustomObservable("")
+    var inputText = Observable("")
+    var outputText = Observable("")
     
     init() {
         inputText.bind { _ in

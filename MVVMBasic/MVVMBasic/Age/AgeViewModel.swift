@@ -9,10 +9,10 @@ import Foundation
 
 class AgeViewModel {
     // input validate
-    var inputAge = CustomObservable("")
+    var inputAge = Observable("")
     
     // output
-    var outputResultLabel = CustomObservable("")
+    var outputResultLabel = Observable("")
     
     private var age = 0
     

@@ -14,7 +14,7 @@ class BMIViewModel {
     var inputWeight: String? = ""
     
     // input  - Method Signal
-    var calculateBMISignal = CustomObservable(())
+    var calculateBMISignal = Observable(())
     
     init() {
         calculateBMISignal.bind { [self] in
@@ -30,8 +30,8 @@ class BMIViewModel {
     }
     
     // output
-    var outputResultLabel = CustomObservable("")
-    var errorMessage = CustomObservable("")
+    var outputResultLabel = Observable("")
+    var errorMessage = Observable("")
     
     private var height: Double?
     private var weight: Double?

@@ -8,8 +8,8 @@
 import Foundation
 
 class CurrencyViewModel {
-    var inputMoney = CustomObservable("")
-    var outputMoney = CustomObservable("")
+    var inputMoney = Observable("")
+    var outputMoney = Observable("")
 
     init() {
         inputMoney.bind { _ in
