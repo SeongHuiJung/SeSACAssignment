@@ -9,22 +9,30 @@ import Foundation
 import Alamofire
 
 class ProductListViewModel {
-    var inputLoadProductImage = Observable("")
-    var inputLoadRecommendProductImage = Observable("")
-    var inputPagenationTrigger: Observable<(Int, String)> = Observable((0, ""))
-    var inputTagSelect = Observable(0)
     
-    var outputProductList: Observable<[ShopItem]> = Observable([])
-    var outputSearchText = Observable("")
-    var outputProductCollectionViewReload = Observable(())
-    var outputProductCollectionViewScrollTop = Observable(())
-    var outputProductTotalCount = Observable("")
-    var outputIsHintLabelHidden = Observable(true)
-    var outputShowAlert: Observable<ErrorType> = Observable(CommonErrorType.unknownError)
-    var outputSortType: Observable<SortType> = Observable(SortType.sim)
+    struct Input {
+        var loadProductImage = Observable("")
+        var loadRecommendProductImage = Observable("")
+        var pagenationTrigger: Observable<(Int, String)> = Observable((0, ""))
+        var tagSelect = Observable(0)
+    }
     
-    var outputRecommendProductList: Observable<[ShopItem]> = Observable([])
-    var outputRecommendCollectionViewReload = Observable(())
+    struct Output {
+        var productList: Observable<[ShopItem]> = Observable([])
+        var searchText = Observable("")
+        var productCollectionViewReload = Observable(())
+        var productCollectionViewScrollTop = Observable(())
+        var productTotalCount = Observable("")
+        var isHintLabelHidden = Observable(true)
+        var showAlert: Observable<ErrorType> = Observable(CommonErrorType.unknownError)
+        var sortType: Observable<SortType> = Observable(SortType.sim)
+        
+        var recommendProductList: Observable<[ShopItem]> = Observable([])
+        var recommendCollectionViewReload = Observable(())
+    }
+    
+    var input: Input
+    var output: Output
     
     private var page = 1 // 현재 페이지
     private var endPage = 0 // 최대 페이지
@@ -32,35 +40,38 @@ class ProductListViewModel {
     private var display = 20
     
     init() {
-        inputLoadProductImage.lazyBind { searchText in
+        input = Input()
+        output = Output()
+        
+        input.loadProductImage.lazyBind { searchText in
             self.updateProductImage(searchText: searchText)
         }
         
-        inputLoadRecommendProductImage.lazyBind { searchText in
+        input.loadRecommendProductImage.lazyBind { searchText in
             self.updateRecommendProductImage(searchText: searchText)
         }
         
-        inputPagenationTrigger.lazyBind { (row, searchText) in
-            if row == self.outputProductList.value.count - 3 && self.page != self.endPage {
+        input.pagenationTrigger.lazyBind { (row, searchText) in
+            if row == self.output.productList.value.count - 3 && self.page != self.endPage {
                 self.page += 1
                 self.start = self.page * self.display
                 self.updateProductImage(searchText: searchText)
             }
         }
         
-        inputTagSelect.lazyBind { row in
+        input.tagSelect.lazyBind { row in
             switch row {
-            case 0: self.outputSortType.value = SortType.sim
-            case 1: self.outputSortType.value = SortType.date
-            case 2: self.outputSortType.value = SortType.dsc
-            case 3: self.outputSortType.value = SortType.asc
-            default: self.outputSortType.value = SortType.sim
+            case 0: self.output.sortType.value = SortType.sim
+            case 1: self.output.sortType.value = SortType.date
+            case 2: self.output.sortType.value = SortType.dsc
+            case 3: self.output.sortType.value = SortType.asc
+            default: self.output.sortType.value = SortType.sim
             }
         }
         
-        outputSortType.lazyBind { _ in
+        output.sortType.lazyBind { _ in
             self.resetData()
-            self.updateProductImage(searchText: self.outputSearchText.value)
+            self.updateProductImage(searchText: self.output.searchText.value)
         }
     }
 }
@@ -68,32 +79,32 @@ class ProductListViewModel {
 // MARK: - Logic
 extension ProductListViewModel {
     func updateProductImage(searchText: String) {
-        callRequest(searchText: searchText, sort: outputSortType.value) { value in
-            self.outputProductList.value.append(contentsOf: value.items)
+        callRequest(searchText: searchText, sort: output.sortType.value) { value in
+            self.output.productList.value.append(contentsOf: value.items)
 
-            self.outputProductCollectionViewReload.value = ()
+            self.output.productCollectionViewReload.value = ()
             
-            if self.page == 1 && !self.outputProductList.value.isEmpty {
-                self.outputIsHintLabelHidden.value = true
-                self.outputProductCollectionViewScrollTop.value = ()
+            if self.page == 1 && !self.output.productList.value.isEmpty {
+                self.output.isHintLabelHidden.value = true
+                self.output.productCollectionViewScrollTop.value = ()
                 
                 self.setEndPage(value: value)
                 let totalProductNum = NumberFomatterSingleton.shared.foarmatter.string(from: value.total as NSNumber) ?? "0"
                 
-                self.outputProductTotalCount.value = "\(totalProductNum) 개의 검색 결과"
+                self.output.productTotalCount.value = "\(totalProductNum) 개의 검색 결과"
             }
             
             // 검색결과가 없는 경우 빈 리스트임을 알리는 UI 표현
-            if self.outputProductList.value.isEmpty {
-                self.outputIsHintLabelHidden.value = false
+            if self.output.productList.value.isEmpty {
+                self.output.isHintLabelHidden.value = false
             }
         }
     }
     
     func updateRecommendProductImage(searchText: String) {
-        callRequest(searchText: searchText, sort: outputSortType.value) { value in
-            self.outputRecommendProductList.value.append(contentsOf: value.items)
-            self.outputRecommendCollectionViewReload.value = ()
+        callRequest(searchText: searchText, sort: output.sortType.value) { value in
+            self.output.recommendProductList.value.append(contentsOf: value.items)
+            self.output.recommendCollectionViewReload.value = ()
         }
     }
     
@@ -116,7 +127,7 @@ extension ProductListViewModel {
             comopletionHandler(value)
             
         } fail: { errorType in
-            self.outputShowAlert.value = errorType
+            self.output.showAlert.value = errorType
             
         }
     }
@@ -124,7 +135,7 @@ extension ProductListViewModel {
     func resetData() {
         page = 1
         start = 1
-        outputProductList.value = []
+        output.productList.value = []
     }
     
     func setEndPage(value: Shop) {

@@ -10,12 +10,8 @@ import UIKit
 class ProductListViewController: UIViewController {
 
     let viewModel = ProductListViewModel()
-    
-//    let sortTypeList = ["정확도", "날짜순", "가격높은순", "가격낮은순"]
-//    let sortTypeListEng = ["sim", "date", "dsc", "asc"]
 
     private var totalProductLabel = CustomUILabel(text: "", textColor: .systemGreen, alignment: .left, size: 12)
-    
     lazy private var productCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutVertical(cellCount: 2, gap: 10))
         collectionView.register(ProductListCollectionViewCell.self, forCellWithReuseIdentifier: ProductListCollectionViewCell.identifier)
@@ -25,7 +21,6 @@ class ProductListViewController: UIViewController {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-    
     lazy private var tagCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 1, gap: 10, itemSize: CGSize(width: 80, height: 32)))
         collectionView.register(SortTagCollectionViewCell.self, forCellWithReuseIdentifier: SortTagCollectionViewCell.identifier)
@@ -35,7 +30,6 @@ class ProductListViewController: UIViewController {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-    
     lazy private var recommendProductCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayoutHorizontal(cellCount: 1, gap: 10, itemSize: CGSize(width: 100, height: 100)))
         collectionView.register(RecommendProductCollectionViewCell.self, forCellWithReuseIdentifier: RecommendProductCollectionViewCell.identifier)
@@ -45,7 +39,6 @@ class ProductListViewController: UIViewController {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
-    
     let emptyLabel = CustomUILabel(text: "텅", textColor: .white, alignment: .center, size: 50, weight: .heavy)
     
     override func viewDidLoad() {
@@ -59,31 +52,31 @@ class ProductListViewController: UIViewController {
     }
     
     func setBind() {
-        viewModel.outputSearchText.bind { text in
+        viewModel.output.searchText.bind { text in
             self.navigationItem.title = text
         }
         
-        viewModel.outputProductCollectionViewReload.lazyBind {
+        viewModel.output.productCollectionViewReload.lazyBind {
             self.productCollectionView.reloadData()
         }
         
-        viewModel.outputProductCollectionViewScrollTop.lazyBind {
+        viewModel.output.productCollectionViewScrollTop.lazyBind {
             self.productCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
         
-        viewModel.outputProductTotalCount.lazyBind { text in
+        viewModel.output.productTotalCount.lazyBind { text in
             self.totalProductLabel.text = text
         }
         
-        viewModel.outputIsHintLabelHidden.bind { isHidden in
+        viewModel.output.isHintLabelHidden.bind { isHidden in
             self.emptyLabel.isHidden = isHidden
         }
         
-        viewModel.outputShowAlert.lazyBind { errorType in
+        viewModel.output.showAlert.lazyBind { errorType in
             self.showErrorAlert(errorType: errorType)
         }
         
-        viewModel.outputRecommendCollectionViewReload.lazyBind {
+        viewModel.output.recommendCollectionViewReload.lazyBind {
             self.recommendProductCollectionView.reloadData()
         }
     }
@@ -93,8 +86,8 @@ class ProductListViewController: UIViewController {
 extension ProductListViewController {
     
     func loadProducts() {
-        viewModel.inputLoadProductImage.value = viewModel.outputSearchText.value
-        viewModel.inputLoadRecommendProductImage.value = viewModel.outputSearchText.value
+        viewModel.input.loadProductImage.value = viewModel.output.searchText.value
+        viewModel.input.loadRecommendProductImage.value = viewModel.output.searchText.value
     }
 }
 
@@ -102,13 +95,13 @@ extension ProductListViewController {
 extension ProductListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == productCollectionView {
-            viewModel.outputProductList.value.count
+            viewModel.output.productList.value.count
         }
         else if collectionView == tagCollectionView {
             SortType.allCases.count
         }
         else {
-            viewModel.outputRecommendProductList.value.count
+            viewModel.output.recommendProductList.value.count
         }
     }
     
@@ -117,8 +110,8 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         if collectionView == productCollectionView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductListCollectionViewCell.identifier, for: indexPath) as! ProductListCollectionViewCell
 
-            if !viewModel.outputProductList.value.isEmpty {
-                cell.configureData(data: viewModel.outputProductList.value[indexPath.item], isLike: false)
+            if !viewModel.output.productList.value.isEmpty {
+                cell.configureData(data: viewModel.output.productList.value[indexPath.item], isLike: false)
             }
             
             return cell
@@ -134,33 +127,33 @@ extension ProductListViewController: UICollectionViewDelegate, UICollectionViewD
         else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendProductCollectionViewCell.identifier, for: indexPath) as! RecommendProductCollectionViewCell
 
-            cell.configureData(data: viewModel.outputRecommendProductList.value[indexPath.item])
+            cell.configureData(data: viewModel.output.recommendProductList.value[indexPath.item])
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == tagCollectionView && viewModel.outputSortType.value.rawValue != indexPath.row  {
+        if collectionView == tagCollectionView && viewModel.output.sortType.value.rawValue != indexPath.row  {
             
             if let cell = collectionView.cellForItem(at: indexPath) as? SortTagCollectionViewCell {
-                cell.isSelectedTag = true
+                  cell.isSelectedTag = true
                 
                 for i in 0..<SortType.allCases.count {
                     if i != indexPath.row {
                         if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? SortTagCollectionViewCell {
-                            cell.isSelectedTag = false
+                              cell.isSelectedTag = false
                         }
                     }
                 }
             }
             
-            viewModel.inputTagSelect.value = indexPath.row
+            viewModel.input.tagSelect.value = indexPath.row
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard collectionView == productCollectionView else { return }
-        viewModel.inputPagenationTrigger.value = (indexPath.row, viewModel.outputSearchText.value)
+        viewModel.input.pagenationTrigger.value = (indexPath.row, viewModel.output.searchText.value)
     }
 }
 

@@ -48,7 +48,7 @@ class SearchViewController: UIViewController {
         
         viewModel.outputPushNextVC.lazyBind { searchText in
             let viewController = ProductListViewController()
-            viewController.viewModel.outputSearchText.value = searchText
+            viewController.viewModel.output.searchText.value = searchText
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         
