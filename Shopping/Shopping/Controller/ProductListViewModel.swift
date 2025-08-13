@@ -109,26 +109,13 @@ extension ProductListViewModel {
     }
     
     func callRequest(searchText: String, sort: SortType = SortType.sim, comopletionHandler: @escaping (Shop)->()) {
+
+        let params = ShopParameter(query: searchText, display: String(display), sort: sort.englishName, start: String(start))
         
-        let params = [
-            "query" : searchText,
-            "display" : String(display),
-            "sort" : sort.englishName,
-            "start" : String(start)
-        ]
-        
-        let url = URLType.naverShop(params: params).url
-        let header: HTTPHeaders = [
-            "X-Naver-Client-Id" : APIKey.naverClientId,
-            "X-Naver-Client-Secret" : APIKey.naverClientSecret
-        ]
-        
-        NetworkManager.shared.callRequest(url: url, header: header, sort: sort) { value in
+        NetworkManager.shared.callRequest(api: .searchProduct(params: params), decodeType: Shop.self) { value in
             comopletionHandler(value)
-            
         } fail: { errorType in
             self.output.showAlert.value = errorType
-            
         }
     }
     

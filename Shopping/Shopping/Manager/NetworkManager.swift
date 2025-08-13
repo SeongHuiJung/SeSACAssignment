@@ -14,10 +14,10 @@ final class NetworkManager {
     
     // retry
     // 로딩화면
-    func callRequest(url: String, header: HTTPHeaders, sort: SortType = SortType.sim, success: @escaping (Shop) -> (), fail: @escaping (ErrorType) -> ()) {
-        AF.request(url, method: .get, headers: header)
+    func callRequest<T: Decodable>(api: ShoppingRouter, decodeType: T.Type, success: @escaping (T) -> (), fail: @escaping (ErrorType) -> ()) {
+        AF.request(api.endPoint, method: api.method, parameters: api.parameter ,headers: api.headers)
             .validate(statusCode: 200..<300)
-            .responseDecodable(of: Shop.self) { response in
+            .responseDecodable(of: T.self) { response in
                 switch response.result {
                 case .success(let value):
                     success(value)
@@ -27,7 +27,7 @@ final class NetworkManager {
             }
     }
     
-    private func getErrorType(response: DataResponse<Shop, AFError>) -> ErrorType {
+    private func getErrorType<T>(response: DataResponse<T, AFError>) -> ErrorType {
         let data = response.data
         guard let data = data else { return CommonErrorType.decodingError}
 
