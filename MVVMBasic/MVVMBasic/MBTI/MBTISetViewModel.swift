@@ -8,6 +8,14 @@
 import Foundation
 
 class MBTISetViewModel {
+    
+    var inputMBTIData: [String: String] = [:]
+    
+    var inputIsOnCount = 0 {
+        didSet {
+            updateMBTIIsOnCount()
+        }
+    }
     // input - Parameter Signal
     var nickname: String? = "" {
         didSet {
@@ -15,74 +23,29 @@ class MBTISetViewModel {
         }
     }
     
-    // 타입 int 로
-    var mbtiSelect: MBTIButton = MBTIButton()
-    var mbtiButtonList: [MBTIButton] = []
-    
     // 데이터 매개변수로 넣기
     // input  - Method Signal
     var checkMBTISignal = () {
         didSet {
-            checkMBTI()
-            updateMBTICount()
+            setMBTIPariIndex()
+            updateMBTIIsOnData()
+            
         }
     }
     
     // output
-    var hintText: String = "" {
+    var outputHintText: String = "" {
         didSet {
             fetchHintText?()
         }
     }
     
-    var outputEResult: Bool = false {
+    var outputMBTIResult: ((Int, Bool), (Int, Bool)) = ((0,false),(0,false)) {
         didSet {
-            fetchEStatus?()
+            fetchMBTIButtonStatus?()
         }
     }
-    
-    var outputIResult: Bool = false {
-        didSet {
-            fetchIStatus?()
-        }
-    }
-    
-    var outputSResult: Bool = false {
-        didSet {
-            fetchSStatus?()
-        }
-    }
-    
-    var outputNResult: Bool = false {
-        didSet {
-            fetchNStatus?()
-        }
-    }
-    
-    var outputTResult: Bool = false {
-        didSet {
-            fetchTStatus?()
-        }
-    }
-    
-    var outputFResult: Bool = false {
-        didSet {
-            fetchFStatus?()
-        }
-    }
-    
-    var outputJResult: Bool = false {
-        didSet {
-            fetchJStatus?()
-        }
-    }
-    
-    var outputPResult: Bool = false {
-        didSet {
-            fetchPStatus?()
-        }
-    }
-    
+
     var outputIsValideSetUpProfile = false {
         didSet {
             fetchCompleteStatus?()
@@ -91,20 +54,8 @@ class MBTISetViewModel {
     
     // closure
     var fetchHintText : (() -> ())?
-    
-    var fetchEStatus: (() -> ())?
-    var fetchIStatus: (() -> ())?
-    var fetchSStatus: (() -> ())?
-    var fetchNStatus: (() -> ())?
-    var fetchTStatus: (() -> ())?
-    var fetchFStatus: (() -> ())?
-    var fetchJStatus: (() -> ())?
-    var fetchPStatus: (() -> ())?
-    
+    var fetchMBTIButtonStatus: (() -> ())?
     var fetchCompleteStatus: (() -> ())?
-    
-    // private property
-    private var isOnCount = 0
     
     private var isValideNickname = false {
         didSet {
@@ -122,33 +73,33 @@ class MBTISetViewModel {
 extension MBTISetViewModel {
     private func validateNickname() {
         guard let nickname = nickname else { return }
-
+        
         guard nickname.count != 0 else {
-            hintText = ""
+            outputHintText = ""
             isValideNickname = false
             return
         }
         
         let (hasSpecial, specialChar) = isContainSpecialCharacter(text: nickname)
         guard !hasSpecial else {
-            hintText = "닉네임에 \(specialChar ?? "")는 포함할 수 없어요."
+            outputHintText = "닉네임에 \(specialChar ?? "")는 포함할 수 없어요."
             isValideNickname = false
             return
         }
         
         guard !isContainNumber(text: nickname) else {
-            hintText = "닉네임에 숫자는 포함할 수 없어요."
+            outputHintText = "닉네임에 숫자는 포함할 수 없어요."
             isValideNickname = false
             return
         }
         
         guard 2 <= nickname.count && nickname.count <= 9 else {
-            hintText = "닉네임은 2글자 이상, 9글자 이하로 작성해주세요."
+            outputHintText = "닉네임은 2글자 이상, 9글자 이하로 작성해주세요."
             isValideNickname = false
             return
         }
-
-        hintText = "사용할 수 있는 닉네임이에요."
+        
+        outputHintText = "사용할 수 있는 닉네임이에요."
         isValideNickname = true
     }
     
@@ -171,57 +122,22 @@ extension MBTISetViewModel {
         return false
     }
     
-    private func checkMBTI() {
-        guard let selectMBTI = mbtiSelect.label.text else { return }
-        let selectMBTIType = MBTIType(rawValue: selectMBTI)
-        guard let selectMBTIType else { return }
-        let partnerMBTI = selectMBTIType.partner.rawValue
+    private func setMBTIPariIndex() {
+        inputMBTIData["selectIndex"] = "\(MBTIType(rawValue: inputMBTIData["selectMBTI"]!)!.index)"
         
-        var pickMbtiIsOn = false
-        var partnerMbtiIsOn = false
-        
-        for item in mbtiButtonList {
-            if selectMBTI == item.label.text! {
-                pickMbtiIsOn = item.isOn
-            }
-            
-            if partnerMBTI == item.label.text! {
-                partnerMbtiIsOn = item.isOn
-            }
-        }
+        // 파트너 mbti 찾기
+        guard let partnerType = MBTIType(rawValue: inputMBTIData["selectMBTI"]!)?.partner else { return }
+        inputMBTIData["partnerIndex"] = "\(partnerType.index)"
+    }
+    
+    private func updateMBTIIsOnData() {
+        let pickMbtiIsOn = Bool(inputMBTIData["selectIsOn"]!)! // 사용자가 선택한 mbti 의 현재 상태
+        let partnerMbtiIsOn = Bool(inputMBTIData["partnerIsOn"]!)! // 사용자가 선택한 짝 mbti 의 현재 상태
         
         let result = getResult(pickMbtiIsOn: pickMbtiIsOn, partnerMbtiIsOn: partnerMbtiIsOn)
-
-        switch selectMBTIType {
-        case .E:
-            outputEResult = result.0
-            outputIResult = result.1
-        case .I:
-            outputEResult = result.1
-            outputIResult = result.0
-            
-        case .S:
-            outputSResult = result.0
-            outputNResult = result.1
-        case .N:
-            outputSResult = result.1
-            outputNResult = result.0
-            
-        case .T:
-            outputTResult = result.0
-            outputFResult = result.1
-        case .F:
-            outputTResult = result.1
-            outputFResult = result.0
-            
-            
-        case .J:
-            outputJResult = result.0
-            outputPResult = result.1
-        case .P:
-            outputJResult = result.1
-            outputPResult = result.0
-        }
+        
+        outputMBTIResult = ((Int(inputMBTIData["selectIndex"]!)!, result.0),
+                            (Int(inputMBTIData["partnerIndex"]!)!, result.1))
     }
     
     // E/I , N/S ... 각 짝끼리 라디오 기능 설정
@@ -243,14 +159,9 @@ extension MBTISetViewModel {
         }
     }
     
-    private func updateMBTICount() {
-        isOnCount = 0
+    private func updateMBTIIsOnCount() {
         
-        for item in mbtiButtonList {
-            isOnCount += item.isOn ? 1 : 0
-        }
-        
-        if isOnCount == 4 {
+        if inputIsOnCount == 4 {
             isValideMBTI = true
         }
         else {
@@ -267,3 +178,4 @@ extension MBTISetViewModel {
         }
     }
 }
+

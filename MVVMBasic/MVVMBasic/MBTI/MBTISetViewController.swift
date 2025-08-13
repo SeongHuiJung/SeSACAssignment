@@ -57,14 +57,14 @@ class MBTISetViewController: BaseViewController {
     private let completeButton = RoundButton(title: "완료", size: 18, background: .buttonDeactivate)
     
     private let MBTIButtons = [
-        MBTIButton(text: "E"),
-        MBTIButton(text: "S"),
-        MBTIButton(text: "T"),
-        MBTIButton(text: "J"),
-        MBTIButton(text: "I"),
-        MBTIButton(text: "N"),
-        MBTIButton(text: "F"),
-        MBTIButton(text: "P"),
+        MBTIButton(text: MBTIType.E.rawValue),
+        MBTIButton(text: MBTIType.S.rawValue),
+        MBTIButton(text: MBTIType.T.rawValue),
+        MBTIButton(text: MBTIType.J.rawValue),
+        MBTIButton(text: MBTIType.I.rawValue),
+        MBTIButton(text: MBTIType.N.rawValue),
+        MBTIButton(text: MBTIType.F.rawValue),
+        MBTIButton(text: MBTIType.P.rawValue)
     ]
     
     private let estjStackView: UIStackView = {
@@ -96,14 +96,12 @@ class MBTISetViewController: BaseViewController {
         super.configureHierarchy()
         [profileSetView, textField, textFieldLine, hintLabel, MBTILable, estjStackView, infpStackView, completeButton].forEach { view.addSubview($0) }
         
-        
         MBTIButtons[0...3].forEach {
             estjStackView.addArrangedSubview($0)
         }
         MBTIButtons[4...7].forEach {
             infpStackView.addArrangedSubview($0)
         }
-        
     }
     
     override func configureConstraint() {
@@ -167,42 +165,25 @@ class MBTISetViewController: BaseViewController {
     // 3. dictionary 으로 변경하기
     private func setViewModelClosure() {
         viewModel.fetchHintText = {
-            self.hintLabel.text = self.viewModel.hintText
+            self.hintLabel.text = self.viewModel.outputHintText
         }
         
-        viewModel.fetchEStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputEResult, index: MBTIType.E.index)
+        viewModel.fetchMBTIButtonStatus = {
+            let selectMBTI = self.viewModel.outputMBTIResult.0
+            let selectMBTIIndex = selectMBTI.0
+            let selectMBTIIsOn = selectMBTI.1
+            
+            let partnerMBTI = self.viewModel.outputMBTIResult.1
+            let partnerMBTIIndex = partnerMBTI.0
+            let partnerMBTIIsOn = partnerMBTI.1
+
+            self.MBTIButtons[selectMBTIIndex].isOn = selectMBTIIsOn
+            self.MBTIButtons[partnerMBTIIndex].isOn = partnerMBTIIsOn
+            
+            self.fetchMBTIUI(result: selectMBTIIsOn, index: selectMBTIIndex)
+            self.fetchMBTIUI(result: partnerMBTIIsOn, index: partnerMBTIIndex)
         }
-        
-        viewModel.fetchIStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputIResult, index: MBTIType.I.index)
-        }
-        
-        viewModel.fetchSStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputSResult, index: MBTIType.S.index)
-        }
-        
-        viewModel.fetchNStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputNResult, index: MBTIType.N.index)
-        }
-        
-        viewModel.fetchTStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputTResult, index: MBTIType.T.index)
-        }
-        
-        viewModel.fetchFStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputFResult, index: MBTIType.F.index)
-        }
-        
-        viewModel.fetchJStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputJResult, index: MBTIType.J.index)
-        }
-        
-        // fetchPStatus.. fetchEStatus.. 다 없애고 fetchMBTIUI 하나로 관리할 수 있지 않을까?
-        viewModel.fetchPStatus = {
-            self.fetchMBTIUI(result: self.viewModel.outputPResult, index: MBTIType.P.index)
-        }
-        
+    
         viewModel.fetchCompleteStatus = {
             if self.viewModel.outputIsValideSetUpProfile {
                 self.completeButton.backgroundColor = .buttonActive
@@ -223,18 +204,23 @@ class MBTISetViewController: BaseViewController {
             self.MBTIButtons[index].backgroundColor = .white
             self.MBTIButtons[index].label.textColor = .gray
         }
-        self.MBTIButtons[index].isOn = result
     }
     
     @objc func textFieldChanged() {
-        print(#function)
         viewModel.nickname = textField.text
     }
     
     @objc func mbtiButtonTapped(_ sender: MBTIButton) {
-        viewModel.mbtiSelect = sender
-        viewModel.mbtiButtonList = MBTIButtons
-        viewModel.checkMBTISignal = () // index 랑 t/f 값 같이 넘겨주기
+        let partnerIndex = MBTIType(rawValue: sender.label.text!)?.partner.index ?? 0
+        viewModel.inputMBTIData = ["selectMBTI" :  sender.label.text!,
+                                   "selectIsOn" : "\(sender.isOn)",
+                                   "partnerIsOn" : "\(MBTIButtons[partnerIndex].isOn)"]
+        
+        viewModel.checkMBTISignal = ()
+        
+        var isOnCount = 0
+        MBTIButtons.forEach { if $0.isOn { isOnCount += 1 } }
+        viewModel.inputIsOnCount = isOnCount
     }
     
     @objc func completeButtonTapped() {
