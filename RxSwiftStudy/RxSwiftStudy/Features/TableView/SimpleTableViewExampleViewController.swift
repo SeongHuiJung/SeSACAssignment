@@ -19,7 +19,7 @@ class SimpleTableViewExampleViewController: UIViewController, UITableViewDelegat
         return view
       }()
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     let items = Observable.just((0..<20).map { "\($0)" })
     
     override func viewDidLoad() {
