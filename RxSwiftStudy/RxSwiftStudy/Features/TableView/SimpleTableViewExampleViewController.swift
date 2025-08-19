@@ -24,7 +24,7 @@ class SimpleTableViewExampleViewController: UIViewController, UITableViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(#function)
+        print(self, #function)
         configure()
         
         items
