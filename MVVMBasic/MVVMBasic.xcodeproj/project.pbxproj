@@ -157,7 +157,7 @@
 				DEVELOPMENT_TEAM = 2EZ5QWFYX2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MVVMBasic/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "정성희";
+				INFOPLIST_KEY_CFBundleDisplayName = "정성희 MBTI";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -191,7 +191,7 @@
 				DEVELOPMENT_TEAM = 2EZ5QWFYX2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MVVMBasic/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "정성희";
+				INFOPLIST_KEY_CFBundleDisplayName = "정성희 MBTI";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

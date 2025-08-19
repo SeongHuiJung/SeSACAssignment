@@ -164,11 +164,11 @@ class MBTISetViewController: BaseViewController {
         }
         
         viewModel.output.mBTIResult.lazyBind { (selectMBTI, partnerMBTI) in
-            let selectMBTIIndex = selectMBTI.0
-            let selectMBTIIsOn = selectMBTI.1
+            let selectMBTIIndex = selectMBTI.index
+            let selectMBTIIsOn = selectMBTI.isOn
 
-            let partnerMBTIIndex = partnerMBTI.0
-            let partnerMBTIIsOn = partnerMBTI.1
+            let partnerMBTIIndex = partnerMBTI.index
+            let partnerMBTIIsOn = partnerMBTI.isOn
 
             self.MBTIButtons[selectMBTIIndex].isOn = selectMBTIIsOn
             self.MBTIButtons[partnerMBTIIndex].isOn = partnerMBTIIsOn

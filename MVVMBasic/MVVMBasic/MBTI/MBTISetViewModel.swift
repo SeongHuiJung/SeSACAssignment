@@ -17,7 +17,7 @@ class MBTISetViewModel {
     
     struct Output {
         var hintText = Observable("")
-        var mBTIResult: Observable<((Int, Bool), (Int, Bool))> = Observable(((0,false),(0,false)))
+        var mBTIResult: Observable<(selectMBTI: (index: Int, isOn: Bool), partnerMBTI: (index: Int, isOn: Bool))> = Observable(((0,false),(0,false)))
         var isValideSetUpProfile = Observable(false)
     }
     

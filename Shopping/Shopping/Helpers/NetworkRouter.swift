@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 
+// URLRequestConvertible
 struct ShopParameter {
     var query: String
     var display: String
