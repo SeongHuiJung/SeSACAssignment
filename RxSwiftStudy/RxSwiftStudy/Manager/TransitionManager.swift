@@ -23,15 +23,17 @@ class TransitionManager {
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
         
-        let page1 = UINavigationController(rootViewController: SimpleTableViewExampleViewController())
-        let page2 = UINavigationController(rootViewController: NumbersViewController())
-        let page3 = UINavigationController(rootViewController: SimpleValidationViewController())
+        let page1 = UINavigationController(rootViewController: HomeworkViewController())
+        let page2 = UINavigationController(rootViewController: SimpleTableViewExampleViewController())
+        let page3 = UINavigationController(rootViewController: NumbersViewController())
+        let page4 = UINavigationController(rootViewController: SimpleValidationViewController())
         
         page1.view.backgroundColor = .white
         page2.view.backgroundColor = .white
         page3.view.backgroundColor = .white
+        page3.view.backgroundColor = .white
         
-        tabBarController.setViewControllers([page1, page2, page3], animated: true)
+        tabBarController.setViewControllers([page1, page2, page3, page4], animated: true)
         
         if let items = tabBarController.tabBar.items {
             items[0].selectedImage = UIImage(systemName: "star.fill")
@@ -42,6 +44,9 @@ class TransitionManager {
             
             items[2].selectedImage = UIImage(systemName: "person.fill")
             items[2].image = UIImage(systemName: "person")
+            
+            items[3].selectedImage = UIImage(systemName: "rectangle.portrait.and.arrow.right.fill")
+            items[3].image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
         }
         
         tabBarAppearance.backgroundColor = .white
