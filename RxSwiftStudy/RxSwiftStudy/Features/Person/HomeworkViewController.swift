@@ -75,11 +75,12 @@ class HomeworkViewController: UIViewController {
     ]
     
     lazy var userList: BehaviorSubject<[Person]> = BehaviorSubject(value: sampleUsers)
+    var tapUserList: BehaviorSubject<[Person]> = BehaviorSubject(value: [])
     
     let tableView = UITableView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     let searchBar = UISearchBar()
-     
+    
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -87,18 +88,32 @@ class HomeworkViewController: UIViewController {
         configure()
         bind()
     }
-     
+    
     private func bind() {
-
-        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { (row, element, cell) in
-            let personData = try! self.userList.value()[row]
-            
+        
+        tapUserList.bind(to: collectionView.rx.items(cellIdentifier: UserCollectionViewCell.identifier, cellType: UserCollectionViewCell.self)) { (row, element, cell) in
             DispatchQueue.main.async {
-                cell.usernameLabel.text = personData.name
-                cell.profileImageView.setDownSamplingImage(url: personData.profileImage)
+                cell.label.text = element.name
             }
         }
         .disposed(by: disposeBag)
+        
+        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { (row, element, cell) in
+            
+            DispatchQueue.main.async {
+                cell.usernameLabel.text = element.name
+                cell.profileImageView.setDownSamplingImage(url: element.profileImage)
+            }
+        }
+        .disposed(by: disposeBag)
+        
+        tableView.rx.modelSelected(Person.self)
+            .bind(with: self) { owner, personData in
+                var preTapUserList = try! owner.tapUserList.value()
+                preTapUserList.append(personData)
+                owner.tapUserList.onNext(preTapUserList.reversed())
+            }
+            .disposed(by: disposeBag)
     }
     
     private func configure() {
@@ -108,7 +123,7 @@ class HomeworkViewController: UIViewController {
         view.addSubview(searchBar)
         
         navigationItem.titleView = searchBar
-         
+        
         collectionView.register(UserCollectionViewCell.self, forCellWithReuseIdentifier: UserCollectionViewCell.identifier)
         collectionView.backgroundColor = .lightGray
         collectionView.snp.makeConstraints { make in
@@ -133,6 +148,6 @@ class HomeworkViewController: UIViewController {
         layout.scrollDirection = .horizontal
         return layout
     }
-
+    
 }
- 
+
