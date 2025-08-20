@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import Kingfisher
 
 struct Person: Identifiable {
     let id = UUID()
@@ -71,10 +74,14 @@ class HomeworkViewController: UIViewController {
         Person(name: "Ann", email: "ann.howard@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/women/25.jpg")
     ]
     
+    lazy var userList: BehaviorSubject<[Person]> = BehaviorSubject(value: sampleUsers)
+    
     let tableView = UITableView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     let searchBar = UISearchBar()
      
+    let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
@@ -82,7 +89,16 @@ class HomeworkViewController: UIViewController {
     }
      
     private func bind() {
-          
+
+        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { (row, element, cell) in
+            let personData = try! self.userList.value()[row]
+            
+            DispatchQueue.main.async {
+                cell.usernameLabel.text = personData.name
+                cell.profileImageView.setDownSamplingImage(url: personData.profileImage)
+            }
+        }
+        .disposed(by: disposeBag)
     }
     
     private func configure() {
