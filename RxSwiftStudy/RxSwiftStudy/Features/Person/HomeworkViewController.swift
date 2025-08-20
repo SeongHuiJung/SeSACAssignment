@@ -90,6 +90,10 @@ class HomeworkViewController: UIViewController {
         bind()
     }
     
+    deinit {
+        print("HomeworkViewController deinit")
+    }
+    
     private func bind() {
         
         tapUserList.bind(to: collectionView.rx.items(cellIdentifier: UserCollectionViewCell.identifier, cellType: UserCollectionViewCell.self)) { (row, element, cell) in
@@ -97,9 +101,18 @@ class HomeworkViewController: UIViewController {
                 cell.label.text = element.name
             }
         }
-        .disposed(by: disposeBag)
-        
-        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { (row, element, cell) in
+
+        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { [weak self] (row, element, cell) in
+            guard let self else { return }
+            
+            cell.detailButton.rx.tap
+                .bind(with: self) { [weak self] owner, _ in
+                    guard let self else { return }
+                    let vc = PersonDetailViewController()
+                    vc.name = element.name
+                    navigationController?.pushViewController(vc, animated: true)
+                }
+                .disposed(by: disposeBag) // TODO: 약한참조로 해줄시 화면 여러번 나오는 버그가 해결되는 이유
             
             DispatchQueue.main.async {
                 cell.usernameLabel.text = element.name
