@@ -76,6 +76,7 @@ class HomeworkViewController: UIViewController {
     
     lazy var userList: BehaviorSubject<[Person]> = BehaviorSubject(value: sampleUsers)
     var tapUserList: BehaviorSubject<[Person]> = BehaviorSubject(value: [])
+    var searchTextReturn = Observable.just("")
     
     let tableView = UITableView()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
@@ -110,8 +111,21 @@ class HomeworkViewController: UIViewController {
         tableView.rx.modelSelected(Person.self)
             .bind(with: self) { owner, personData in
                 var preTapUserList = try! owner.tapUserList.value()
-                preTapUserList.append(personData)
-                owner.tapUserList.onNext(preTapUserList.reversed())
+                preTapUserList.insert(personData, at: 0)
+                owner.tapUserList.onNext(preTapUserList)
+            }
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.searchButtonClicked
+            .bind(with: self) { owner, _ in
+                guard let name = owner.searchBar.text else { return }
+                var preUserList = try! owner.userList.value() // TODO: try! 를 해줘야 하는 이유?
+                
+                let randomImageUrl = owner.sampleUsers.randomElement()?.profileImage ?? "https://randomuser.me/api/portraits/thumb/men/1.jpg"
+                let newPerson = Person(name: name, email: "email", profileImage: randomImageUrl)
+                
+                preUserList.insert(newPerson, at: 0)
+                owner.userList.onNext(preUserList)
             }
             .disposed(by: disposeBag)
     }
@@ -148,6 +162,4 @@ class HomeworkViewController: UIViewController {
         layout.scrollDirection = .horizontal
         return layout
     }
-    
 }
-
