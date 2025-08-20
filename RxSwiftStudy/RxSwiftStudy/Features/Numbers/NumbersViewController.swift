@@ -52,7 +52,7 @@ class NumbersViewController: UIViewController {
             number3.rx.text.orEmpty) { textValue1, textValue2, textValue3 -> Int in
                 // 갑자기 클로저가 나오는 이유? -> 지지고 볶아서 내가 원하는 값으로 return 할 수 있는 것 같다고 추정..?
                 // 이런 목적이 맞다면 어떤 operator 에 대해 사용할 수 있는걸까? 모든 operator 일까?
-                // -> combineLatest 이 그런 특성을 갖고 있기 때문
+                // // TODO: -> combineLatest 이 그런 특성을 갖고 있기 때문?
                 return (Int(textValue1) ?? 0) + (Int(textValue2) ?? 0) + (Int(textValue3) ?? 0)
             }
             .map { $0.description } // 여기까지 Observable

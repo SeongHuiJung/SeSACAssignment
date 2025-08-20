@@ -61,7 +61,9 @@ class SimpleValidationViewController: UIViewController {
     private func addBind() {
         // MARK: observable
         let usernameValid = usernameTextField.rx.text.orEmpty
-            .map { $0.count >= self.minimalUsernameLength } // TODO: operator 에서 발생할 수 있는 순환참조를 해결하는 방법?
+            .withUnretained(self)
+            .map { owner, value in
+                value.count >= owner.minimalUsernameLength } // TODO: operator 에서 발생할 수 있는 순환참조를 해결하는 방법
             .share(replay: 1)
         
         let passwordValid = passwordTextField.rx.text.orEmpty
