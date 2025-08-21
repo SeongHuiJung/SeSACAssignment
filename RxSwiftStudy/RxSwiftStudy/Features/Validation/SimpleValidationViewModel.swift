@@ -23,7 +23,7 @@ class SimpleValidationViewModel {
         let everythingValid: BehaviorRelay<CustomColor>
         let usernameHintText: BehaviorRelay<String>
         let passwordHintText: BehaviorRelay<String>
-        let actionButtonTapped: BehaviorRelay<()>
+        let actionButtonTapped: BehaviorRelay<Bool>
     }
     
     private let minimalUsernameLength = 5
@@ -40,7 +40,7 @@ class SimpleValidationViewModel {
         let everythingValid = BehaviorRelay(value: CustomColor.deactive)
         let usernameHintText = BehaviorRelay(value: "")
         let passwordHintText = BehaviorRelay(value: "")
-        let actionButtonTapped = BehaviorRelay(value: ())
+        let actionButtonTapped = BehaviorRelay(value: false) // 기본값을 false 로 주어 화면 첫 실행시 bool 값 분기처리를 통해 바로 로드되지 않도록 함
         
         input.usernameChanged
             .withUnretained(self)
@@ -75,7 +75,7 @@ class SimpleValidationViewModel {
         // TODO: lazyBind 처럼 탭 했을때만 실행되게 하려면?
         input.actionButtonTapped
             .bind(with: self) { owner, _ in
-                actionButtonTapped.accept(())
+                actionButtonTapped.accept(true)
             }
             .disposed(by: disposeBag)
         

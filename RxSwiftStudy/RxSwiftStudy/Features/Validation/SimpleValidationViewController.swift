@@ -90,9 +90,12 @@ class SimpleValidationViewController: UIViewController {
             .bind(to: passwordValidLabel.rx.text)
             .disposed(by: disposeBag)
         
+        // customObservable 과는 다르게
+        // 값 변경이 먼저 되고(방출/emit), 이 후에 bind 설정(구독)이 되더라도
+        // rxSwift 는 해당 emit 에 대해 반응할 수 있다 -> 화면 진입하자마자 시행되면 안되는 코드를 주의해야할 것 같음
         output.actionButtonTapped
-            .bind(with: self) { owner, _ in
-                owner.showAlert()
+            .bind(with: self) { owner, isTapped in
+                if isTapped { owner.showAlert() }
             }
             .disposed(by: disposeBag)
     }
