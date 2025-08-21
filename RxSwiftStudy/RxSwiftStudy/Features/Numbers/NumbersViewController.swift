@@ -12,6 +12,8 @@ import RxCocoa
 
 class NumbersViewController: UIViewController {
 
+    let viewModel = NumberViewModel()
+    
     let number1 = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
@@ -46,19 +48,19 @@ class NumbersViewController: UIViewController {
     }
     
     private func bind() {
-        Observable.combineLatest(
+        
+        let input = NumberViewModel.Input(
+            valueChaged: Observable.combineLatest(
             number1.rx.text.orEmpty,
             number2.rx.text.orEmpty,
-            number3.rx.text.orEmpty) { textValue1, textValue2, textValue3 -> Int in
-                // 갑자기 클로저가 나오는 이유? -> 지지고 볶아서 내가 원하는 값으로 return 할 수 있는 것 같다고 추정..?
-                // 이런 목적이 맞다면 어떤 operator 에 대해 사용할 수 있는걸까? 모든 operator 일까?
-                // // TODO: -> combineLatest 이 그런 특성을 갖고 있기 때문?
-                return (Int(textValue1) ?? 0) + (Int(textValue2) ?? 0) + (Int(textValue3) ?? 0)
-            }
-            .map { $0.description } // 여기까지 Observable
+            number3.rx.text.orEmpty)
+        )
+        let output = viewModel.transform(input: input)
         
-            // 여기부터 Observer
-            .bind(to: resultLabel.rx.text)
+        output.resultValue
+            .bind(with: self) { owner, result in
+                owner.resultLabel.text = result
+            }
             .disposed(by: disposeBag)
     }
     

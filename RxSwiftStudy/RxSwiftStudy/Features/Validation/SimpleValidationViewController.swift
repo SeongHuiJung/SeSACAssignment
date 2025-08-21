@@ -46,11 +46,10 @@ class SimpleValidationViewController: UIViewController {
         button.setTitle("로그인", for: .normal)
         return button
     }()
-    
-    private let minimalUsernameLength = 5
-    private let minimalPasswordLength = 5
-    
+
     private let disposeBag = DisposeBag()
+    
+    private let viewModel = SimpleValidationViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,36 +58,39 @@ class SimpleValidationViewController: UIViewController {
     }
     
     private func addBind() {
-        // MARK: observable
+        
         let usernameValid = usernameTextField.rx.text.orEmpty
-            .withUnretained(self)
-            .map { owner, value in
-                value.count >= owner.minimalUsernameLength } // TODO: operator 에서 발생할 수 있는 순환참조를 해결하는 방법
-            .share(replay: 1)
-        
         let passwordValid = passwordTextField.rx.text.orEmpty
-            .map { $0.count >= self.minimalPasswordLength }
-            .share(replay: 1)
+        let actionButtonTapped = actionButton.rx.tap
         
-        let everythingValid = Observable.combineLatest(usernameValid, passwordValid) { (username, password) -> UIColor in
-            return username && password ? .systemBlue : .lightGray
-            }
-            .share(replay: 1)
+        let input = SimpleValidationViewModel.Input(usernameChanged: usernameValid, passwordChanged: passwordValid, actionButtonTapped: actionButtonTapped)
         
-        // MARK: observer
-        usernameValid
+        let output = viewModel.transform(input: input)
+        
+        output.usernameValid
             .bind(to: usernameValidLabel.rx.isHidden)
             .disposed(by: disposeBag)
         
-        passwordValid
+        output.passwordValid
             .bind(to: passwordValidLabel.rx.isHidden)
             .disposed(by: disposeBag)
+
         
-        everythingValid
-            .bind(to: actionButton.rx.backgroundColor)
+        output.everythingValid
+            .bind(with: self) { owner, colorType in
+                owner.actionButton.backgroundColor = colorType.color
+            }
             .disposed(by: disposeBag)
         
-        actionButton.rx.tap
+        output.usernameHintText
+            .bind(to: usernameValidLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.passwordHintText
+            .bind(to: passwordValidLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.actionButtonTapped
             .bind(with: self) { owner, _ in
                 owner.showAlert()
             }
@@ -134,8 +136,5 @@ class SimpleValidationViewController: UIViewController {
             make.top.equalTo(passwordValidLabel.snp.bottom).offset(32)
             make.horizontalEdges.equalTo(view.safeAreaInsets).inset(12)
         }
-        
-        usernameValidLabel.text = "이름은 \(minimalUsernameLength)글자 이상 입력해주세요"
-        passwordValidLabel.text = "비밀번호는 \(minimalPasswordLength)글자 이상 입력해주세요"
     }
 }
