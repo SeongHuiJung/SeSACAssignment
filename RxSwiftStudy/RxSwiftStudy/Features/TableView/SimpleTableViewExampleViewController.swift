@@ -28,7 +28,7 @@ class SimpleTableViewExampleViewController: UIViewController, UITableViewDelegat
         configure()
         
         items
-            .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { (row, element, cell) in // TODO: 왜 자동으로 클로저가 안나오지?
+            .bind(to: tableView.rx.items(cellIdentifier: SimpleTableViewCell.identifier, cellType: SimpleTableViewCell.self)) { (row, element, cell) in
                 cell.label.text = "\(element) @ row \(row)"
             }
             .disposed(by: disposeBag)

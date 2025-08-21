@@ -74,8 +74,8 @@ class HomeworkViewController: UIViewController {
         Person(name: "Ann", email: "ann.howard@example.com", profileImage: "https://randomuser.me/api/portraits/thumb/women/25.jpg")
     ]
     
-    lazy var userList: BehaviorSubject<[Person]> = BehaviorSubject(value: sampleUsers)
-    var tapUserList: BehaviorSubject<[Person]> = BehaviorSubject(value: [])
+    lazy var userList: BehaviorRelay<[Person]> = BehaviorRelay(value: sampleUsers)
+    var tapUserList: BehaviorRelay<[Person]> = BehaviorRelay(value: [])
     var searchTextReturn = Observable.just("")
     
     let tableView = UITableView()
@@ -101,18 +101,18 @@ class HomeworkViewController: UIViewController {
                 cell.label.text = element.name
             }
         }
+        .disposed(by: disposeBag)
 
-        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { [weak self] (row, element, cell) in
-            guard let self else { return }
+        userList.bind(to: tableView.rx.items(cellIdentifier: PersonTableViewCell.identifier, cellType: PersonTableViewCell.self)) { (row, element, cell) in
             
             cell.detailButton.rx.tap
                 .bind(with: self) { [weak self] owner, _ in
                     guard let self else { return }
                     let vc = PersonDetailViewController()
-                    vc.name = element.name
+                    vc.navigationItem.title = element.name
                     navigationController?.pushViewController(vc, animated: true)
                 }
-                .disposed(by: disposeBag) // TODO: 약한참조로 해줄시 화면 여러번 나오는 버그가 해결되는 이유
+                .disposed(by: cell.disposeBag)
             
             DispatchQueue.main.async {
                 cell.usernameLabel.text = element.name
@@ -123,22 +123,22 @@ class HomeworkViewController: UIViewController {
         
         tableView.rx.modelSelected(Person.self)
             .bind(with: self) { owner, personData in
-                var preTapUserList = try! owner.tapUserList.value()
+                var preTapUserList = owner.tapUserList.value
                 preTapUserList.insert(personData, at: 0)
-                owner.tapUserList.onNext(preTapUserList)
+                owner.tapUserList.accept(preTapUserList)
             }
             .disposed(by: disposeBag)
         
         searchBar.rx.searchButtonClicked
             .bind(with: self) { owner, _ in
                 guard let name = owner.searchBar.text else { return }
-                var preUserList = try! owner.userList.value() // TODO: try! 를 해줘야 하는 이유?
+                var preUserList = owner.userList.value
                 
                 let randomImageUrl = owner.sampleUsers.randomElement()?.profileImage ?? "https://randomuser.me/api/portraits/thumb/men/1.jpg"
                 let newPerson = Person(name: name, email: "email", profileImage: randomImageUrl)
                 
                 preUserList.insert(newPerson, at: 0)
-                owner.userList.onNext(preUserList)
+                owner.userList.accept(preUserList)
             }
             .disposed(by: disposeBag)
     }
