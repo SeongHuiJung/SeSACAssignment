@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: type enum 으로 빼주기
-
 class UserDefaultsManager {
     
     @UserDefault(key: "riceCount", defaultValue: 0)
@@ -27,7 +25,7 @@ class UserDefaultsManager {
 @propertyWrapper
 struct UserDefault<T> {
     let key: String
-    let defaultValue: T // 값이 없을때 뭐가 나오게 할것인가
+    let defaultValue: T
     
     var wrappedValue: T {
         get { UserDefaults.standard.object(forKey: key) as? T ?? defaultValue }
