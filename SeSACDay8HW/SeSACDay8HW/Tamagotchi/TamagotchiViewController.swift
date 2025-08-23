@@ -26,33 +26,36 @@ final class TamagotchiViewController: BaseViewController {
     }()
     private let tamagotchiLabel = CustomUILabel(text: "test", alignment: .center, size: 16, weight: .semibold, textColor: .primary)
     
-    private let stateLabel = CustomUILabel(text: "test", alignment: .center, size: 15, weight: .regular, textColor: .primary)
+    private let statusLabel = CustomUILabel(text: "", alignment: .left, size: 15, weight: .regular, textColor: .primary, numberOfLines: 1)
     
-    private let riceTextField = CustomTextField(text: "rice", placeholder: "냠냠", size: 15, alignment: .center, textColor: .primary)
-    private let waterTextField = CustomTextField(text: "water", placeholder: "물물", size: 15, alignment: .center, textColor: .primary)
+    private let riceTextField = CustomTextField(text: "", placeholder: "냠냠", size: 15, alignment: .center, textColor: .primary)
+    private let waterTextField = CustomTextField(text: "", placeholder: "물물", size: 15, alignment: .center, textColor: .primary)
     
     private let lineView1 = {
         let view = UIView()
         view.backgroundColor = .primary
         return view
     }()
+    
     private let lineView2 = {
         let view = UIView()
         view.backgroundColor = .primary
         return view
     }()
     
-    private let riceButton = IconButton(title: "test", size: 16, textColor: .primary, iconName: "fork.knife.circle")
-    private let waterButton = IconButton(title: "test", size: 16, textColor: .primary, iconName: "drop.circle")
+    private let riceButton = IconButton(title: "밥먹기", size: 16, textColor: .primary, iconName: "fork.knife.circle")
+    private let waterButton = IconButton(title: "물먹기", size: 16, textColor: .primary, iconName: "drop.circle")
+    
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "대장님의 다마고치"
+        bind()
     }
     
     override func configureHierarchy() {
         super.configureHierarchy()
-        [bubbleImage, tamagotchiSpeechLabel, tamagotchiImage, tamagotchiLabel, stateLabel, riceTextField, waterTextField, lineView1, lineView2, riceButton, waterButton].forEach { view.addSubview($0) }
+        [bubbleImage, tamagotchiSpeechLabel, tamagotchiImage, tamagotchiLabel, statusLabel, riceTextField, waterTextField, lineView1, lineView2, riceButton, waterButton].forEach { view.addSubview($0) }
     }
     
     override func configureLayout() {
@@ -72,12 +75,14 @@ final class TamagotchiViewController: BaseViewController {
             make.centerX.equalToSuperview()
             make.top.equalTo(tamagotchiImage.snp.bottom).offset(10)
         }
-        stateLabel.snp.makeConstraints { make in
+        
+        statusLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(tamagotchiLabel.snp.bottom).offset(10)
+            make.top.equalTo(tamagotchiLabel.snp.bottom).offset(12)
         }
+        
         riceTextField.snp.makeConstraints { make in
-            make.top.equalTo(stateLabel.snp.bottom).offset(28)
+            make.top.equalTo(statusLabel.snp.bottom).offset(28)
             make.left.equalTo(view.safeAreaLayoutGuide).offset(80)
             make.width.equalTo(160)
             make.height.equalTo(40)
@@ -115,12 +120,20 @@ final class TamagotchiViewController: BaseViewController {
 
     override func configureView() {
         super.configureView()
+        navigationItem.title = "대장님의 다마고치"
     }
 }
 
 extension TamagotchiViewController {
     func bind() {
+       
+        let input = TamagotchiViewModel.Input(riceButtonTapped: riceButton.rx.tap, addRiceAmount: riceTextField.rx.text.orEmpty, waterButtonTapped: waterButton.rx.tap, addWaterAmount: waterTextField.rx.text.orEmpty)
+        let output = viewModel.transform(input: input)
         
-        let input = TamagotchiViewModel.Input()
+        output.statusResult
+            .bind(with: self) { owner, statusText in
+                owner.statusLabel.text = statusText
+            }
+            .disposed(by: disposeBag)
     }
 }
