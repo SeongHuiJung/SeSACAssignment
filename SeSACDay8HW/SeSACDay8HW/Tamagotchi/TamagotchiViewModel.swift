@@ -20,27 +20,26 @@ final class TamagotchiViewModel {
     
     struct Output {
         let statusResult: BehaviorRelay<String>
+        let tamagotchiMessage: BehaviorRelay<String>
     }
     
     init() {}
+    
+    private let tamagotchiMessageList = TamagotchiData().messages
     
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         let statusResult: BehaviorRelay<String> = BehaviorRelay(value: getUpdateStatusText())
+        let tamagotchiMessage: BehaviorRelay<String> = BehaviorRelay(value: tamagotchiMessageList.randomElement() ?? "")
 
         input.riceButtonTapped
             .withLatestFrom(input.addRiceAmount)
             .bind(with: self) { owner, addRiceAmount in
-                if addRiceAmount == "" {
-                    UserDefaultsManager.riceCount += 1
+                if addRiceAmount == "" || (Int(addRiceAmount) != nil && Int(addRiceAmount)! < 100) {
+                    UserDefaultsManager.riceCount += Int(addRiceAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                }
-                else if let addRiceAmount = Int(addRiceAmount) {
-                    if addRiceAmount < 100 {
-                        UserDefaultsManager.riceCount += addRiceAmount
-                        statusResult.accept(owner.getUpdateStatusText())
-                    }
+                    tamagotchiMessage.accept(owner.tamagotchiMessageList.randomElement() ?? "")
                 }
             }
             .disposed(by: disposeBag)
@@ -48,20 +47,16 @@ final class TamagotchiViewModel {
         input.waterButtonTapped
             .withLatestFrom(input.addWaterAmount)
             .bind(with: self) { owner, addWaterAmount in
-                if addWaterAmount == "" {
-                    UserDefaultsManager.waterCount += 1
+                
+                if addWaterAmount == "" || (Int(addWaterAmount) != nil && Int(addWaterAmount)! < 50) {
+                    UserDefaultsManager.waterCount += Int(addWaterAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                }
-                else if let addWaterAmount = Int(addWaterAmount) {
-                    if addWaterAmount < 50 {
-                        UserDefaultsManager.waterCount += addWaterAmount
-                        statusResult.accept(owner.getUpdateStatusText())
-                    }
+                    tamagotchiMessage.accept(owner.tamagotchiMessageList.randomElement() ?? "")
                 }
             }
             .disposed(by: disposeBag)
 
-        return Output(statusResult: statusResult)
+        return Output(statusResult: statusResult, tamagotchiMessage: tamagotchiMessage)
     }
     
     private func getUpdatedLevel(riceCount: Int, waterCount: Int) -> Int {

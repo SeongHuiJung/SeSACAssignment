@@ -131,9 +131,11 @@ extension TamagotchiViewController {
         let output = viewModel.transform(input: input)
         
         output.statusResult
-            .bind(with: self) { owner, statusText in
-                owner.statusLabel.text = statusText
-            }
+            .bind(to: statusLabel.rx.text)
+            .disposed(by: disposeBag)
+
+        output.tamagotchiMessage
+            .bind(to: tamagotchiSpeechLabel.rx.text)
             .disposed(by: disposeBag)
     }
 }
