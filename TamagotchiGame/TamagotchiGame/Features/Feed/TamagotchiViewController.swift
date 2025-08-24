@@ -125,6 +125,9 @@ final class TamagotchiViewController: BaseViewController {
     override func configureView() {
         super.configureView()
         navigationItem.title = "\(UserDefaultsManager.userName)님의 다마고치"
+       
+        let infoButton = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(infoButtonTapped))
+        navigationItem.rightBarButtonItem = infoButton
     }
 }
 
@@ -152,5 +155,9 @@ extension TamagotchiViewController {
                 owner.tamagotchiImage.image = UIImage(named: imageName)
             }
             .disposed(by: disposeBag)
+    }
+    
+    @objc private func infoButtonTapped() {
+        navigationController?.pushViewController(SettingViewController(), animated: true)
     }
 }
