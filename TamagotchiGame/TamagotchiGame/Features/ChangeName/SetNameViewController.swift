@@ -52,7 +52,6 @@ class SetNameViewController: BaseViewController {
         navigationItem.title = "대장님 이름 정하기"
         navigationItem.rightBarButtonItem = barButton
     }
-
 }
 
 // MARK: - Bind

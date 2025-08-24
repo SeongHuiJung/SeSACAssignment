@@ -55,9 +55,10 @@ enum TamagotchiType {
 
 class OnboardingViewController: BaseViewController {
 
+    var startButtonTitle = "시작하기"
     private let viewModel = OnboardingViewModel()
-    private var selectedTamagotchiType = TamagotchiType.none
-    private let tamagotchiCollectionView = {
+    
+    let tamagotchiCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayout(scrollDirection: .vertical, cellCount: 3, gap: (20, 20), edgeInsets: (20, 32), standardTotalSize: UIScreen.main.bounds.width, fixCellSize: 160))
         collectionView.register(OnboardingCollectionViewCell.self, forCellWithReuseIdentifier: OnboardingCollectionViewCell.identifier)
         collectionView.backgroundColor = .clear
@@ -79,6 +80,10 @@ class OnboardingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
+    }
+    
+    deinit {
+        print(self, "deinit")
     }
     
     override func configureHierarchy() {
@@ -110,6 +115,7 @@ extension OnboardingViewController {
             .bind(with: self) { owner, type in
                 let viewController = SelectTamagotchiViewController()
                 viewController.tamagotchiType.accept(type) // TODO: 여기서는 type.. 넣는 타입이 다르다?
+                viewController.startButton.setTitle(owner.startButtonTitle, for: .normal)
                 viewController.modalPresentationStyle = .overCurrentContext
                 owner.present(viewController, animated: false)
             }

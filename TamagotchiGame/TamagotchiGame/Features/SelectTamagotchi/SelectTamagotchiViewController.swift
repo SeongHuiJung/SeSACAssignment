@@ -65,9 +65,11 @@ class SelectTamagotchiViewController: BaseViewController {
         return button
     }()
     
-    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        print("memory",self)
+//        print(#function)
         bind()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
     }

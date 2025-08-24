@@ -48,6 +48,7 @@ class SettingViewController: BaseViewController {
     override func configureView() {
         super.configureView()
         navigationItem.title = "설정"
+        navigationItem.backButtonTitle = "설정"
         
         nameSetButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -57,7 +58,7 @@ class SettingViewController: BaseViewController {
         
         changeTamagotchiButton.rx.tap
             .bind(with: self) { owner, _ in
-//                owner.navigationController?.pushViewController(SetNameViewController(), animated: true)
+                owner.navigationController?.pushViewController(ChangeTamagotchiViewController(), animated: true)
             }
             .disposed(by: disposeBag)
         
