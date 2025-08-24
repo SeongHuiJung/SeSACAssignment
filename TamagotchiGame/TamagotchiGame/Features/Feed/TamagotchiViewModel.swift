@@ -47,6 +47,7 @@ final class TamagotchiViewModel {
                     statusResult.accept(owner.getUpdateStatusText())
                     tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
                     tamagotchiMessage.accept(owner.getMessage())
+                    UserDefaultsManager.tamagotchiLevel = owner.getLevel()
                 }
             }
             .disposed(by: disposeBag)
@@ -60,6 +61,7 @@ final class TamagotchiViewModel {
                     statusResult.accept(owner.getUpdateStatusText())
                     tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
                     tamagotchiMessage.accept(owner.getMessage())
+                    UserDefaultsManager.tamagotchiLevel = owner.getLevel()
                 }
             }
             .disposed(by: disposeBag)

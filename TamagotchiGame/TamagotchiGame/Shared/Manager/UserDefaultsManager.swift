@@ -20,6 +20,12 @@ class UserDefaultsManager {
     
     @UserDefault(key: "userName", defaultValue: "대장")
     static var userName: String
+    
+    @UserDefault(key: "tamagotchiTypeIndex", defaultValue: 0)
+    static var tamagotchiTypeIndex: Int
+    
+    @UserDefault(key: "tamagotchiLevel", defaultValue: 0)
+    static var tamagotchiLevel: Int
 }
 
 @propertyWrapper

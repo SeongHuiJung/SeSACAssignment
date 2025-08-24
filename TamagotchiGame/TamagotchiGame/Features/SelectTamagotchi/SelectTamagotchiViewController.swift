@@ -66,10 +66,7 @@ class SelectTamagotchiViewController: BaseViewController {
     }()
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        print("memory",self)
-//        print(#function)
         bind()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
     }
@@ -150,7 +147,13 @@ extension SelectTamagotchiViewController {
             .bind(with: self) { owner, _ in
                 let viewController = TamagotchiViewController()
                 viewController.tamagotchiType.accept(owner.tamagotchiType.value) // TODO: 여기서는 owner.tamagotchiType.value
+                print(owner.tamagotchiType.value)
+                UserDefaultsManager.tamagotchiTypeIndex = owner.tamagotchiType.value.index
                 
+                if UserDefaultsManager.tamagotchiLevel == 0 {
+                    UserDefaultsManager.tamagotchiLevel = 1
+                }
+
                 let nav = UINavigationController(rootViewController: viewController)
                 self.view.window?.rootViewController = nav
                 self.view.window?.makeKeyAndVisible()
