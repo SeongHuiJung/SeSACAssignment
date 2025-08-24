@@ -16,9 +16,7 @@ class IconButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
+
     init(title: String, size: CGFloat, textColor: UIColor, iconName: String) {
         super.init(frame: .zero)
         

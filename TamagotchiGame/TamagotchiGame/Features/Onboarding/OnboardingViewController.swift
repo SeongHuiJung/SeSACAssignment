@@ -10,11 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-enum TamagotchiType: Int {
-    case tingling = 1
-    case smile
-    case twinkle
-    case none = -1
+enum TamagotchiType {
+    case tingling(level: Int)
+    case smile(level: Int)
+    case twinkle(level: Int)
+    case none
     
     var krName: String {
         switch self {
@@ -24,11 +24,39 @@ enum TamagotchiType: Int {
         case .none: "준비중이에요"
         }
     }
+    
+    var index: Int {
+        switch self {
+        case .tingling: 1
+        case .smile: 2
+        case .twinkle: 3
+        case .none: -1
+        }
+    }
+    
+    var imageName: String {
+        switch self {
+        case .tingling(let level),
+                .smile(let level),
+                .twinkle(let level): "\(self.index)-\(level)"
+        case .none: "noImage"
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .tingling: "저는 따끔따끔 다마고치에요\n만질때는 따끔따끔하니 조심해주세요"
+        case .smile: "저는 방실방실 다마고치에요\n웃게 만들어드릴게요~~"
+        case .twinkle: "저는 반짝반짝 다마고치에요\n반짝반짝 빛나용"
+        case .none: "준비중이에요"
+        }
+    }
 }
 
 class OnboardingViewController: BaseViewController {
 
     private let viewModel = OnboardingViewModel()
+    private var selectedTamagotchiType = TamagotchiType.none
     private let tamagotchiCollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionView.getLayout(scrollDirection: .vertical, cellCount: 3, gap: (20, 20), edgeInsets: (20, 32), standardTotalSize: UIScreen.main.bounds.width, fixCellSize: 160))
         collectionView.register(OnboardingCollectionViewCell.self, forCellWithReuseIdentifier: OnboardingCollectionViewCell.identifier)
@@ -38,9 +66,9 @@ class OnboardingViewController: BaseViewController {
 
     private let tamagotchiListData = {
         var list = [TamagotchiType](repeating: TamagotchiType.none, count: 24)
-        let existData = [TamagotchiType(rawValue: 1)!,
-                    TamagotchiType(rawValue: 2)!,
-                    TamagotchiType(rawValue: 3)!]
+        let existData = [TamagotchiType.tingling(level: 6),
+                         TamagotchiType.smile(level: 6),
+                         TamagotchiType.twinkle(level: 6)]
         list.insert(contentsOf: existData, at: 0)
         return list
     }()
@@ -77,5 +105,14 @@ extension OnboardingViewController {
             cell.configureData(tamagotchiType: value)
         }
         .disposed(by: disposeBag)
+        
+        tamagotchiCollectionView.rx.modelSelected(TamagotchiType.self)
+            .bind(with: self) { owner, type in
+                let viewController = SelectTamagotchiViewController()
+                viewController.tamagotchiType.accept(type) // TODO: 여기서는 type.. 넣는 타입이 다르다?
+                viewController.modalPresentationStyle = .overCurrentContext
+                owner.present(viewController, animated: false)
+            }
+            .disposed(by: disposeBag)
     }
 }

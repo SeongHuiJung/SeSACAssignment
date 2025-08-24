@@ -7,16 +7,18 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class OnboardingCollectionViewCell: BaseCollectionViewCell {
     static let identifier = "OnboardingCollectionViewCell"
-    
-    let image = {
+
+    private let image = {
         let image = UIImageView()
         image.backgroundColor = .clear
         return image
     }()
-    let namePaddingView = {
+    private let namePaddingView = {
         let view = UIView()
         view.backgroundColor = .second
         view.layer.borderColor = UIColor.primary.cgColor
@@ -25,7 +27,7 @@ class OnboardingCollectionViewCell: BaseCollectionViewCell {
         view.clipsToBounds = true
         return view
     }()
-    let name = CustomUILabel(text: "test", alignment: .center, size: 13, textColor: .primary)
+    private let name = CustomUILabel(text: "test", alignment: .center, size: 13, textColor: .primary)
     
     override func configureHierarchy() {
         super.configureHierarchy()
@@ -49,6 +51,11 @@ class OnboardingCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+    }
+    
     override func configureView() {
         super.configureView()
     }
@@ -56,9 +63,7 @@ class OnboardingCollectionViewCell: BaseCollectionViewCell {
 
 extension OnboardingCollectionViewCell {
     func configureData(tamagotchiType: TamagotchiType) {
-        if tamagotchiType == .none { image.image = UIImage(named: "noImage") }
-        else { image.image = UIImage(named: "\(tamagotchiType.rawValue)-6") }
-        
+        image.image = UIImage(named: tamagotchiType.imageName)
         name.text = tamagotchiType.krName
     }
 }
