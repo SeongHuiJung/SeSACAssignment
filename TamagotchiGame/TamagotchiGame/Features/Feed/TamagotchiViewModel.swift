@@ -35,21 +35,18 @@ final class TamagotchiViewModel {
     
     func transform(input: Input) -> Output {
         let statusResult: BehaviorRelay<String> = BehaviorRelay(value: getUpdateStatusText())
-        let tamagotchiMessage: BehaviorRelay<String> = BehaviorRelay(value: tamagotchiMessageList.randomElement() ?? "")
+        let tamagotchiMessage: BehaviorRelay<String> = BehaviorRelay(value: getMessage())
         let tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
-        let tamagotchiImage: BehaviorRelay<String> = BehaviorRelay(value: "")
-        
+        let tamagotchiImage: BehaviorRelay<String> = BehaviorRelay(value: getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: getLevel()))
+
         input.riceButtonTapped
             .withLatestFrom(input.addRiceAmount)
             .bind(with: self) { owner, addRiceAmount in
                 if addRiceAmount == "" || (Int(addRiceAmount) != nil && Int(addRiceAmount)! < 100) {
                     UserDefaultsManager.riceCount += Int(addRiceAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                    tamagotchiImage.accept("\(input.tamagotchiType.value.index)-\(owner.getLevel())")
-                    
-                    var message = owner.tamagotchiMessageList.randomElement() ?? ""
-                    message = message.replacingOccurrences(of: "userName", with: UserDefaultsManager.userName)
-                    tamagotchiMessage.accept(message)
+                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
+                    tamagotchiMessage.accept(owner.getMessage())
                 }
             }
             .disposed(by: disposeBag)
@@ -61,11 +58,8 @@ final class TamagotchiViewModel {
                 if addWaterAmount == "" || (Int(addWaterAmount) != nil && Int(addWaterAmount)! < 50) {
                     UserDefaultsManager.waterCount += Int(addWaterAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                    tamagotchiImage.accept("\(input.tamagotchiType.value.index)-\(owner.getLevel())")
-                    
-                    var message = owner.tamagotchiMessageList.randomElement() ?? ""
-                    message = message.replacingOccurrences(of: "userName", with: UserDefaultsManager.userName)
-                    tamagotchiMessage.accept(message)
+                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
+                    tamagotchiMessage.accept(owner.getMessage())
                 }
             }
             .disposed(by: disposeBag)
@@ -97,5 +91,15 @@ final class TamagotchiViewModel {
         let waterCount = UserDefaultsManager.waterCount
         let level = getUpdatedLevel(riceCount: riceCount, waterCount: waterCount)
         return level
+    }
+    
+    private func getMessage() -> String {
+        var message = tamagotchiMessageList.randomElement() ?? ""
+        message = message.replacingOccurrences(of: "userName", with: UserDefaultsManager.userName)
+        return message
+    }
+    
+    private func getImageName(tamagotchiTypeIndex: Int, level: Int) -> String {
+        return "\(tamagotchiTypeIndex)-\(level)"
     }
 }

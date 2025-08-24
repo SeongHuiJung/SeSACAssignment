@@ -13,48 +13,45 @@ import RxCocoa
 final class TamagotchiViewController: BaseViewController {
     
     var tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
-    
     private let viewModel = TamagotchiViewModel()
+    private let disposeBag = DisposeBag()
+    
     
     private let bubbleImage = {
         let image = UIImageView(image: UIImage(named: "bubble"))
         return image
     }()
-    
     private let tamagotchiSpeechLabel = CustomUILabel(text: "", alignment: .center, size: 15, weight: .semibold, textColor: .primary)
     private let tamagotchiImage = {
-        let image = UIImageView(image: UIImage(named: "1-1"))
+        let image = UIImageView(image: UIImage(named: ""))
         return image
     }()
     private let tamagotchiLabel = CustomUILabel(text: "test", alignment: .center, size: 16, weight: .semibold, textColor: .primary)
-    
     private let statusLabel = CustomUILabel(text: "", alignment: .left, size: 15, weight: .regular, textColor: .primary, numberOfLines: 1)
-    
     private let riceTextField = CustomTextField(text: "", placeholder: "냠냠", size: 15, alignment: .center, textColor: .primary)
     private let waterTextField = CustomTextField(text: "", placeholder: "물물", size: 15, alignment: .center, textColor: .primary)
-    
     private let lineView1 = {
         let view = UIView()
         view.backgroundColor = .primary
         return view
     }()
-    
     private let lineView2 = {
         let view = UIView()
         view.backgroundColor = .primary
         return view
     }()
-    
     private let riceButton = IconButton(title: "밥먹기", size: 16, textColor: .primary, iconName: "fork.knife.circle")
     private let waterButton = IconButton(title: "물먹기", size: 16, textColor: .primary, iconName: "drop.circle")
-    
-    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationItem.title = "\(UserDefaultsManager.userName)님의 다마고치"
+    }
+
     override func configureHierarchy() {
         super.configureHierarchy()
         [bubbleImage, tamagotchiSpeechLabel, tamagotchiImage, tamagotchiLabel, statusLabel, riceTextField, waterTextField, lineView1, lineView2, riceButton, waterButton].forEach { view.addSubview($0) }
@@ -124,8 +121,6 @@ final class TamagotchiViewController: BaseViewController {
 
     override func configureView() {
         super.configureView()
-        navigationItem.title = "\(UserDefaultsManager.userName)님의 다마고치"
-       
         let infoButton = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: self, action: #selector(infoButtonTapped))
         navigationItem.rightBarButtonItem = infoButton
     }
