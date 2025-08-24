@@ -14,10 +14,7 @@ class UserDefaultsManager {
     
     @UserDefault(key: "waterCount", defaultValue: 0)
     static var waterCount: Int
-    
-    @UserDefault(key: "isFirstOpenApp", defaultValue: false)
-    static var isFirstOpenApp: Bool
-    
+
     @UserDefault(key: "userName", defaultValue: "대장")
     static var userName: String
     

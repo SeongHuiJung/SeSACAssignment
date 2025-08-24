@@ -64,7 +64,25 @@ class SettingViewController: BaseViewController {
         
         resetButton.rx.tap
             .bind(with: self) { owner, _ in
+                let alert = UIAlertController(title: "데이터 초기화", message: "처음부터 다시 시작하시겠어요?", preferredStyle: .alert)
+
+                let ok = UIAlertAction(title: "초기화하기", style: .destructive) { _ in
+                    UserDefaultsManager.riceCount = 0
+                    UserDefaultsManager.waterCount = 0
+                    UserDefaultsManager.userName = "대장"
+                    UserDefaultsManager.tamagotchiTypeIndex = 0
+                    UserDefaultsManager.tamagotchiLevel = 0
+                    
+                    let nav = UINavigationController(rootViewController: OnboardingViewController())
+                    self.view.window?.rootViewController = nav
+                    self.view.window?.makeKeyAndVisible()
+                }
+                let cancel = UIAlertAction(title: "취소", style: .cancel)
                 
+                alert.addAction(cancel)
+                alert.addAction(ok)
+
+                owner.self.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }
