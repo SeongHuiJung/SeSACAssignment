@@ -139,15 +139,15 @@ extension SelectTamagotchiViewController {
         
         cancelButton.rx.tap
             .bind(with: self) { owner, _ in
-                self.dismiss(animated: false)
+                owner.dismiss(animated: false)
             }
             .disposed(by: disposeBag)
         
         startButton.rx.tap
             .bind(with: self) { owner, _ in
 //                let viewController = TamagotchiViewController(viewModel: TamagotchiViewModel(tamagotchiType: <#T##TamagotchiType#>))
-                let viewController = TamagotchiViewController()
-                viewController.tamagotchiType.accept(owner.tamagotchiType.value) // TODO: 여기서는 owner.tamagotchiType.value
+//                let viewController = TamagotchiViewController()
+//                viewController.tamagotchiType.accept() // TODO: 여기서는 owner.tamagotchiType.value
                 print(owner.tamagotchiType.value)
                 UserDefaultsManager.tamagotchiTypeIndex = owner.tamagotchiType.value.index
                 
@@ -155,9 +155,8 @@ extension SelectTamagotchiViewController {
                     UserDefaultsManager.tamagotchiLevel = 1
                 }
 
-                let nav = UINavigationController(rootViewController: viewController)
-                self.view.window?.rootViewController = nav
-                self.view.window?.makeKeyAndVisible()
+                owner.view.window?.rootViewController = TransitionManager.shared.getMainTabViewController(reSelect: true, tamagotchiType: owner.tamagotchiType.value)
+                owner.view.window?.makeKeyAndVisible()
             }
             .disposed(by: disposeBag)
     }

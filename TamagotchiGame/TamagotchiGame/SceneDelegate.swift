@@ -15,26 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-
-        if UserDefaultsManager.tamagotchiTypeIndex == 0 {
-            let nav = UINavigationController(rootViewController: OnboardingViewController())
-            window?.rootViewController = nav
-            window?.makeKeyAndVisible()
-        }
-        else {
-            let viewController = TamagotchiViewController()
-            var type = TamagotchiType.none
-            switch UserDefaultsManager.tamagotchiTypeIndex {
-            case 1 : type = .tingling(level: UserDefaultsManager.tamagotchiLevel)
-            case 2 : type = .smile(level: UserDefaultsManager.tamagotchiLevel)
-            case 3 : type = .twinkle(level: UserDefaultsManager.tamagotchiLevel)
-            default: break
-            }
-            viewController.tamagotchiType.accept(type)
-            let nav = UINavigationController(rootViewController: viewController)
-            window?.rootViewController = nav
-            window?.makeKeyAndVisible()
-        }
+        window?.rootViewController = TransitionManager.shared.getMainTabViewController(reSelect: false, tamagotchiType: TamagotchiType.none)
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -64,7 +46,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 

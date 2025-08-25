@@ -72,17 +72,16 @@ class SettingViewController: BaseViewController {
                     UserDefaultsManager.userName = "대장"
                     UserDefaultsManager.tamagotchiTypeIndex = 0
                     UserDefaultsManager.tamagotchiLevel = 0
-                    
-                    let nav = UINavigationController(rootViewController: OnboardingViewController())
-                    self.view.window?.rootViewController = nav
-                    self.view.window?.makeKeyAndVisible()
+
+                    owner.view.window?.rootViewController = TransitionManager.shared.getMainTabViewController(reSelect: false, tamagotchiType: TamagotchiType.none)
+                    owner.view.window?.makeKeyAndVisible()
                 }
                 let cancel = UIAlertAction(title: "취소", style: .cancel)
                 
                 alert.addAction(cancel)
                 alert.addAction(ok)
 
-                owner.self.present(alert, animated: true)
+                owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }
