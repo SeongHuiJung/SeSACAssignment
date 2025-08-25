@@ -11,7 +11,7 @@ import RxCocoa
 
 final class TamagotchiViewModel {
     struct Input {
-        let tamagotchiType: BehaviorRelay<TamagotchiType>
+        let tamagotchiType: BehaviorRelay<TamagotchiType> // review: 없애기
         
         let riceButtonTapped: ControlEvent<Void>
         let addRiceAmount: ControlProperty<String>
@@ -28,6 +28,12 @@ final class TamagotchiViewModel {
     }
     
     init() {}
+    
+//    private let tamagotchiType: BehaviorRelay<TamagotchiType>
+//    
+//    init(tamagotchiType: TamagotchiType) {
+//        self.tamagotchiType = BehaviorRelay(value: tamagotchiType)
+//    }
     
     private let tamagotchiMessageList = TamagotchiData().messages
     

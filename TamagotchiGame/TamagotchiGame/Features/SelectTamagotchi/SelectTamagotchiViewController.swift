@@ -145,6 +145,7 @@ extension SelectTamagotchiViewController {
         
         startButton.rx.tap
             .bind(with: self) { owner, _ in
+//                let viewController = TamagotchiViewController(viewModel: TamagotchiViewModel(tamagotchiType: <#T##TamagotchiType#>))
                 let viewController = TamagotchiViewController()
                 viewController.tamagotchiType.accept(owner.tamagotchiType.value) // TODO: 여기서는 owner.tamagotchiType.value
                 print(owner.tamagotchiType.value)

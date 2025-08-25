@@ -14,6 +14,7 @@ final class TamagotchiViewController: BaseViewController {
     
     var tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
     private let viewModel = TamagotchiViewModel()
+//    private let viewModel: TamagotchiViewModel()
     private let disposeBag = DisposeBag()
     
     
@@ -42,6 +43,14 @@ final class TamagotchiViewController: BaseViewController {
     }()
     private let riceButton = IconButton(title: "밥먹기", size: 16, textColor: .primary, iconName: "fork.knife.circle")
     private let waterButton = IconButton(title: "물먹기", size: 16, textColor: .primary, iconName: "drop.circle")
+    
+//    init(viewModel: TamagotchiViewModel) {
+//        self.viewModel = viewModel
+//    }
+//    
+//    @MainActor required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
