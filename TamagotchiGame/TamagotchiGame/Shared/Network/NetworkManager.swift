@@ -14,14 +14,14 @@ enum CommonError: Error {
 }
 
 final class NetworkManager {
-    static func callRequest<T>(url: String, type: T.Type) -> Observable<T> {
+    static func callRequest<T: Decodable>(router: NetworkRouter, type: T.Type) -> Observable<T> {
         return Observable<T>.create { observer in
-            AF.request(url).responseDecodable(of: Lotto.self) { response in
+            AF.request(router.URL, method: router.method, parameters: router.parameter).responseDecodable(of: type) { response in
                 switch response.result {
                 case .success(let value):
-                    observer.onNext(value as! T) // 성공시 데이터 던지기
+                    observer.onNext(value) // 성공시 데이터 던지기
                     observer.onCompleted() // 작업 완료 후에 반드시 메모리 해제
-                case .failure(let error):
+                case .failure(_):
                     observer.onError(CommonError.invalid) // 실패시 오류 던지기
                 }
             }

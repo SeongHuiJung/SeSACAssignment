@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class RequestLottoViewModel {
+final class RequestLottoViewModel {
     struct Input {
         let textFieldReturnTapped: Observable<ControlProperty<String>.Element>
     }
@@ -30,7 +30,9 @@ class RequestLottoViewModel {
             .distinctUntilChanged()
             .filter { Int($0) != nil }
             .flatMap {
-                NetworkManager.callRequest(url: "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\($0)", type: Lotto.self)
+                let param = LottoParameter(method: "getLottoNumber", drwNo: $0)
+                let router = NetworkRouter.lotto(param: param)
+                return NetworkManager.callRequest(router: router, type: Lotto.self)
             }
             .subscribe(with: self) { owner, lottoData in
                 lottoList.accept(lottoData.numList)

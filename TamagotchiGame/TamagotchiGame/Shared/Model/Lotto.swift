@@ -5,7 +5,8 @@
 //  Created by 정성희 on 8/25/25.
 //
 
-// 디코딩 에러가 났을때 
+// RxSwift: 옵셔널로 잡아주면 네트워크 통신 실패시 dispose 되지 않음
+// TODO: 디코딩 에러가 나지 않게 해서 오류를 던지지 않기 때문인가?
 import Foundation
 struct Lotto: Codable {
     let date: String?

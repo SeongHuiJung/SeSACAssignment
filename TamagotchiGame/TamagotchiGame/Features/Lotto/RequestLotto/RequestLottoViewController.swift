@@ -24,28 +24,32 @@ final class RequestLottoViewController: BaseViewController {
     
     override func configureHierarchy() {
         super.configureHierarchy()
+        
+        view.addSubview(tableView)
+        view.addSubview(searchBar)
     }
     
     override func configureLayout() {
         super.configureLayout()
-    }
-    
-    override func configureView() {
-        super.configureView()
-        
-        view.addSubview(tableView)
-        view.addSubview(searchBar)
-        
-        navigationItem.titleView = searchBar
-         
-        tableView.register(ListBaseTableViewCell.self, forCellReuseIdentifier: ListBaseTableViewCell.identifier)
-        tableView.backgroundColor = .lightGray
-        tableView.rowHeight = 80
+        searchBar.snp.makeConstraints { make in
+            make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(44)
+        }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    override func configureView() {
+        super.configureView()
+
+        tableView.register(ListBaseTableViewCell.self, forCellReuseIdentifier: ListBaseTableViewCell.identifier)
+        tableView.backgroundColor = .lightGray
+        tableView.rowHeight = 80
+       
+        navigationItem.title = "회차별 로또 당첨 번호 확인"
     }
 }
 
