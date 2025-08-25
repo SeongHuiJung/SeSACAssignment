@@ -1,8 +1,8 @@
 //
 //  BaseViewController.swift
-//  SeSACDay8HW
+//  TamagotchiGame
 //
-//  Created by 정성희 on 8/23/25.
+//  Created by 정성희 on 8/25/25.
 //
 
 import UIKit
@@ -17,17 +17,18 @@ class BaseViewController: UIViewController {
     }
     
     func configureView() {
-        view.backgroundColor = .second
+        view.backgroundColor = .white
         
         navigationItem.backButtonTitle = ""
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = .second
-        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.primary]
+        navigationBarAppearance.backgroundColor = .white
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         
         navigationController?.navigationBar.standardAppearance = navigationBarAppearance
     }
     
     func configureHierarchy() { }
     func configureLayout() { }
+    
 }

@@ -6,24 +6,61 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class RequestLottoViewController: UIViewController {
+final class RequestLottoViewController: BaseViewController {
 
+    private let tableView = UITableView()
+    private let searchBar = UISearchBar()
+    
+    private let viewModel = RequestLottoViewModel()
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        bind()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func configureHierarchy() {
+        super.configureHierarchy()
     }
-    */
+    
+    override func configureLayout() {
+        super.configureLayout()
+    }
+    
+    override func configureView() {
+        super.configureView()
+        
+        view.addSubview(tableView)
+        view.addSubview(searchBar)
+        
+        navigationItem.titleView = searchBar
+         
+        tableView.register(ListBaseTableViewCell.self, forCellReuseIdentifier: ListBaseTableViewCell.identifier)
+        tableView.backgroundColor = .lightGray
+        tableView.rowHeight = 80
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+    }
+}
 
+// MARK: - Bind
+extension RequestLottoViewController {
+    func bind() {
+        let searchBarTapObservable = searchBar.rx.searchButtonClicked.withLatestFrom(searchBar.rx.text.orEmpty)
+        let input = RequestLottoViewModel.Input(textFieldReturnTapped: searchBarTapObservable)
+        let output = viewModel.transform(input: input)
+        
+        output.lottoList
+        // 받은 데이터를 바로 bind
+            .bind(to: tableView.rx.items(cellIdentifier: ListBaseTableViewCell.identifier, cellType: ListBaseTableViewCell.self)) { (row, value, cell) in
+                cell.titleLabel.text = String(value)
+            }
+            .disposed(by: disposeBag)
+    }
 }

@@ -10,6 +10,7 @@
 		57A0E4092E5ADA3C007DB51D /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 57A0E4082E5ADA3C007DB51D /* RxCocoa */; };
 		57A0E40B2E5ADA3C007DB51D /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 57A0E40A2E5ADA3C007DB51D /* RxSwift */; };
 		57A0E40E2E5ADA44007DB51D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 57A0E40D2E5ADA44007DB51D /* SnapKit */; };
+		57CAFD6E2E5C945A005EC735 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 57CAFD6D2E5C945A005EC735 /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57A0E40E2E5ADA44007DB51D /* SnapKit in Frameworks */,
+				57CAFD6E2E5C945A005EC735 /* Alamofire in Frameworks */,
 				57A0E40B2E5ADA3C007DB51D /* RxSwift in Frameworks */,
 				57A0E4092E5ADA3C007DB51D /* RxCocoa in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 				57A0E4082E5ADA3C007DB51D /* RxCocoa */,
 				57A0E40A2E5ADA3C007DB51D /* RxSwift */,
 				57A0E40D2E5ADA44007DB51D /* SnapKit */,
+				57CAFD6D2E5C945A005EC735 /* Alamofire */,
 			);
 			productName = TamagotchiGame;
 			productReference = 57A0E3C92E5AD93D007DB51D /* TamagotchiGame.app */;
@@ -122,6 +125,7 @@
 			packageReferences = (
 				57A0E4072E5ADA3C007DB51D /* XCRemoteSwiftPackageReference "RxSwift" */,
 				57A0E40C2E5ADA44007DB51D /* XCRemoteSwiftPackageReference "SnapKit" */,
+				57CAFD6C2E5C945A005EC735 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 57A0E3CA2E5AD93D007DB51D /* Products */;
@@ -383,6 +387,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		57CAFD6C2E5C945A005EC735 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -400,6 +412,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 57A0E40C2E5ADA44007DB51D /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		57CAFD6D2E5C945A005EC735 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57CAFD6C2E5C945A005EC735 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
