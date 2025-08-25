@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class TamagotchiViewController: BaseViewController {
+final class TamagotchiViewController: TamagotchiBaseViewController {
     
     var tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
     private let viewModel = TamagotchiViewModel()

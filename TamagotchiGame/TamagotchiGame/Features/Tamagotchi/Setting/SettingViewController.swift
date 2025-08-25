@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
-class SettingViewController: BaseViewController {
+class SettingViewController: TamagotchiBaseViewController {
 
     let stack = CustomStackView(axis: .vertical, alignment: .fill, spacing: 0)
     let nameSetButton = ListButton(title: "내 이름 설정하기", iconName: "pencil")

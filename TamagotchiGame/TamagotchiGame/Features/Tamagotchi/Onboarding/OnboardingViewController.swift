@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class OnboardingViewController: BaseViewController {
+class OnboardingViewController: TamagotchiBaseViewController {
 
     var startButtonTitle = "시작하기"
     private let viewModel = OnboardingViewModel()

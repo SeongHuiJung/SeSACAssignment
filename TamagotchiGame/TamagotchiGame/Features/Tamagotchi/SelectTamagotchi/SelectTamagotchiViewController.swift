@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class SelectTamagotchiViewController: BaseViewController {
+class SelectTamagotchiViewController: TamagotchiBaseViewController {
 
     var tamagotchiType = BehaviorRelay(value: TamagotchiType.none)
     let disposeBag = DisposeBag()

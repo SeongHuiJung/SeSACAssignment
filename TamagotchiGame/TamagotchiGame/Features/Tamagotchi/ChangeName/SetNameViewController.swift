@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class SetNameViewController: BaseViewController {
+class SetNameViewController: TamagotchiBaseViewController {
 
     private let viewModel = SetNameViewModel()
     private let textField = CustomTextField(text: "", placeholder: "이름을 입력해주세요", size: 16)
