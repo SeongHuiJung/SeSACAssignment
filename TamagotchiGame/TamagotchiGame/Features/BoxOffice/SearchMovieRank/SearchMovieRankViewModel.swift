@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
-// https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f856f2c3efc33d98f90758270686fab9&targetDt=20250825
+
 final class SearchMovieRankViewModel {
     struct Input {
         let textFieldReturnTapped: Observable<ControlProperty<String>.Element>
@@ -16,6 +16,7 @@ final class SearchMovieRankViewModel {
     
     struct Output {
         let movieData: PublishRelay<[BoxOffice]>
+        let alertData: PublishRelay<(title: String, message: String)>
     }
     
     init() {}
@@ -25,26 +26,26 @@ final class SearchMovieRankViewModel {
     func transform(input: Input) -> Output {
         
         let movieData: PublishRelay<[BoxOffice]> = PublishRelay()
-        
+        let alertData: PublishRelay<(title: String, message: String)> = PublishRelay()
+                        
         input.textFieldReturnTapped
             .distinctUntilChanged() // 0826 reveiw: indicator
+            
             .flatMap {
                 let param = MovieParameter(key: APIKey.movieKey, targetDt: $0)
                 let router = NetworkRouter.trendMovie(param: param)
                 return NetworkManager.callRequest(router: router, type: MovieRank.self)
             }
-            .subscribe(with: self) { owner, movieRankData in
-                print("데이터",  movieRankData)
-                movieData.accept(movieRankData.boxOfficeResult.movieData)
-            } onError: { owner, error in
-                print(error)
-            } onCompleted: { owner in
-                print("onCompleted")
-            } onDisposed: { owner in
-                print("onDisposed")
+            .bind(with: self) { owner, response in
+                switch response {
+                case .success(let data):
+                    movieData.accept(data.boxOfficeResult.movieData)
+                case .failure(let error):
+                    alertData.accept(("통신 에러", "에러가 발생했어요. 다시 시도해주세요."))
+                }
             }
             .disposed(by: disposeBag)
         
-        return Output(movieData: movieData)
+        return Output(movieData: movieData, alertData: alertData)
     }
 }

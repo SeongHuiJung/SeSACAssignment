@@ -67,5 +67,12 @@ extension SearchMovieRankViewController {
                 cell.titleLabel.text = value.name
             }
             .disposed(by: disposeBag)
+        
+        output.alertData
+            .bind(with: self) { owner, data in
+                let alert = AlertMaanger.shared.makeAlert(titel: data.title, message: data.message)
+                owner.present(alert, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
