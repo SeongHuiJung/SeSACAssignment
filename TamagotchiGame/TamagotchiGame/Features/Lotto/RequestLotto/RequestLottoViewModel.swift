@@ -16,6 +16,7 @@ final class RequestLottoViewModel {
     
     struct Output {
         let lottoList: PublishRelay<[Int]>
+        let alertData: PublishRelay<(title: String, message: String)>
     }
     
     init() {}
@@ -25,6 +26,7 @@ final class RequestLottoViewModel {
     func transform(input: Input) -> Output {
         
         let lottoList: PublishRelay<[Int]> = PublishRelay()
+        let alertData: PublishRelay<(title: String, message: String)> = PublishRelay()
         
         input.textFieldReturnTapped
             .distinctUntilChanged()
@@ -34,18 +36,17 @@ final class RequestLottoViewModel {
                 let router = NetworkRouter.lotto(param: param)
                 return NetworkManager.callRequest(router: router, type: Lotto.self)
             }
-            .subscribe(with: self) { owner, lottoData in
-                lottoList.accept(lottoData.numList)
-            } onError: { owner, error in
-                print("onError", error)
-            } onCompleted: { owner in
-                print("onCompleted")
-            } onDisposed: { owner in
-                print("onDisposed")
+            .bind(with: self) { owner, response in
+                switch response {
+                case .success(let data):
+                    lottoList.accept(data.numList)
+                case .failure(let error):
+                    alertData.accept(("통신 에러", "에러가 발생했어요. 다시 시도해주세요."))
+                }
             }
             .disposed(by: disposeBag)
 
-        return Output(lottoList: lottoList)
+        return Output(lottoList: lottoList, alertData: alertData)
     }
 }
 

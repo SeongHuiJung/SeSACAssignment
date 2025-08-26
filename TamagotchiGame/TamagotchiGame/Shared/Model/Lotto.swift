@@ -6,21 +6,21 @@
 //
 
 // RxSwift: 옵셔널로 잡아주면 네트워크 통신 실패시 dispose 되지 않음
-// TODO: 디코딩 에러가 나지 않게 해서 오류를 던지지 않기 때문인가?
+// TODO: 디코딩 에러가 나지 않게 해서 오류를 던지지 않기 때문인가? -> 넵 맞습니다~
 import Foundation
 struct Lotto: Codable {
-    let date: String?
-    let num1: Int?
-    let num2: Int?
-    let num3: Int?
-    let num4: Int?
-    let num5: Int?
-    let num6: Int?
-    let bonusNum: Int?
-    let returnValue: String?
+    let date: String
+    let num1: Int
+    let num2: Int
+    let num3: Int
+    let num4: Int
+    let num5: Int
+    let num6: Int
+    let bonusNum: Int
+    let returnValue: String
     
     var numList: [Int] {
-        [num1 ?? 0, num2 ?? 0, num3 ?? 0, num4 ?? 0, num5 ?? 0, num6 ?? 0]
+        [num1, num2, num3, num4, num5, num6]
     }
     
     enum CodingKeys: String, CodingKey {
@@ -37,14 +37,14 @@ struct Lotto: Codable {
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.date = try container.decodeIfPresent(String.self, forKey: .date)
-        self.num1 = try container.decodeIfPresent(Int.self, forKey: .num1)
-        self.num2 = try container.decodeIfPresent(Int.self, forKey: .num2)
-        self.num3 = try container.decodeIfPresent(Int.self, forKey: .num3)
-        self.num4 = try container.decodeIfPresent(Int.self, forKey: .num4)
-        self.num5 = try container.decodeIfPresent(Int.self, forKey: .num5)
-        self.num6 = try container.decodeIfPresent(Int.self, forKey: .num6)
-        self.bonusNum = try container.decodeIfPresent(Int.self, forKey: .bonusNum)
-        self.returnValue = try container.decodeIfPresent(String.self, forKey: .returnValue)
+        self.date = try container.decode(String.self, forKey: .date)
+        self.num1 = try container.decode(Int.self, forKey: .num1)
+        self.num2 = try container.decode(Int.self, forKey: .num2)
+        self.num3 = try container.decode(Int.self, forKey: .num3)
+        self.num4 = try container.decode(Int.self, forKey: .num4)
+        self.num5 = try container.decode(Int.self, forKey: .num5)
+        self.num6 = try container.decode(Int.self, forKey: .num6)
+        self.bonusNum = try container.decode(Int.self, forKey: .bonusNum)
+        self.returnValue = try container.decode(String.self, forKey: .returnValue)
     }
 }

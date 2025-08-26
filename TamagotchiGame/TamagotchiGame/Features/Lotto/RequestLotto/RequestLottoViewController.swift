@@ -61,9 +61,15 @@ extension RequestLottoViewController {
         let output = viewModel.transform(input: input)
         
         output.lottoList
-        // 받은 데이터를 바로 bind
             .bind(to: tableView.rx.items(cellIdentifier: ListBaseTableViewCell.identifier, cellType: ListBaseTableViewCell.self)) { (row, value, cell) in
                 cell.titleLabel.text = String(value)
+            }
+            .disposed(by: disposeBag)
+        
+        output.alertData
+            .bind(with: self) { owner, data in
+                let alert = AlertMaanger.shared.makeAlert(titel: data.title, message: data.message)
+                owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }
