@@ -10,11 +10,19 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-// 0826 reveiw: viewmodel 로 기능 빼기
 class SelectTamagotchiViewController: TamagotchiBaseViewController {
 
-    var tamagotchiType = BehaviorRelay(value: TamagotchiType.none)
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+    private var viewModel: SelectTamagotchiViewModel
+    
+    init(viewModel: SelectTamagotchiViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     let paddingView = {
         let view = UIView()
@@ -68,8 +76,8 @@ class SelectTamagotchiViewController: TamagotchiBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        dependencyInjection()
         bind()
-        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
     }
     
     override func configureHierarchy() {
@@ -124,39 +132,35 @@ class SelectTamagotchiViewController: TamagotchiBaseViewController {
     
     override func configureView() {
         super.configureView()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    }
+}
+
+// MARK: - DI
+extension SelectTamagotchiViewController {
+    func dependencyInjection() {
+        let type = viewModel.tamagotchiType
+        tamagotchiImage.image = UIImage(named: type.imageName)
+        name.text = type.krName
+        descriptionLabel.text = type.description
     }
 }
 
 // MARK: - Bind
 extension SelectTamagotchiViewController {
     func bind() {
-        tamagotchiType
-            .bind(with: self) { owner, type in
-                owner.tamagotchiImage.image = UIImage(named: type.imageName)
-                owner.name.text = type.krName
-                owner.descriptionLabel.text = type.description
-            }
-            .disposed(by: disposeBag)
+        let input = SelectTamagotchiViewModel.Input(cancelButtonTap: cancelButton.rx.tap, startButtonTap: startButton.rx.tap)
+        let output = viewModel.transform(input: input)
         
-        cancelButton.rx.tap
+        output.cancelButtonTap
             .bind(with: self) { owner, _ in
                 owner.dismiss(animated: false)
             }
             .disposed(by: disposeBag)
         
-        startButton.rx.tap
+        output.startButtonTap
             .bind(with: self) { owner, _ in
-//                let viewController = TamagotchiViewController(viewModel: TamagotchiViewModel(tamagotchiType: <#T##TamagotchiType#>))
-//                let viewController = TamagotchiViewController()
-//                viewController.tamagotchiType.accept() // TODO: 여기서는 owner.tamagotchiType.value
-                print(owner.tamagotchiType.value)
-                UserDefaultsManager.tamagotchiTypeIndex = owner.tamagotchiType.value.index
-                
-                if UserDefaultsManager.tamagotchiLevel == 0 {
-                    UserDefaultsManager.tamagotchiLevel = 1
-                }
-
-                owner.view.window?.rootViewController = TransitionManager.shared.getMainTabViewController(reSelect: true, tamagotchiType: owner.tamagotchiType.value)
+                owner.view.window?.rootViewController = TransitionManager.shared.getMainTabViewController(reSelect: true, tamagotchiType: owner.viewModel.tamagotchiType)
                 owner.view.window?.makeKeyAndVisible()
             }
             .disposed(by: disposeBag)

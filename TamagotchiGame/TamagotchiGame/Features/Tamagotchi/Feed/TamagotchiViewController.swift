@@ -12,11 +12,18 @@ import RxCocoa
 
 final class TamagotchiViewController: TamagotchiBaseViewController {
     
-    var tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
-    private let viewModel = TamagotchiViewModel()
-//    private let viewModel: TamagotchiViewModel()
+    let viewModel: TamagotchiViewModel
+    
     private let disposeBag = DisposeBag()
     
+    init(viewModel: TamagotchiViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private let bubbleImage = {
         let image = UIImageView(image: UIImage(named: "bubble"))
@@ -44,16 +51,9 @@ final class TamagotchiViewController: TamagotchiBaseViewController {
     private let riceButton = IconButton(title: "밥먹기", size: 16, textColor: .primary, iconName: "fork.knife.circle")
     private let waterButton = IconButton(title: "물먹기", size: 16, textColor: .primary, iconName: "drop.circle")
     
-//    init(viewModel: TamagotchiViewModel) {
-//        self.viewModel = viewModel
-//    }
-//    
-//    @MainActor required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        dependencyInjection()
         bind()
     }
     
@@ -135,9 +135,19 @@ final class TamagotchiViewController: TamagotchiBaseViewController {
     }
 }
 
+// MARK: - DI
+extension TamagotchiViewController {
+    func dependencyInjection() {
+        let type = viewModel.tamagotchiType
+        tamagotchiLabel.text = type.krName
+        tamagotchiImage.image = UIImage(named: type.imageName)
+    }
+}
+
+// MARK: - Bind
 extension TamagotchiViewController {
     func bind() {
-        let input = TamagotchiViewModel.Input(tamagotchiType: tamagotchiType, riceButtonTapped: riceButton.rx.tap, addRiceAmount: riceTextField.rx.text.orEmpty, waterButtonTapped: waterButton.rx.tap, addWaterAmount: waterTextField.rx.text.orEmpty)
+        let input = TamagotchiViewModel.Input(riceButtonTapped: riceButton.rx.tap, addRiceAmount: riceTextField.rx.text.orEmpty, waterButtonTapped: waterButton.rx.tap, addWaterAmount: waterTextField.rx.text.orEmpty)
         let output = viewModel.transform(input: input)
         
         output.statusResult
@@ -146,12 +156,6 @@ extension TamagotchiViewController {
 
         output.tamagotchiMessage
             .bind(to: tamagotchiSpeechLabel.rx.text)
-            .disposed(by: disposeBag)
-        
-        output.tamagotchiType
-            .bind(with: self) { owner, type in
-                owner.tamagotchiLabel.text = type.krName
-            }
             .disposed(by: disposeBag)
         
         output.tamagotchiImage

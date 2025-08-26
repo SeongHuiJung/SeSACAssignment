@@ -30,7 +30,6 @@ class TransitionManager {
             page1 = nav
         }
         else {
-            let viewController = TamagotchiViewController()
             var type = TamagotchiType.none
             if reSelect {
                 type = tamagotchiType
@@ -43,8 +42,8 @@ class TransitionManager {
                 default: break
                 }
             }
-
-            viewController.tamagotchiType.accept(type)
+            
+            let viewController = TamagotchiViewController(viewModel: TamagotchiViewModel(tamagotchiType: type))
             let nav = UINavigationController(rootViewController: viewController)
             page1 = nav
         }

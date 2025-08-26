@@ -10,8 +10,12 @@ import RxSwift
 import RxCocoa
 
 final class TamagotchiViewModel {
+    
+    // MARK: DI
+    var tamagotchiType: TamagotchiType
+    
+    // MARK: Input
     struct Input {
-        let tamagotchiType: BehaviorRelay<TamagotchiType> // review: 없애기
         
         let riceButtonTapped: ControlEvent<Void>
         let addRiceAmount: ControlProperty<String>
@@ -20,30 +24,24 @@ final class TamagotchiViewModel {
         let addWaterAmount: ControlProperty<String>
     }
     
+    // MARK: Output
     struct Output {
-        let tamagotchiType: BehaviorRelay<TamagotchiType>
         let statusResult: BehaviorRelay<String>
         let tamagotchiMessage: BehaviorRelay<String>
         let tamagotchiImage: BehaviorRelay<String>
     }
     
-    init() {}
-    
-//    private let tamagotchiType: BehaviorRelay<TamagotchiType>
-//    
-//    init(tamagotchiType: TamagotchiType) {
-//        self.tamagotchiType = BehaviorRelay(value: tamagotchiType)
-//    }
-    
+    init(tamagotchiType: TamagotchiType) {
+        self.tamagotchiType = tamagotchiType
+    }
+
     private let tamagotchiMessageList = TamagotchiData().messages
-    
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         let statusResult: BehaviorRelay<String> = BehaviorRelay(value: getUpdateStatusText())
         let tamagotchiMessage: BehaviorRelay<String> = BehaviorRelay(value: getMessage())
-        let tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
-        let tamagotchiImage: BehaviorRelay<String> = BehaviorRelay(value: getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: getLevel()))
+        let tamagotchiImage: BehaviorRelay<String> = BehaviorRelay(value: getImageName(tamagotchiTypeIndex: tamagotchiType.index, level: getLevel()))
     
         input.riceButtonTapped
             .withLatestFrom(input.addRiceAmount)
@@ -51,7 +49,7 @@ final class TamagotchiViewModel {
                 if addRiceAmount == "" || (Int(addRiceAmount) != nil && Int(addRiceAmount)! < 100) {
                     UserDefaultsManager.riceCount += Int(addRiceAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
+                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: owner.tamagotchiType.index, level: owner.getLevel()))
                     tamagotchiMessage.accept(owner.getMessage())
                     UserDefaultsManager.tamagotchiLevel = owner.getLevel()
                 }
@@ -65,20 +63,14 @@ final class TamagotchiViewModel {
                 if addWaterAmount == "" || (Int(addWaterAmount) != nil && Int(addWaterAmount)! < 50) {
                     UserDefaultsManager.waterCount += Int(addWaterAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
-                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: owner.getLevel()))
+                    tamagotchiImage.accept(owner.getImageName(tamagotchiTypeIndex: owner.tamagotchiType.index, level: owner.getLevel()))
                     tamagotchiMessage.accept(owner.getMessage())
                     UserDefaultsManager.tamagotchiLevel = owner.getLevel()
                 }
             }
             .disposed(by: disposeBag)
 
-        input.tamagotchiType
-            .bind(with: self) { owner, type in
-                tamagotchiType.accept(type)
-            }
-            .disposed(by: disposeBag)
-        
-        return Output(tamagotchiType: tamagotchiType, statusResult: statusResult, tamagotchiMessage: tamagotchiMessage, tamagotchiImage: tamagotchiImage)
+        return Output(statusResult: statusResult, tamagotchiMessage: tamagotchiMessage, tamagotchiImage: tamagotchiImage)
     }
     
     // 0826 reveiw: 최대한 operator 활용해보기 (익숙해지기 위함)

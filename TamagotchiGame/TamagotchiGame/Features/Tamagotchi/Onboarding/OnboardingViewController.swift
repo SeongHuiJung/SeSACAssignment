@@ -70,8 +70,7 @@ extension OnboardingViewController {
         
         tamagotchiCollectionView.rx.modelSelected(TamagotchiType.self)
             .bind(with: self) { owner, type in
-                let viewController = SelectTamagotchiViewController()
-                viewController.tamagotchiType.accept(type) // TODO: 여기서는 type.. 넣는 타입이 다르다?
+                let viewController = SelectTamagotchiViewController(viewModel: SelectTamagotchiViewModel(tamagotchiType: type)) // 주입
                 viewController.startButton.setTitle(owner.startButtonTitle, for: .normal)
                 viewController.modalPresentationStyle = .overCurrentContext
                 owner.present(viewController, animated: false)
