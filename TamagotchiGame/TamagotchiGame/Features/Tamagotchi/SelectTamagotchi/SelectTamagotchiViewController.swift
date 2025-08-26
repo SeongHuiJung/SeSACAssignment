@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+// 0826 reveiw: viewmodel 로 기능 빼기
 class SelectTamagotchiViewController: TamagotchiBaseViewController {
 
     var tamagotchiType = BehaviorRelay(value: TamagotchiType.none)

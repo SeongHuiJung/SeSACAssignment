@@ -44,7 +44,7 @@ final class TamagotchiViewModel {
         let tamagotchiMessage: BehaviorRelay<String> = BehaviorRelay(value: getMessage())
         let tamagotchiType: BehaviorRelay<TamagotchiType> = BehaviorRelay(value: TamagotchiType.none)
         let tamagotchiImage: BehaviorRelay<String> = BehaviorRelay(value: getImageName(tamagotchiTypeIndex: input.tamagotchiType.value.index, level: getLevel()))
-
+    
         input.riceButtonTapped
             .withLatestFrom(input.addRiceAmount)
             .bind(with: self) { owner, addRiceAmount in
@@ -61,7 +61,7 @@ final class TamagotchiViewModel {
         input.waterButtonTapped
             .withLatestFrom(input.addWaterAmount)
             .bind(with: self) { owner, addWaterAmount in
-                
+                // 0826 reveiw: compactMap 활용 등등 operator 좀더 활용하기
                 if addWaterAmount == "" || (Int(addWaterAmount) != nil && Int(addWaterAmount)! < 50) {
                     UserDefaultsManager.waterCount += Int(addWaterAmount) ?? 1
                     statusResult.accept(owner.getUpdateStatusText())
@@ -81,6 +81,7 @@ final class TamagotchiViewModel {
         return Output(tamagotchiType: tamagotchiType, statusResult: statusResult, tamagotchiMessage: tamagotchiMessage, tamagotchiImage: tamagotchiImage)
     }
     
+    // 0826 reveiw: 최대한 operator 활용해보기 (익숙해지기 위함)
     private func getUpdatedLevel(riceCount: Int, waterCount: Int) -> Int {
         let level = Int((Double(riceCount) / 5 + Double(waterCount) / 2) / 10) + 1
         if level > 10 { return 10 }

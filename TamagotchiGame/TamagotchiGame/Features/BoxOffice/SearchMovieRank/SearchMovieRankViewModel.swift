@@ -27,7 +27,7 @@ final class SearchMovieRankViewModel {
         let movieData: PublishRelay<[BoxOffice]> = PublishRelay()
         
         input.textFieldReturnTapped
-            .distinctUntilChanged()
+            .distinctUntilChanged() // 0826 reveiw: indicator
             .flatMap {
                 let param = MovieParameter(key: APIKey.movieKey, targetDt: $0)
                 let router = NetworkRouter.trendMovie(param: param)
