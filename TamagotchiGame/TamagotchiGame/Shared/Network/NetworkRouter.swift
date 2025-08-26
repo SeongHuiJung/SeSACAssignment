@@ -7,10 +7,7 @@
 
 import Foundation
 import Alamofire
-// https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=f856f2c3efc33d98f90758270686fab9&targetDt=\($0)
 
-
-// // https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=\($0)
 struct MovieParameter {
     let key: String
     let targetDt: String

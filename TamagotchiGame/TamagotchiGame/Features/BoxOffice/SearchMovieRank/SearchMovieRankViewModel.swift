@@ -30,18 +30,41 @@ final class SearchMovieRankViewModel {
                         
         input.textFieldReturnTapped
             .distinctUntilChanged() // 0826 reveiw: indicator
-            
+            .filter {
+                if DateFormatter.formatStringToDate(dateText: $0, format: "yyyyMMdd") == nil {
+                    alertData.accept((ErrorType.incorrectDecoding.title, ErrorType.incorrectDecoding.message))
+                    return false
+                }
+                return true
+            }
             .flatMap {
                 let param = MovieParameter(key: APIKey.movieKey, targetDt: $0)
                 let router = NetworkRouter.trendMovie(param: param)
-                return NetworkManager.callRequest(router: router, type: MovieRank.self)
+                return NetworkManager.callRequestWithResultType(router: router, type: MovieRank.self)
             }
-            .bind(with: self) { owner, response in
+            .bind { response in
                 switch response {
                 case .success(let data):
                     movieData.accept(data.boxOfficeResult.movieData)
                 case .failure(let error):
-                    alertData.accept(("통신 에러", "에러가 발생했어요. 다시 시도해주세요."))
+                    
+                    var errorType = ErrorType.unknown
+                    
+                    if let afError = error.asAFError,
+                       let urlError = afError.underlyingError as? URLError {
+                        switch urlError.code {
+                        case .notConnectedToInternet:
+                            errorType = .notConnectedToInternet
+                        case .cannotFindHost, .cannotConnectToHost:
+                            errorType = .serverError
+                        default:
+                            errorType = .incorrectDecoding
+                        }
+                    } else {
+                        errorType = .unknown
+                    }
+                    
+                    alertData.accept((errorType.title, errorType.message))
                 }
             }
             .disposed(by: disposeBag)

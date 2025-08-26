@@ -63,6 +63,8 @@ class OnboardingViewController: TamagotchiBaseViewController {
 
 extension OnboardingViewController {
     private func bind() {
+        
+        // TODO: 이거는 input / output 으로 해야하나..?
         tamagotchiList.bind(to: tamagotchiCollectionView.rx.items(cellIdentifier: OnboardingCollectionViewCell.identifier, cellType: OnboardingCollectionViewCell.self)) { index, value, cell in
             cell.configureData(tamagotchiType: value)
         }

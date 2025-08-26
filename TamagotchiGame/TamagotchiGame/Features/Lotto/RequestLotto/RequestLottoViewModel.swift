@@ -30,23 +30,47 @@ final class RequestLottoViewModel {
         
         input.textFieldReturnTapped
             .distinctUntilChanged()
-            .filter { Int($0) != nil }
+            .filter {
+                if Int($0) != nil {
+                    return true
+                }
+                else {
+                    alertData.accept((ErrorType.incorrectDecoding.title, ErrorType.incorrectDecoding.message))
+                    return false
+                }
+            }
             .flatMap {
                 let param = LottoParameter(method: "getLottoNumber", drwNo: $0)
                 let router = NetworkRouter.lotto(param: param)
-                return NetworkManager.callRequest(router: router, type: Lotto.self)
+                return NetworkManager.callRequestWithResultType(router: router, type: Lotto.self)
             }
-            .bind(with: self) { owner, response in
+            .bind{ response in
                 switch response {
                 case .success(let data):
                     lottoList.accept(data.numList)
                 case .failure(let error):
-                    alertData.accept(("통신 에러", "에러가 발생했어요. 다시 시도해주세요."))
+                    
+                    var errorType = ErrorType.unknown
+                    
+                    if let afError = error.asAFError,
+                       let urlError = afError.underlyingError as? URLError {
+                        switch urlError.code {
+                        case .notConnectedToInternet:
+                            errorType = .notConnectedToInternet
+                        case .cannotFindHost, .cannotConnectToHost:
+                            errorType = .serverError
+                        default:
+                            errorType = .incorrectDecoding
+                        }
+                    } else {
+                        errorType = .unknown
+                    }
+                    
+                    alertData.accept((errorType.title, errorType.message))
                 }
             }
             .disposed(by: disposeBag)
-
+        
         return Output(lottoList: lottoList, alertData: alertData)
     }
 }
-
